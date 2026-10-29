@@ -175,8 +175,14 @@ any sub-path. The app name and its links (repository, donation pages) live in `s
 
 ## Supporting the project
 
-Stitchino is free and has no ads. A star helps people find it, and so does mentioning it to a
-stitching group or reporting a bug.
+Stitchino is free and has no ads. If it's been useful, you can buy me a coffee on Ko-fi or set up
+a small recurring donation on Liberapay, which takes no cut.
+
+[![Buy me a coffee on Ko-fi](https://img.shields.io/badge/Ko--fi-buy_me_a_coffee-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/mrheltic)
+[![Donate on Liberapay](https://img.shields.io/badge/Liberapay-donate-F6C915?style=for-the-badge&logo=liberapay&logoColor=black)](https://liberapay.com/mrheltic)
+
+Money isn't the only way to help: a star makes the project easier to find, and so does mentioning
+it to a stitching group or reporting a bug.
 
 ## Licence
 

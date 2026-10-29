@@ -12,12 +12,12 @@ export const APP_NAME = 'Stitchino';
 export const LINKS = {
   /** Public repository */
   source: 'https://github.com/mrheltic/stitchino',
-  /** One-off donations, e.g. https://ko-fi.com/<name> */
-  kofi: '',
+  /** One-off donations */
+  kofi: 'https://ko-fi.com/mrheltic',
   /** Monthly sponsorship, e.g. https://github.com/sponsors/<user> */
   githubSponsors: '',
-  /** Recurring donations without platform fees, e.g. https://liberapay.com/<name> */
-  liberapay: '',
+  /** Recurring donations without platform fees */
+  liberapay: 'https://liberapay.com/mrheltic',
   /** Bug reports and ideas */
   issues: 'https://github.com/mrheltic/stitchino/issues',
 } as const;
