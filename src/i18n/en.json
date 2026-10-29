@@ -19,7 +19,18 @@
     "importPdf": "Import a PDF",
     "openFile": "Open a file",
     "projects": "Your projects",
-    "noProjects": "No projects yet. Start from a photo!"
+    "noProjects": "No projects yet. Start from a photo!",
+    "noPreview": "No preview",
+    "projectInfo": "{{size}} stitches · {{colors}} colours · {{stitches}} crosses",
+    "updated": "Edited on {{date}}",
+    "imported": "imported, personal use",
+    "stitch": "Stitch",
+    "duplicate": "Duplicate",
+    "export": "Export the project file",
+    "copyOf": "{{title}} (copy)",
+    "deleteTitle": "Delete the project?",
+    "deleteText": "“{{title}}” and its progress will be removed from this device. This can't be undone.",
+    "openError": "This file is not a valid PuntoCroce project."
   },
   "common": {
     "comingSoon": "This section is under construction.",
@@ -61,5 +72,164 @@
   "footer": {
     "privacy": "No tracking: everything stays in your browser.",
     "license": "Free software, GPL-3.0 licence"
+  },
+  "wizard": {
+    "title": "New pattern from a photo",
+    "next": "Next",
+    "steps": {
+      "photo": "Photo",
+      "crop": "Framing",
+      "adjust": "Adjustments",
+      "size": "Size and fabric",
+      "colors": "Colours",
+      "create": "Create the pattern"
+    },
+    "photo": {
+      "drop": "Drop a photo here, paste it, or pick one from your device.",
+      "choose": "Choose a photo",
+      "change": "Change photo",
+      "camera": "Take a photo",
+      "privacy": "Your photo stays on your device: it is never uploaded."
+    },
+    "crop": {
+      "area": "Photo to crop",
+      "aspect": "Aspect ratio",
+      "rotateLeft": "Rotate left",
+      "rotateRight": "Rotate right",
+      "flip": "Mirror",
+      "reset": "Use the whole photo",
+      "hint": "Drag the box or its corners to choose the part to stitch.",
+      "free": "Free"
+    },
+    "adjust": {
+      "brightness": "Brightness",
+      "contrast": "Contrast",
+      "saturation": "Saturation",
+      "midtones": "Midtones",
+      "sharpen": "Sharpness",
+      "denoise": "Noise reduction",
+      "denoiseHint": "Softens photo grain and reduces isolated stitches.",
+      "reset": "Reset adjustments",
+      "background": "Leave the background unstitched",
+      "backgroundOn": "Background left unstitched",
+      "backgroundHint": "Tap the background in the preview: the area of similar colour will stay bare fabric. You can tap several spots.",
+      "tolerance": "Tolerance",
+      "undoPick": "Undo last tap",
+      "clearPicks": "Start over"
+    },
+    "size": {
+      "width": "Width",
+      "stitches_one": "{{count}} stitch",
+      "stitches_other": "{{count}} stitches",
+      "stitchesShort": "stitches",
+      "fabric": "Fabric",
+      "overTwo": "Stitch over 2 fabric threads",
+      "fabricColor": "Fabric colour",
+      "finished": "Finished size",
+      "toBuy": "Fabric to buy",
+      "frame": "Standard frame",
+      "hoop": "Round hoop",
+      "custom": "custom size",
+      "scrollFrame": "scroll frame or move the hoop",
+      "strands": "Strands and needle",
+      "strandsValue_one": "{{count}} strand, size {{needle}} needle",
+      "strandsValue_other": "{{count}} strands, size {{needle}} needle"
+    },
+    "colors": {
+      "brand": "Thread brand",
+      "max": "Maximum number of colours",
+      "useSuggested": "Use the suggested value: {{count}}",
+      "summary_one": "{{count}} {{brand}} colour",
+      "summary_other": "{{count}} {{brand}} colours",
+      "cleanup": "Isolated stitch cleanup",
+      "cleanupHint": "Isolated stitches (confetti) make stitching slow: cleanup merges them into nearby colours.",
+      "cleanupLevels": {
+        "0": "None",
+        "1": "Light",
+        "2": "Medium",
+        "3": "Strong"
+      },
+      "protectDetails": "Protect details (eyes, highlights)",
+      "minStitches": "Minimum stitches per colour",
+      "minStitchesHint": "Colours with fewer stitches are merged into the most similar one.",
+      "dither": "Blending (dithering)",
+      "ditherHint": "Mixes colours in dots to suggest gradients: more faithful, but more isolated stitches.",
+      "ditherStrength": "Strength",
+      "dithers": {
+        "none": "None",
+        "floyd-steinberg": "Floyd–Steinberg",
+        "atkinson": "Atkinson",
+        "ordered": "Regular"
+      }
+    },
+    "create": {
+      "name": "Project name",
+      "untitled": "Untitled pattern",
+      "variants": "Compare",
+      "button": "Create the project"
+    },
+    "preview": {
+      "empty": "Choose a photo to see the preview.",
+      "photo": "Photo",
+      "pattern": "Pattern",
+      "working": "Working",
+      "palette": "Pattern colours"
+    },
+    "metrics": {
+      "size": "Stitches",
+      "colors": "Colours",
+      "stitches": "Crosses",
+      "confetti": "Isolated",
+      "difficulty": "Difficulty",
+      "time": "Time",
+      "hours_one": "≈ {{count}} hour",
+      "hours_other": "≈ {{count}} hours",
+      "finished": "Size"
+    },
+    "errors": {
+      "unsupported": "This image can't be opened. Try a JPG or PNG photo.",
+      "convert": "The conversion failed. Try different settings.",
+      "noThreads": "No threads available with these settings.",
+      "save": "The project could not be saved."
+    }
+  },
+  "fabric": {
+    "kinds": {
+      "aida": "Aida",
+      "evenweave": "Evenweave",
+      "linen": "Linen"
+    },
+    "colors": {
+      "white": "White",
+      "antiqueWhite": "Antique white",
+      "cream": "Cream",
+      "natural": "Natural",
+      "lightBlue": "Light blue",
+      "pink": "Pink",
+      "grey": "Grey",
+      "navy": "Navy",
+      "black": "Black"
+    }
+  },
+  "difficulty": {
+    "easy": "easy",
+    "medium": "medium",
+    "hard": "challenging",
+    "expert": "expert"
+  },
+  "blank": {
+    "title": "New blank pattern",
+    "size": "Size",
+    "width": "Width in stitches",
+    "height": "Height in stitches",
+    "create": "Create the pattern"
+  },
+  "editor": {
+    "notFound": "Project not found",
+    "legend": "Key",
+    "symbol": "Symbol",
+    "thread": "Thread",
+    "stitches": "Stitches",
+    "skeins": "Skeins"
   }
 }

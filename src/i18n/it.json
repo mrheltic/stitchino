@@ -19,7 +19,18 @@
     "importPdf": "Importa un PDF",
     "openFile": "Apri un file",
     "projects": "I tuoi progetti",
-    "noProjects": "Nessun progetto per ora. Inizia da una foto!"
+    "noProjects": "Nessun progetto per ora. Inizia da una foto!",
+    "noPreview": "Nessuna anteprima",
+    "projectInfo": "{{size}} punti · {{colors}} colori · {{stitches}} crocette",
+    "updated": "Modificato il {{date}}",
+    "imported": "importato, uso personale",
+    "stitch": "Ricama",
+    "duplicate": "Duplica",
+    "export": "Esporta il file del progetto",
+    "copyOf": "{{title}} (copia)",
+    "deleteTitle": "Eliminare il progetto?",
+    "deleteText": "«{{title}}» e il suo avanzamento verranno cancellati da questo dispositivo. Non si può annullare.",
+    "openError": "Questo file non è un progetto PuntoCroce valido."
   },
   "common": {
     "comingSoon": "Questa sezione è in costruzione.",
@@ -61,5 +72,164 @@
   "footer": {
     "privacy": "Nessun tracciamento: tutto resta nel tuo browser.",
     "license": "Software libero, licenza GPL-3.0"
+  },
+  "wizard": {
+    "title": "Nuovo schema da foto",
+    "next": "Avanti",
+    "steps": {
+      "photo": "Foto",
+      "crop": "Inquadratura",
+      "adjust": "Regolazioni",
+      "size": "Dimensioni e tessuto",
+      "colors": "Colori",
+      "create": "Crea lo schema"
+    },
+    "photo": {
+      "drop": "Trascina qui una foto, incollala oppure sceglila dal dispositivo.",
+      "choose": "Scegli una foto",
+      "change": "Cambia foto",
+      "camera": "Scatta una foto",
+      "privacy": "La foto resta sul tuo dispositivo: non viene caricata su nessun server."
+    },
+    "crop": {
+      "area": "Foto da ritagliare",
+      "aspect": "Proporzioni",
+      "rotateLeft": "Ruota a sinistra",
+      "rotateRight": "Ruota a destra",
+      "flip": "Specchia",
+      "reset": "Usa tutta la foto",
+      "hint": "Trascina il riquadro o i suoi angoli per scegliere la parte da ricamare.",
+      "free": "Libere"
+    },
+    "adjust": {
+      "brightness": "Luminosità",
+      "contrast": "Contrasto",
+      "saturation": "Saturazione",
+      "midtones": "Toni medi",
+      "sharpen": "Nitidezza",
+      "denoise": "Riduzione rumore",
+      "denoiseHint": "Ammorbidisce la grana della foto e riduce i punti isolati.",
+      "reset": "Azzera regolazioni",
+      "background": "Non ricamare lo sfondo",
+      "backgroundOn": "Sfondo non ricamato",
+      "backgroundHint": "Tocca lo sfondo nell'anteprima: la zona di colore simile resterà tela libera. Puoi toccare più punti.",
+      "tolerance": "Tolleranza",
+      "undoPick": "Annulla l'ultimo tocco",
+      "clearPicks": "Ricomincia"
+    },
+    "size": {
+      "width": "Larghezza",
+      "stitches_one": "{{count}} punto",
+      "stitches_other": "{{count}} punti",
+      "stitchesShort": "punti",
+      "fabric": "Tessuto",
+      "overTwo": "Ricamo su 2 fili del tessuto",
+      "fabricColor": "Colore della tela",
+      "finished": "Misura finita",
+      "toBuy": "Tela da comprare",
+      "frame": "Cornice standard",
+      "hoop": "Telaio tondo",
+      "custom": "su misura",
+      "scrollFrame": "telaio a rulli o spostando il telaio",
+      "strands": "Fili e ago",
+      "strandsValue_one": "{{count}} filo, ago n. {{needle}}",
+      "strandsValue_other": "{{count}} fili, ago n. {{needle}}"
+    },
+    "colors": {
+      "brand": "Marca dei fili",
+      "max": "Numero massimo di colori",
+      "useSuggested": "Usa il valore consigliato: {{count}}",
+      "summary_one": "{{count}} colore {{brand}}",
+      "summary_other": "{{count}} colori {{brand}}",
+      "cleanup": "Pulizia dei punti isolati",
+      "cleanupHint": "I punti isolati (confetti) rendono il ricamo lento: la pulizia li assorbe nei colori vicini.",
+      "cleanupLevels": {
+        "0": "Nessuna",
+        "1": "Leggera",
+        "2": "Media",
+        "3": "Forte"
+      },
+      "protectDetails": "Proteggi i dettagli (occhi, riflessi)",
+      "minStitches": "Punti minimi per colore",
+      "minStitchesHint": "I colori con meno punti vengono uniti al più simile.",
+      "dither": "Sfumature (dithering)",
+      "ditherHint": "Mescola i colori a puntini per simulare sfumature: più fedele, ma più punti isolati.",
+      "ditherStrength": "Intensità",
+      "dithers": {
+        "none": "Nessuna",
+        "floyd-steinberg": "Floyd–Steinberg",
+        "atkinson": "Atkinson",
+        "ordered": "Regolare"
+      }
+    },
+    "create": {
+      "name": "Nome del progetto",
+      "untitled": "Schema senza titolo",
+      "variants": "Confronta",
+      "button": "Crea il progetto"
+    },
+    "preview": {
+      "empty": "Scegli una foto per vedere l'anteprima.",
+      "photo": "Foto",
+      "pattern": "Schema",
+      "working": "Elaborazione in corso",
+      "palette": "Colori dello schema"
+    },
+    "metrics": {
+      "size": "Punti",
+      "colors": "Colori",
+      "stitches": "Crocette",
+      "confetti": "Isolati",
+      "difficulty": "Difficoltà",
+      "time": "Tempo",
+      "hours_one": "≈ {{count}} ora",
+      "hours_other": "≈ {{count}} ore",
+      "finished": "Misura"
+    },
+    "errors": {
+      "unsupported": "Non riesco ad aprire questa immagine. Prova con una foto JPG o PNG.",
+      "convert": "La conversione non è riuscita. Prova a cambiare le impostazioni.",
+      "noThreads": "Nessun filo disponibile con queste impostazioni.",
+      "save": "Non sono riuscito a salvare il progetto."
+    }
+  },
+  "fabric": {
+    "kinds": {
+      "aida": "Aida",
+      "evenweave": "Evenweave",
+      "linen": "Lino"
+    },
+    "colors": {
+      "white": "Bianco",
+      "antiqueWhite": "Bianco antico",
+      "cream": "Crema",
+      "natural": "Naturale",
+      "lightBlue": "Azzurro",
+      "pink": "Rosa",
+      "grey": "Grigio",
+      "navy": "Blu notte",
+      "black": "Nero"
+    }
+  },
+  "difficulty": {
+    "easy": "facile",
+    "medium": "media",
+    "hard": "impegnativa",
+    "expert": "da esperti"
+  },
+  "blank": {
+    "title": "Nuovo schema vuoto",
+    "size": "Dimensioni",
+    "width": "Larghezza in punti",
+    "height": "Altezza in punti",
+    "create": "Crea lo schema"
+  },
+  "editor": {
+    "notFound": "Progetto non trovato",
+    "legend": "Legenda",
+    "symbol": "Simbolo",
+    "thread": "Filo",
+    "stitches": "Punti",
+    "skeins": "Matasse"
   }
 }
