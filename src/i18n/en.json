@@ -485,7 +485,7 @@
     "by": "by {{author}}",
     "page": "Page {{n}} of {{total}}",
     "region": "columns {{x0}}–{{x1}}, rows {{y0}}–{{y1}}",
-    "credit": "Made with $t(app.name), free cross-stitch software",
+    "credit": "Made with $t(app.name), free cross-stitch software · {{site}}",
     "overTwo": "over 2",
     "info": {
       "size": "Size",

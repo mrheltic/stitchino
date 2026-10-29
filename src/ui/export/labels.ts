@@ -1,3 +1,4 @@
+import { SITE_LABEL } from '../../core/brand.ts';
 import type { ChartLabels } from '../../core/pdf/export/chartPdf.ts';
 
 type T = (key: string, options?: Record<string, unknown>) => string;
@@ -11,7 +12,7 @@ export function chartLabels(t: T, locale: string): ChartLabels {
     by: (author) => t('pdf.by', { author }),
     page: (n, total) => t('pdf.page', { n, total }),
     region: (x0, x1, y0, y1) => t('pdf.region', { x0, x1, y0, y1 }),
-    credit: t('pdf.credit'),
+    credit: t('pdf.credit', { site: SITE_LABEL }),
     info: {
       size: t('pdf.info.size'),
       stitchesValue: (w, h) => t('pdf.info.stitchesValue', { w, h }),

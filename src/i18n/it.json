@@ -485,7 +485,7 @@
     "by": "di {{author}}",
     "page": "Pagina {{n}} di {{total}}",
     "region": "colonne {{x0}}–{{x1}}, righe {{y0}}–{{y1}}",
-    "credit": "Creato con $t(app.name), software libero per il punto croce",
+    "credit": "Creato con $t(app.name), software libero per il punto croce · {{site}}",
     "overTwo": "su 2 fili",
     "info": {
       "size": "Dimensioni",

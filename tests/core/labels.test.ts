@@ -6,7 +6,9 @@ describe('PDF labels built inside the worker', () => {
   it('translates, interpolates and nests the app name', async () => {
     const it_ = chartLabels(await standaloneT('it'), 'it');
     expect(it_.page(2, 5)).toBe('Pagina 2 di 5');
-    expect(it_.credit).toBe('Creato con Stitchino, software libero per il punto croce');
+    expect(it_.credit).toBe(
+      'Creato con Stitchino, software libero per il punto croce · mrheltic.github.io/stitchino',
+    );
     expect(it_.info.strandsNeedle(1, '24')).toBe('1 filo, ago n. 24');
     expect(it_.info.strandsNeedle(2, '24')).toBe('2 fili, ago n. 24');
     const en = chartLabels(await standaloneT('en'), 'en');

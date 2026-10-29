@@ -5,6 +5,12 @@
  */
 export const APP_NAME = 'Stitchino';
 
+/** Where the app is published (GitHub Pages). Static pages and the sitemap use it for full URLs. */
+export const SITE_URL = 'https://mrheltic.github.io/stitchino/';
+
+/** The address as people would type it, for print: "mrheltic.github.io/stitchino". */
+export const SITE_LABEL = SITE_URL.replace(/^https:\/\//, '').replace(/\/$/, '');
+
 /**
  * External links. Leave a link empty until the page exists: the app only shows configured links,
  * and a link to an unclaimed donation page could send money to a stranger.
