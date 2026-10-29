@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "PuntoCroce",
+    "tagline": "Schemi a punto croce dalle tue foto"
+  },
+  "nav": {
+    "projects": "Progetti",
+    "inventory": "I miei fili",
+    "guide": "Guida",
+    "settings": "Impostazioni",
+    "menu": "Menu",
+    "skip": "Vai al contenuto"
+  },
+  "home": {
+    "title": "Trasforma una foto in uno schema a punto croce",
+    "subtitle": "Gratis e senza limiti, senza account. Le tue foto restano sul tuo dispositivo.",
+    "fromPhoto": "Nuovo schema da foto",
+    "blank": "Schema vuoto",
+    "importPdf": "Importa un PDF",
+    "openFile": "Apri un file",
+    "projects": "I tuoi progetti",
+    "noProjects": "Nessun progetto per ora. Inizia da una foto!"
+  },
+  "common": {
+    "comingSoon": "Questa sezione è in costruzione.",
+    "back": "Indietro",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "save": "Salva",
+    "delete": "Elimina"
+  },
+  "pages": {
+    "wizard": "Nuovo schema",
+    "editor": "Editor",
+    "stitch": "Modalità ricamo",
+    "inventory": "I miei fili",
+    "importPdf": "Importa un PDF",
+    "guide": "Guida"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua",
+    "theme": "Tema",
+    "themeSystem": "Come il sistema",
+    "themeLight": "Chiaro",
+    "themeDark": "Scuro",
+    "units": "Unità di misura",
+    "metric": "Centimetri",
+    "imperial": "Pollici"
+  },
+  "pwa": {
+    "updateAvailable": "È disponibile una nuova versione.",
+    "update": "Aggiorna",
+    "offlineReady": "PuntoCroce ora funziona anche offline.",
+    "dismiss": "Chiudi"
+  },
+  "notFound": {
+    "title": "Pagina non trovata",
+    "back": "Torna ai progetti"
+  },
+  "footer": {
+    "privacy": "Nessun tracciamento: tutto resta nel tuo browser.",
+    "license": "Software libero, licenza GPL-3.0"
+  }
+}

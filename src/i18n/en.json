@@ -1,0 +1,65 @@
+{
+  "app": {
+    "name": "PuntoCroce",
+    "tagline": "Cross-stitch patterns from your photos"
+  },
+  "nav": {
+    "projects": "Projects",
+    "inventory": "My threads",
+    "guide": "Guide",
+    "settings": "Settings",
+    "menu": "Menu",
+    "skip": "Skip to content"
+  },
+  "home": {
+    "title": "Turn a photo into a cross-stitch pattern",
+    "subtitle": "Free with no limits and no account. Your photos never leave your device.",
+    "fromPhoto": "New pattern from a photo",
+    "blank": "Blank pattern",
+    "importPdf": "Import a PDF",
+    "openFile": "Open a file",
+    "projects": "Your projects",
+    "noProjects": "No projects yet. Start from a photo!"
+  },
+  "common": {
+    "comingSoon": "This section is under construction.",
+    "back": "Back",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete"
+  },
+  "pages": {
+    "wizard": "New pattern",
+    "editor": "Editor",
+    "stitch": "Stitching mode",
+    "inventory": "My threads",
+    "importPdf": "Import a PDF",
+    "guide": "Guide"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "themeSystem": "Match system",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "units": "Units",
+    "metric": "Centimetres",
+    "imperial": "Inches"
+  },
+  "pwa": {
+    "updateAvailable": "A new version is available.",
+    "update": "Update",
+    "offlineReady": "PuntoCroce now works offline too.",
+    "dismiss": "Dismiss"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to projects"
+  },
+  "footer": {
+    "privacy": "No tracking: everything stays in your browser.",
+    "license": "Free software, GPL-3.0 licence"
+  }
+}

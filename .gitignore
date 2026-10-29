@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dev-dist/
+coverage/
+playwright-report/
+test-results/
+*.local
+.DS_Store
+# PDF di terzi usati solo per i test locali dell'importazione (protetti da copyright)
+test-corpus/
+# Sorgenti scaricate dagli script di build
+.cache/

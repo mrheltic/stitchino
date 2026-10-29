@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@font-face {
+  font-family: 'PuntoCroce Symbols';
+  src: url('/fonts/pc-symbols.ttf') format('truetype');
+  font-display: block;
+}
+
+:root {
+  --bg: #faf7f2;
+  --surface: #ffffff;
+  --surface-2: #f3eee6;
+  --ink: #2b2420;
+  --muted: #6b625b;
+  --line: #e4dbcf;
+  --accent: #9e2f45;
+  --accent-strong: #84243a;
+  --accent-ink: #ffffff;
+  --focus: #2f6fde;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #161312;
+  --surface: #211d1b;
+  --surface-2: #2b2624;
+  --ink: #f2ece6;
+  --muted: #b5aca4;
+  --line: #3b3431;
+  --accent: #e07a90;
+  --accent-strong: #ec95a8;
+  --accent-ink: #1b1413;
+  --focus: #7aa7ff;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-ink: var(--accent-ink);
+  --font-symbols: 'PuntoCroce Symbols';
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
