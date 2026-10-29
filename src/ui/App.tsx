@@ -24,7 +24,7 @@ const router = createHashRouter([
       },
       {
         path: 'project/:id/stitch',
-        handle: { fullscreen: true },
+        handle: { fullscreen: true, immersive: true },
         lazy: async () => ({ Component: (await import('./routes/Stitch.tsx')).default }),
       },
       {

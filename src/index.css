@@ -19,6 +19,8 @@
   --accent-strong: #84243a;
   --accent-ink: #ffffff;
   --focus: #2f6fde;
+  /* De-emphasised chart marks (≥ 3:1 on the surface). */
+  --chart-muted: #968a80;
   color-scheme: light;
 }
 
@@ -33,6 +35,7 @@
   --accent-strong: #ec95a8;
   --accent-ink: #1b1413;
   --focus: #7aa7ff;
+  --chart-muted: #7d736c;
   color-scheme: dark;
 }
 

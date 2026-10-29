@@ -1,25 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-
-const scene = fileURLToPath(new URL('./fixtures/scene.png', import.meta.url));
+import { fromPhoto } from './helpers.ts';
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('puntocroce.lang', 'it'));
 });
-
-async function fromPhoto(page: Page, title: string) {
-  await page.goto('./#/new');
-  await page.getByTestId('photo-input').setInputFiles(scene);
-  await page.getByRole('button', { name: /Dimensioni e tessuto/ }).click();
-  await page.getByRole('spinbutton', { name: 'Larghezza' }).fill('40');
-  await page.getByRole('button', { name: /Crea lo schema/ }).click();
-  await page.getByLabel('Nome del progetto').fill(title);
-  const create = page.getByRole('button', { name: 'Crea il progetto' });
-  await expect(create).toBeEnabled({ timeout: 20_000 });
-  await create.click();
-  await expect(page.getByRole('button', { name: title, exact: true })).toBeVisible();
-}
 
 async function download(page: Page): Promise<{ name: string; bytes: Buffer }> {
   const pending = page.waitForEvent('download');

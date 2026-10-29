@@ -35,7 +35,8 @@
     "oxsSubstituted_one": "{{count}} colour from a brand I don't know was replaced by the closest DMC: {{list}}.",
     "oxsSubstituted_other": "{{count}} colours from brands I don't know were replaced by the closest DMC: {{list}}.",
     "oxsSkipped_one": "{{count}} unsupported item (beads or special stitches) was skipped.",
-    "oxsSkipped_other": "{{count}} unsupported items (beads or special stitches) were skipped."
+    "oxsSkipped_other": "{{count}} unsupported items (beads or special stitches) were skipped.",
+    "progress": "{{percent}} stitched"
   },
   "common": {
     "comingSoon": "This section is under construction.",
@@ -515,6 +516,75 @@
       "kofi": "Buy me a coffee",
       "githubSponsors": "Sponsor on GitHub",
       "liberapay": "Donate on Liberapay"
+    }
+  },
+  "stitch": {
+    "canvas": "Pattern to stitch “{{title}}”",
+    "findNext": "Next stitch",
+    "panel": "Progress and colours",
+    "fullscreen": "Full screen",
+    "exitFullscreen": "Exit full screen",
+    "doneColor": "Colour of done stitches",
+    "doneColors": {
+      "16a34a": "Green",
+      "eab308": "Yellow",
+      "db2777": "Magenta",
+      "2563eb": "Blue",
+      "374151": "Dark grey",
+      "auto": "Auto",
+      "autoHint": "The colour that stands out most from this pattern's threads"
+    },
+    "rulers": "Rulers",
+    "leftHanded": "Left-handed controls",
+    "keepAwake": "Keep the screen on",
+    "edit": "Edit the pattern",
+    "reset": "Reset progress…",
+    "resetTitle": "Reset progress?",
+    "resetText": "All marked stitches, parking marks and the daily history will be cleared. Right after, you can still bring them back with “Undo”.",
+    "resetConfirm": "Reset",
+    "resetNotice": "The pattern changed size after you started stitching, so the marked stitches no longer line up: progress starts again from zero.",
+    "allColors": "All colours",
+    "allColorsHint": "All colours: pick one to stitch just that",
+    "tools": {
+      "mark": "Mark stitches",
+      "area": "Mark an area of one colour",
+      "rect": "Mark a rectangle",
+      "lines": "Mark backstitch and knots",
+      "park": "Park a thread",
+      "pan": "Move the view"
+    },
+    "toolHints": {
+      "mark": "Tap or drag over the stitches you've done. Starting on a marked stitch clears the marks.",
+      "area": "Tap a stitch: the whole area of the same colour around it is marked.",
+      "rect": "Drag a rectangle: every stitch inside is marked.",
+      "lines": "Tap a backstitch line or a knot to mark it.",
+      "park": "Tap where you left the thread of the active colour; tap again to remove the mark.",
+      "pan": "Drag to move around. Zoom with two fingers or the mouse wheel."
+    },
+    "hints": {
+      "parkColor": "First pick the colour of the thread to park.",
+      "allDone": "No stitches left to do in this colour: well done!"
+    },
+    "progress": "Progress",
+    "doneOf": "{{done}} of {{total}} stitches",
+    "today": "Today",
+    "stitches_one": "{{n}} stitch",
+    "stitches_other": "{{n}} stitches",
+    "pace": "Pace",
+    "paceValue": "about {{n}} stitches per stitching day",
+    "finish": "Expected finish",
+    "finished": "Finished!",
+    "backstitch": "Backstitch",
+    "knots": "Knots",
+    "colors": "Colours",
+    "hideDone": "Hide finished",
+    "colorProgress": "Colour progress",
+    "colorDone": "Colour finished",
+    "left": "{{n}} to go",
+    "daily": {
+      "title": "Stitches over the last 14 days",
+      "empty": "Here you'll see how many stitches you do each day.",
+      "today": "today"
     }
   }
 }

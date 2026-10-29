@@ -7,6 +7,8 @@ import { UpdatePrompt } from './components/UpdatePrompt.tsx';
 export interface RouteHandle {
   /** Full-screen work area (editor, stitching): no footer, main fills the viewport. */
   fullscreen?: boolean;
+  /** On phones the app header gives way too (the page has its own way back). */
+  immersive?: boolean;
 }
 
 function NavItem({
@@ -38,7 +40,9 @@ function NavItem({
 
 export function Layout() {
   const { t } = useTranslation();
-  const fullscreen = useMatches().some((m) => (m.handle as RouteHandle | undefined)?.fullscreen);
+  const matches = useMatches();
+  const fullscreen = matches.some((m) => (m.handle as RouteHandle | undefined)?.fullscreen);
+  const immersive = matches.some((m) => (m.handle as RouteHandle | undefined)?.immersive);
 
   return (
     <div
@@ -51,7 +55,7 @@ export function Layout() {
       >
         {t('nav.skip')}
       </button>
-      <header className="border-b border-line bg-surface">
+      <header className={`border-b border-line bg-surface ${immersive ? 'max-lg:hidden' : ''}`}>
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2.5">
           <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
             <img src="./favicon.svg" alt="" width={28} height={28} className="rounded-md" />

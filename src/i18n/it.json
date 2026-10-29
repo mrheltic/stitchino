@@ -35,7 +35,8 @@
     "oxsSubstituted_one": "{{count}} colore di una marca che non conosco è stato sostituito con il DMC più simile: {{list}}.",
     "oxsSubstituted_other": "{{count}} colori di marche che non conosco sono stati sostituiti con i DMC più simili: {{list}}.",
     "oxsSkipped_one": "{{count}} elemento non supportato (perline o punti speciali) è stato ignorato.",
-    "oxsSkipped_other": "{{count}} elementi non supportati (perline o punti speciali) sono stati ignorati."
+    "oxsSkipped_other": "{{count}} elementi non supportati (perline o punti speciali) sono stati ignorati.",
+    "progress": "Ricamato al {{percent}}"
   },
   "common": {
     "comingSoon": "Questa sezione è in costruzione.",
@@ -515,6 +516,75 @@
       "kofi": "Offrimi un caffè",
       "githubSponsors": "Sostienimi su GitHub",
       "liberapay": "Dona con Liberapay"
+    }
+  },
+  "stitch": {
+    "canvas": "Schema da ricamare «{{title}}»",
+    "findNext": "Prossimo punto",
+    "panel": "Avanzamento e colori",
+    "fullscreen": "Schermo intero",
+    "exitFullscreen": "Esci dallo schermo intero",
+    "doneColor": "Colore dei punti fatti",
+    "doneColors": {
+      "16a34a": "Verde",
+      "eab308": "Giallo",
+      "db2777": "Fucsia",
+      "2563eb": "Blu",
+      "374151": "Grigio scuro",
+      "auto": "Auto",
+      "autoHint": "Il colore che si distingue di più dai fili di questo schema"
+    },
+    "rulers": "Righelli",
+    "leftHanded": "Comandi per mancini",
+    "keepAwake": "Schermo sempre acceso",
+    "edit": "Modifica lo schema",
+    "reset": "Azzera l'avanzamento…",
+    "resetTitle": "Azzerare l'avanzamento?",
+    "resetText": "Tutti i punti segnati, i parcheggi e la cronologia dei giorni verranno cancellati. Subito dopo puoi ancora annullare con «Annulla».",
+    "resetConfirm": "Azzera",
+    "resetNotice": "Lo schema ha cambiato dimensioni dopo che avevi iniziato a ricamare, quindi i punti segnati non corrispondono più: l'avanzamento riparte da zero.",
+    "allColors": "Tutti i colori",
+    "allColorsHint": "Tutti i colori: scegline uno per ricamare solo quello",
+    "tools": {
+      "mark": "Segna i punti",
+      "area": "Segna un'area dello stesso colore",
+      "rect": "Segna un rettangolo",
+      "lines": "Segna punto scritto e nodini",
+      "park": "Parcheggia un filo",
+      "pan": "Sposta la vista"
+    },
+    "toolHints": {
+      "mark": "Tocca o trascina sui punti fatti. Partendo da un punto già segnato, il segno si toglie.",
+      "area": "Tocca un punto: si segna tutta la zona dello stesso colore che lo circonda.",
+      "rect": "Trascina un rettangolo: si segnano tutti i punti dentro.",
+      "lines": "Tocca un tratto di punto scritto o un nodino per segnarlo.",
+      "park": "Tocca dove hai lasciato il filo del colore attivo; tocca di nuovo per togliere il segno.",
+      "pan": "Trascina per spostarti. Con due dita, o con la rotella, ingrandisci."
+    },
+    "hints": {
+      "parkColor": "Scegli prima il colore del filo da parcheggiare.",
+      "allDone": "Nessun punto da fare con questo colore: ottimo lavoro!"
+    },
+    "progress": "Avanzamento",
+    "doneOf": "{{done}} di {{total}} punti",
+    "today": "Oggi",
+    "stitches_one": "{{n}} punto",
+    "stitches_other": "{{n}} punti",
+    "pace": "Ritmo",
+    "paceValue": "circa {{n}} punti per giorno di ricamo",
+    "finish": "Fine prevista",
+    "finished": "Ricamo completato!",
+    "backstitch": "Punto scritto",
+    "knots": "Nodini",
+    "colors": "Colori",
+    "hideDone": "Nascondi i finiti",
+    "colorProgress": "Avanzamento del colore",
+    "colorDone": "Colore finito",
+    "left": "{{n}} da fare",
+    "daily": {
+      "title": "Punti degli ultimi 14 giorni",
+      "empty": "Qui vedrai quanti punti ricami ogni giorno.",
+      "today": "oggi"
     }
   }
 }
