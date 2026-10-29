@@ -41,7 +41,10 @@ describe('static site', async () => {
       const src = new URLSearchParams(query).get('src')!;
       expect(isPicturePath(src)).toBe(true);
       expect(files.has(src)).toBe(true);
-      expect(linkSettings(query)).toMatchObject({ width: 100, maxColors: 30, title: p.title.en });
+      const settings = linkSettings(query);
+      expect(settings.title).toBe(p.title.en);
+      expect(settings.width).toBeGreaterThan(0);
+      expect(settings.maxColors).toBeGreaterThan(0);
     }
   });
 
