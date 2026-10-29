@@ -44,6 +44,8 @@ export default defineConfig({
   worker: { format: 'es' },
   test: {
     include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.{ts,tsx}'],
+    // Local tuning experiments (git-ignored) run only on request: EXP=1 npx vitest run tests/tmp-…
+    exclude: process.env.EXP ? [] : ['tests/tmp-*', 'node_modules/**'],
     environment: 'node',
   },
 });

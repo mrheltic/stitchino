@@ -10,3 +10,4 @@ test-results/
 test-corpus/
 # Sorgenti scaricate dagli script di build
 .cache/
+tests/tmp-*
