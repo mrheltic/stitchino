@@ -107,8 +107,6 @@ export class ProgressTracker {
   private undoStack: Step[] = [];
   private redoStack: Step[] = [];
   private pending: Step | null = null;
-  /** While marking many cells at once, changes are collected and announced together. */
-  private batch: ProgressChange | null = null;
   private listeners = new Set<Listener>();
   private today: () => string;
 
@@ -257,37 +255,36 @@ export class ProgressTracker {
 
   /** Marks (done = true) or clears the stitches of a cell, only those of colour `filter` if set. */
   markCell(i: number, done: boolean, filter: number | null = null): void {
-    const p = this.pattern;
-    if (i < 0 || i >= p.cells.length) return;
-    const before = this.readCell(i);
-    const next = { ...before };
-    const id = p.cells[i];
-    if (id) {
-      if (filter === null || id === filter) next.full = done;
-    } else {
-      for (const s of p.partials.get(i) ?? []) {
-        if (filter !== null && s.id !== filter) continue;
-        next.arms = done ? next.arms | s.mask : next.arms & ~s.mask;
-      }
-    }
-    if (next.full === before.full && next.arms === before.arms) return;
-    this.record((step) => {
-      if (!step.before.has(i)) step.before.set(i, before);
-      step.after.set(i, next);
-    });
+    this.markCells([i], done, filter);
   }
 
+  /** Marks or clears many cells as one change (and one undo step, unless in a transaction). */
   markCells(cells: Iterable<number>, done: boolean, filter: number | null = null): void {
+    const p = this.pattern;
     const own = !this.pending;
     if (own) this.begin();
-    const outer = this.batch;
-    this.batch ??= { cells: [], lines: false };
-    for (const i of cells) this.markCell(i, done, filter);
-    if (!outer) {
-      const change = this.batch;
-      this.batch = null;
-      if (change.cells.length || change.lines) this.emit(change);
+    const pending = this.pending!;
+    const delta = newStep();
+    for (const i of cells) {
+      if (i < 0 || i >= p.cells.length || delta.after.has(i)) continue;
+      const before = this.readCell(i);
+      const next = { ...before };
+      const id = p.cells[i];
+      if (id) {
+        if (filter === null || id === filter) next.full = done;
+      } else {
+        for (const st of p.partials.get(i) ?? []) {
+          if (filter !== null && st.id !== filter) continue;
+          next.arms = done ? next.arms | st.mask : next.arms & ~st.mask;
+        }
+      }
+      if (next.full === before.full && next.arms === before.arms) continue;
+      delta.before.set(i, before);
+      delta.after.set(i, next);
+      if (!pending.before.has(i)) pending.before.set(i, before);
+      pending.after.set(i, next);
     }
+    if (delta.after.size) this.emit(this.apply(delta, true));
     if (own) this.commit();
   }
 
@@ -426,11 +423,6 @@ export class ProgressTracker {
   }
 
   private emit(change: ProgressChange): void {
-    if (this.batch) {
-      this.batch.cells.push(...change.cells);
-      this.batch.lines ||= change.lines;
-      return;
-    }
     this.version++;
     for (const l of this.listeners) l(change);
   }
