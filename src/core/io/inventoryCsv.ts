@@ -104,19 +104,29 @@ export function parseInventoryCsv(
   const sep = [';', '\t'].find((c) => count(c) > count(',')) ?? ',';
   const items = new Map<string, InventoryItem>();
   const unknown: string[] = [];
-  for (const line of lines) {
+  // With a header, columns are found by name; otherwise "brand, code, skeins" or "code, skeins".
+  const header = splitCsvLine(lines[0] ?? '', sep).map((h) => h.toLowerCase());
+  const column = (re: RegExp) => header.findIndex((h) => re.test(h));
+  const named = {
+    brand: column(/^(brand|marca)$/),
+    code: column(/^(code|codice|number|numero|n\.?|colou?r|colore)$/),
+    qty: column(/^(skeins|matasse|quantity|quantit[àa]|qty|q\.?t[àa]|count)$/),
+  };
+  const hasHeader = named.code >= 0;
+  for (const line of hasHeader ? lines.slice(1) : lines) {
     const cells = splitCsvLine(line, sep);
-    const brand = BRAND_ALIASES[cells[0]?.toLowerCase()];
-    const [code, qty] = brand ? [cells[1], cells[2]] : [cells[0], cells[1]];
+    // Positional reading, or by header name when the row has those columns.
+    let brand: Brand | undefined = BRAND_ALIASES[cells[0]?.toLowerCase()];
+    let [code, qty]: (string | undefined)[] = brand ? [cells[1], cells[2]] : [cells[0], cells[1]];
+    if (hasHeader && cells.length > named.code) {
+      brand = named.brand >= 0 ? BRAND_ALIASES[cells[named.brand]?.toLowerCase()] : undefined;
+      code = cells[named.code];
+      qty = named.qty >= 0 ? cells[named.qty] : undefined;
+    }
     if (!code) continue;
     const ref = resolveCode(brand ?? defaultBrand, code);
     if (!ref) {
-      // A header row ("brand,code,skeins") is not an error.
-      if (
-        !/^(brand|marca|code|codice|number|numero)$/i.test(code) &&
-        !/^(brand|marca)$/i.test(cells[0])
-      )
-        unknown.push(line.trim());
+      unknown.push(line.trim());
       continue;
     }
     const n = qty === undefined || qty === '' ? 1 : Number(qty.replace(',', '.'));

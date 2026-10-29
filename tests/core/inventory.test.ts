@@ -50,6 +50,10 @@ describe('inventory CSV', () => {
     ];
     const csv = inventoryCsv(items);
     expect(csv.split('\n')[1]).toBe('DMC,310,Black,4');
-    expect(parseInventoryCsv(csv).items).toHaveLength(3);
+    expect(parseInventoryCsv(csv).items).toEqual([
+      { ref: { brand: 'DMC', code: '310' }, skeins: 4 },
+      { ref: { brand: 'DMC', code: '3865' }, skeins: 1 },
+      { ref: { brand: 'Anchor', code: '2' }, skeins: 2 },
+    ]);
   });
 });
