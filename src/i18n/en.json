@@ -376,5 +376,51 @@
     "results": "Results",
     "all": "All {{brand}} threads",
     "none": "No threads found."
+  },
+  "realSize": {
+    "title": "Real size",
+    "backToEditor": "Back to the editor",
+    "fabric": "Fabric and strands",
+    "strands": "Strands for the preview",
+    "strandsProject": "As in the pattern",
+    "saveFabric": "Use this fabric in the project",
+    "measures": "Measurements",
+    "margin": "Margin",
+    "cmPerSide": "cm per side",
+    "skeinsTotal": "Skeins in total",
+    "download": "Download the image",
+    "views": {
+      "frame": "Framed",
+      "hoop": "In a hoop",
+      "far": "From afar",
+      "detail": "Close-up"
+    },
+    "viewHints": {
+      "frame": "The smallest standard frame that leaves at least 2 cm of fabric around the design.",
+      "hoop": "A {{hoop}} cm round hoop: if the design is larger, you see its centre.",
+      "far": "The finished piece as it will look from a few steps away.",
+      "detail": "Drag to move and use the wheel or two fingers to zoom: you can see every stitch and the fabric holes."
+    },
+    "print": {
+      "title": "Print at real size",
+      "hint": "A PDF of the stitched preview at 1:1 scale, to hang on the wall or try in a frame before you start.",
+      "pages_one": "{{count}} page",
+      "pages_other": "{{count}} pages",
+      "button": "Download the 1:1 PDF",
+      "page": "Page {{n}} of {{total}}",
+      "cells": "columns {{x0}}–{{x1}}, rows {{y0}}–{{y1}}",
+      "ruler": "This bar must measure exactly 5 cm.",
+      "instructions": "Print at 100% (actual size), without “fit to page”. Join the sheets along the corner marks."
+    },
+    "shopping": {
+      "title": "Shopping list",
+      "copy": "Copy",
+      "copied": "Copied",
+      "share": "Share",
+      "heading": "PuntoCroce – shopping list: {{title}}",
+      "fabricLine": "Fabric: {{fabric}}, at least {{size}}",
+      "needleLine": "Blunt tapestry needle, size {{needle}}",
+      "estimateNote": "Skeins are an estimate (8 m, 6 strands) with a safety margin: buy the amount shown, perhaps one extra for the most used colours."
+    }
   }
 }

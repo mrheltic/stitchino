@@ -376,5 +376,51 @@
     "results": "Risultati",
     "all": "Tutti i fili {{brand}}",
     "none": "Nessun filo trovato."
+  },
+  "realSize": {
+    "title": "Dimensione reale",
+    "backToEditor": "Torna all'editor",
+    "fabric": "Tela e fili",
+    "strands": "Fili per l'anteprima",
+    "strandsProject": "Come nello schema",
+    "saveFabric": "Usa questa tela nel progetto",
+    "measures": "Misure",
+    "margin": "Margine",
+    "cmPerSide": "cm per lato",
+    "skeinsTotal": "Matasse in tutto",
+    "download": "Scarica l'immagine",
+    "views": {
+      "frame": "In cornice",
+      "hoop": "Nel telaio",
+      "far": "Da lontano",
+      "detail": "Dettaglio"
+    },
+    "viewHints": {
+      "frame": "Cornice standard più piccola che lascia almeno 2 cm di tela attorno al ricamo.",
+      "hoop": "Telaio tondo da {{hoop}} cm: se il ricamo è più grande, ne vedi la parte centrale.",
+      "far": "Il lavoro finito, come apparirà a qualche passo di distanza.",
+      "detail": "Trascina per spostarti e usa la rotella o due dita per ingrandire: vedi i singoli punti e i fori della tela."
+    },
+    "print": {
+      "title": "Stampa a grandezza reale",
+      "hint": "Un PDF con l'anteprima ricamata in scala 1:1, da appendere al muro o provare in cornice prima di iniziare.",
+      "pages_one": "{{count}} pagina",
+      "pages_other": "{{count}} pagine",
+      "button": "Scarica il PDF 1:1",
+      "page": "Pagina {{n}} di {{total}}",
+      "cells": "colonne {{x0}}–{{x1}}, righe {{y0}}–{{y1}}",
+      "ruler": "Questa barra deve misurare esattamente 5 cm.",
+      "instructions": "Stampa al 100% (scala reale), senza «adatta alla pagina». Unisci i fogli lungo i segni agli angoli."
+    },
+    "shopping": {
+      "title": "Lista della spesa",
+      "copy": "Copia",
+      "copied": "Copiata",
+      "share": "Condividi",
+      "heading": "PuntoCroce – lista della spesa: {{title}}",
+      "fabricLine": "Tela: {{fabric}}, almeno {{size}}",
+      "needleLine": "Ago da ricamo a punta arrotondata n. {{needle}}",
+      "estimateNote": "Le matasse sono una stima (8 m, 6 capi) con un margine di sicurezza: compra quelle indicate, eventualmente una in più per i colori più usati."
+    }
   }
 }

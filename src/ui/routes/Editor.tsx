@@ -7,6 +7,7 @@ import {
   Hand,
   Loader2,
   MoreHorizontal,
+  Ruler,
   Palette as PaletteIcon,
   Redo2,
   Sparkles,
@@ -363,7 +364,7 @@ function Workspace({
           value={editor.mode}
           onChange={(e) => editor.set({ mode: e.target.value as ViewMode })}
         >
-          {(['colorSymbols', 'symbols', 'colors'] as const).map((m) => (
+          {(['colorSymbols', 'symbols', 'colors', 'realistic'] as const).map((m) => (
             <option key={m} value={m}>
               {t(`editor.view.${m}`)}
             </option>
@@ -476,6 +477,14 @@ function Workspace({
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
+        <Link
+          to={`/project/${id}/real-size`}
+          className={iconButton}
+          aria-label={t('realSize.title')}
+          title={t('realSize.title')}
+        >
+          <Ruler size={18} aria-hidden />
+        </Link>
         <Link to={`/project/${id}/stitch`} className={buttonClass('primary', 'px-3 py-1.5')}>
           <Hand size={16} aria-hidden />
           <span className="max-sm:sr-only">{t('home.stitch')}</span>
