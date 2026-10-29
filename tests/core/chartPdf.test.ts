@@ -70,7 +70,6 @@ async function load(bytes: Uint8Array) {
     data: bytes.slice(),
     disableFontFace: true,
     useSystemFonts: false,
-    isEvalSupported: false,
   }).promise;
 }
 
