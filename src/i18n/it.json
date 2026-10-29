@@ -110,7 +110,8 @@
     "privacy": "Nessun tracciamento: tutto resta nel tuo browser.",
     "license": "Software libero, licenza GPL-3.0",
     "privacyLink": "Privacy e condizioni",
-    "support": "Sostieni Stitchino"
+    "support": "Sostieni Stitchino",
+    "patterns": "Schemi gratuiti"
   },
   "wizard": {
     "title": "Nuovo schema da foto",

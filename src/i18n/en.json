@@ -110,7 +110,8 @@
     "privacy": "No tracking: everything stays in your browser.",
     "license": "Free software, GPL-3.0 licence",
     "privacyLink": "Privacy and terms",
-    "support": "Support Stitchino"
+    "support": "Support Stitchino",
+    "patterns": "Free patterns"
   },
   "wizard": {
     "title": "New pattern from a photo",

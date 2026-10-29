@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import pkg from './package.json' with { type: 'json' };
+import { staticSite } from './site/plugin.ts';
 
 export default defineConfig({
   // Relative base: the app works from any sub-path (GitHub Pages project sites).
@@ -15,11 +16,11 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: ['favicon.svg', 'fonts/*.ttf'],
       manifest: {
-        name: 'Stitchino – punto croce',
+        name: 'Stitchino',
         short_name: 'Stitchino',
         description:
-          'Schemi a punto croce dalle tue foto: crea, stampa e ricama. Gratis, open source, offline.',
-        lang: 'it',
+          'Turn photos into cross-stitch patterns, print them and track your stitching. Free, open source, works offline.',
+        lang: 'en',
         start_url: './',
         scope: './',
         display: 'standalone',
@@ -38,9 +39,13 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,mjs,css,html,svg,png,ttf,woff2,json}'],
+        // The static pages and free patterns are ordinary web pages: not part of the offline app.
+        globIgnores: ['patterns/**', 'it/**', 'photo-to-cross-stitch-pattern/**', 'site/**'],
+        navigateFallbackDenylist: [/\/(patterns|it|photo-to-cross-stitch-pattern)\//],
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       },
     }),
+    staticSite(process.cwd()),
   ],
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   worker: { format: 'es' },

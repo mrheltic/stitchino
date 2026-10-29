@@ -39,7 +39,7 @@ function NavItem({
 }
 
 export function Layout() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const matches = useMatches();
   const fullscreen = matches.some((m) => (m.handle as RouteHandle | undefined)?.fullscreen);
   const immersive = matches.some((m) => (m.handle as RouteHandle | undefined)?.immersive);
@@ -88,6 +88,13 @@ export function Layout() {
         <footer className="flex flex-wrap justify-center gap-x-3 gap-y-1 border-t border-line px-4 py-4 text-center text-xs text-muted">
           <span>{t('footer.privacy')}</span>
           <span>{t('footer.license')}</span>
+          {/* Static pages next to the app, outside the hash router. */}
+          <a
+            href={i18n.resolvedLanguage === 'it' ? 'it/schemi/' : 'patterns/'}
+            className="underline-offset-2 hover:text-ink hover:underline"
+          >
+            {t('footer.patterns')}
+          </a>
           <Link to="/privacy" className="underline-offset-2 hover:text-ink hover:underline">
             {t('footer.privacyLink')}
           </Link>
