@@ -15,10 +15,12 @@ const router = createHashRouter([
       },
       {
         path: 'project/:id',
+        handle: { fullscreen: true },
         lazy: async () => ({ Component: (await import('./routes/Editor.tsx')).default }),
       },
       {
         path: 'project/:id/stitch',
+        handle: { fullscreen: true },
         lazy: async () => ({ Component: (await import('./routes/Stitch.tsx')).default }),
       },
       {

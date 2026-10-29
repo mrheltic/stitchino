@@ -41,7 +41,9 @@ export function Layout() {
   const fullscreen = useMatches().some((m) => (m.handle as RouteHandle | undefined)?.fullscreen);
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div
+      className={fullscreen ? 'flex h-dvh flex-col overflow-hidden' : 'flex min-h-full flex-col'}
+    >
       <button
         type="button"
         className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:px-3 focus:py-2"

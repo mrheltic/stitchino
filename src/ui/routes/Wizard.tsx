@@ -63,9 +63,11 @@ import {
   ASPECTS,
   cropForAspect,
   pickSettings,
+  sanitizeSettings,
   useWizard,
   type AspectPreset,
 } from '../wizard/store.ts';
+import { db } from '../../storage/db.ts';
 
 const STEPS = ['photo', 'crop', 'adjust', 'size', 'colors', 'create'] as const;
 type Step = (typeof STEPS)[number];
@@ -232,19 +234,23 @@ function PhotoWizard() {
 
   // --- Photo loading -------------------------------------------------------------------------
   const loadFile = useCallback(
-    async (f: File) => {
+    async (f: File, settings?: unknown) => {
       setError(null);
       try {
         const bmp = await decodeImage(f);
         setFile(f);
         setBitmap(bmp);
-        set({
-          orientation: { rotation: 0, flip: false },
-          crop: FULL_CROP,
-          aspect: 'free',
-          wandSeeds: [],
-          title: f.name.replace(/\.[^.]+$/, ''),
-        });
+        set(
+          settings
+            ? sanitizeSettings(settings)
+            : {
+                orientation: { rotation: 0, flip: false },
+                crop: FULL_CROP,
+                aspect: 'free',
+                wandSeeds: [],
+                title: f.name.replace(/\.[^.]+$/, ''),
+              },
+        );
         setConv(null);
         setStep('crop');
         setView('photo');
@@ -254,6 +260,25 @@ function PhotoWizard() {
     },
     [set, t],
   );
+
+  // "Regenerate from the photo": start from the project's photo and settings.
+  const [search] = useSearchParams();
+  const fromId = search.get('from');
+  useEffect(() => {
+    if (!fromId) return;
+    let cancelled = false;
+    void db.sources.get(fromId).then((src) => {
+      if (cancelled || !src) return;
+      const name = `${useWizard.getState().title || 'foto'}.${src.mime.split('/')[1] ?? 'jpg'}`;
+      void loadFile(
+        new File([src.bytes as BlobPart], name, { type: src.mime }),
+        src.settings ?? {},
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [fromId, loadFile]);
 
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {

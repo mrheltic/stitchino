@@ -1,13 +1,8 @@
 import { hexToRgb, type Rgb } from '../core/color/srgb.ts';
 import type { PaletteEntry } from '../core/model/pattern.ts';
-import { getThread } from '../core/threads/catalog.ts';
+import { entryRgb } from '../core/model/entryColor.ts';
 
-/** Display colour of a palette entry: the thread colour, or the average of a blend. */
-export function entryRgb(entry: PaletteEntry): Rgb {
-  const rgbs = entry.threads.map((t) => getThread(t)?.rgb ?? ([128, 128, 128] as Rgb));
-  const n = rgbs.length;
-  return [0, 1, 2].map((c) => Math.round(rgbs.reduce((s, v) => s + v[c], 0) / n)) as unknown as Rgb;
-}
+export { entryRgb };
 
 export function paintCells(
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D,

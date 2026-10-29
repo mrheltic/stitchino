@@ -24,10 +24,10 @@ test('creates a project from a photo and lists it on the home page', async ({ pa
   await create.click();
 
   await expect(page).toHaveURL(/#\/project\/[0-9a-f-]+$/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Casetta al sole' })).toBeVisible();
-  await expect(page.getByRole('cell', { name: /DMC/ }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Casetta al sole', exact: true })).toBeVisible();
+  await expect(page.getByTitle('Colore attivo')).toContainText('DMC');
 
-  await page.getByRole('link', { name: 'Progetti' }).click();
+  await page.getByRole('navigation').getByRole('link', { name: 'Progetti' }).click();
   await expect(page.getByRole('link', { name: 'Casetta al sole' })).toBeVisible();
   await expect(page.getByText('60 × 45 punti')).toBeVisible();
 });
@@ -37,5 +37,5 @@ test('creates a blank pattern', async ({ page }) => {
   await page.getByLabel('Nome del progetto').fill('Bordo');
   await page.getByRole('spinbutton', { name: 'Larghezza in punti' }).fill('40');
   await page.getByRole('button', { name: 'Crea lo schema' }).click();
-  await expect(page.getByRole('heading', { level: 1, name: 'Bordo' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Bordo', exact: true })).toBeVisible();
 });

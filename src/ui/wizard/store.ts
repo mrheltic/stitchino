@@ -88,3 +88,71 @@ export function cropForAspect(ratio: number, orientedW: number, orientedH: numbe
   const w = ratio / imgRatio;
   return { x: (1 - w) / 2, y: 0, w, h: 1 };
 }
+
+/**
+ * Wizard settings stored with a project may come from an imported file: keep only well-formed
+ * values and fall back to the defaults for the rest.
+ */
+export function sanitizeSettings(raw: unknown): WizardSettings {
+  const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
+  const num = (v: unknown, lo: number, hi: number, d: number) =>
+    typeof v === 'number' && Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : d;
+  const d = DEFAULT_WIZARD;
+  const o = (r.orientation ?? {}) as Record<string, unknown>;
+  const c = (r.crop ?? {}) as Record<string, unknown>;
+  const a = (r.adjustments ?? {}) as Record<string, unknown>;
+  const f = (r.fabric ?? {}) as Record<string, unknown>;
+  const crop = {
+    x: num(c.x, 0, 0.95, 0),
+    y: num(c.y, 0, 0.95, 0),
+    w: num(c.w, 0.05, 1, 1),
+    h: num(c.h, 0.05, 1, 1),
+  };
+  crop.w = Math.min(crop.w, 1 - crop.x);
+  crop.h = Math.min(crop.h, 1 - crop.y);
+  return {
+    orientation: {
+      rotation: ([0, 90, 180, 270] as const).find((x) => x === o.rotation) ?? 0,
+      flip: o.flip === true,
+    },
+    crop,
+    aspect: (Object.keys(ASPECTS) as AspectPreset[]).find((x) => x === r.aspect) ?? 'free',
+    adjustments: {
+      brightness: num(a.brightness, -1, 1, 0),
+      contrast: num(a.contrast, -1, 1, 0),
+      saturation: num(a.saturation, -1, 1, 0),
+      gamma: num(a.gamma, 0.5, 2, 1),
+      sharpen: num(a.sharpen, 0, 1, 0),
+      denoise: num(a.denoise, 0, 1, 0),
+    },
+    removeBackground: r.removeBackground === true,
+    wandTolerance: num(r.wandTolerance, 0.02, 0.25, d.wandTolerance),
+    wandSeeds: Array.isArray(r.wandSeeds)
+      ? r.wandSeeds
+          .filter(
+            (p): p is [number, number] =>
+              Array.isArray(p) && p.length === 2 && p.every((v) => typeof v === 'number'),
+          )
+          .slice(0, 200)
+          .map(([x, y]) => [num(x, 0, 1, 0), num(y, 0, 1, 0)] as [number, number])
+      : [],
+    width: Math.round(num(r.width, 10, 1000, d.width)),
+    fabric: {
+      kind: (['aida', 'evenweave', 'linen'] as const).find((k) => k === f.kind) ?? 'aida',
+      count: Math.round(num(f.count, 6, 60, 14)),
+      over: f.over === 2 ? 2 : 1,
+      color:
+        typeof f.color === 'string' && /^#[0-9a-f]{6}$/i.test(f.color) ? f.color : d.fabric.color,
+    },
+    brand: r.brand === 'Anchor' ? 'Anchor' : 'DMC',
+    maxColors: Math.round(num(r.maxColors, 2, 80, d.maxColors)),
+    dither:
+      (['none', 'floyd-steinberg', 'atkinson', 'ordered'] as const).find((x) => x === r.dither) ??
+      'none',
+    ditherStrength: num(r.ditherStrength, 0.1, 1, d.ditherStrength),
+    cleanup: ([0, 1, 2, 3] as const).find((x) => x === r.cleanup) ?? d.cleanup,
+    protectDetails: r.protectDetails !== false,
+    minStitches: Math.round(num(r.minStitches, 0, 30, d.minStitches)),
+    title: typeof r.title === 'string' ? r.title.slice(0, 120) : '',
+  };
+}
