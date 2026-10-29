@@ -1,114 +1,189 @@
+<div align="center">
+
+<img src="public/favicon.svg" width="88" height="88" alt="">
+
 # Stitchino
 
-**Le tue foto, punto dopo punto.** Stitchino trasforma una foto in uno schema a punto croce, lo
-stampa e ti accompagna mentre ricami. È gratis, senza limiti e senza account: tutto funziona nel
-browser, anche offline, e le foto non lasciano mai il dispositivo.
+**Your photos, stitch by stitch.**
 
-**Prova Stitchino: <https://mrheltic.github.io/stitchino/>**
+Stitchino turns a photo into a cross-stitch pattern, prints it as a PDF and keeps track of your
+stitching. It's free, there's no account, and your pictures never leave your device.
 
-> Stato: beta (0.9). Mancano le prove sul campo con chi ricama: vedi «Da verificare» più sotto.
+[![Open Stitchino](https://img.shields.io/badge/Open_Stitchino-9e2f45?style=for-the-badge&logo=pwa&logoColor=white)](https://mrheltic.github.io/stitchino/)
 
-## Cosa fa
+[![CI](https://img.shields.io/github/actions/workflow/status/mrheltic/stitchino/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/mrheltic/stitchino/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/github/package-json/v/mrheltic/stitchino?color=9e2f45)](package.json)
+[![Licence](https://img.shields.io/github/license/mrheltic/stitchino?color=blue&logo=gnu&logoColor=white)](LICENSE)
+![Interface in English and Italian](https://img.shields.io/badge/UI-English_%C2%B7_Italiano-555)
+![No tracking](https://img.shields.io/badge/tracking-none-2ea44f)
 
-- **Da foto a schema**: ritaglio e regolazioni, sfondo da non ricamare, dimensione in punti o in cm,
-  numero di colori consigliato, abbinamento percettivo ai fili DMC e Anchor (CIEDE2000), dithering,
-  pulizia dei punti isolati, varianti a confronto. Può usare solo i fili che hai, o preferirli.
-- **Editor completo**: punto intero, mezzo punto, quarti e tre quarti, punto scritto, nodini, testo,
-  selezioni, simmetrie, sostituzione e fusione dei colori, annulla e ripeti, salvataggio automatico.
-- **Dimensione reale**: anteprima ricamata, in cornice e nel telaio, misure, tela da comprare, lista
-  della spesa (con quello che hai già), stampa in scala 1:1 con righello di controllo.
-- **PDF ed esportazioni**: PDF con copertina, legenda e matasse stimate, pagine con griglia ogni 10
-  e mappa; preset compatibile con Pattern Keeper; PNG; OXS in lettura e scrittura; file di progetto.
-- **Modalità ricamo** per tablet e telefono: segni i punti con un tocco, un trascinamento, un
-  rettangolo o un'area; colore attivo, prossimo punto da fare, parcheggi, avanzamento giornaliero e
-  data di fine stimata, schermo sempre acceso.
-- **I miei fili**: inventario con import/export CSV.
-- **PDF di altri designer**: lettura dei PDF con simboli testuali (quelli per Pattern Keeper), con
-  schermata di verifica; restano per uso personale.
-- **Guida** per chi inizia e glossario; copia di sicurezza completa; italiano e inglese; tema scuro.
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
+![PWA](https://img.shields.io/badge/PWA-5A0FC8?logo=pwa&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white)
 
-## Pubblicare il sito (GitHub Pages)
+<img src="docs/images/hero.jpg" width="880" alt="A drawing of a lighthouse at sunset, the cross-stitch chart Stitchino made from it, and a preview of how it looks stitched">
 
-Il sito è statico: basta un hosting di file. Il workflow `.github/workflows/ci.yml` controlla il
-codice a ogni push e, sul ramo `main`, pubblica la build su GitHub Pages. Costo: zero.
+</div>
 
-Per pubblicare una tua copia:
+## What it does
 
-1. Fai un fork del repository (deve restare **pubblico**) e attiva le Actions dalla scheda
-   **Actions**.
-2. Su GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. Al prossimo push su `main`, finito il workflow, il sito è su
-   `https://<utente>.github.io/stitchino/`.
+Pick a photo or a drawing, crop it and say how big the finished piece should be; Stitchino
+chooses the DMC or Anchor threads that match it and draws the chart. From there you can fix single
+stitches in the editor, print a PDF, or keep the chart open on a tablet and tick stitches off as
+you go.
 
-Le pagine usano percorsi relativi e il routing con `#`, quindi funzionano anche in una
-sottocartella, senza configurazioni del server.
+- **Photo to pattern.** Crop, adjust, remove the background with a magic wand, then set the size
+  in stitches or centimetres and the number of colours. Threads are matched with CIEDE2000, so
+  they're picked by how close they look rather than by RGB distance. Dithering is optional, a
+  cleanup pass removes isolated "confetti" stitches, and you choose between three versions.
+- **Editor.** Full, half, quarter and three-quarter stitches, backstitch, French knots, text,
+  selections, symmetry, colour replace and merge. Everything can be undone and changes save on
+  their own.
+- **Real size.** The design stitched on Aida, evenweave or linen, framed or in a hoop, with the
+  finished size, the fabric to buy, skeins and a shopping list. A 1:1 print has a 5 cm ruler for
+  checking your printer's scale.
+- **PDF export.** Cover, key with skein counts, a grid every 10 stitches, a page map and repeated
+  rows where pages meet, plus a preset for Pattern Keeper. PNG, OXS and project files too.
+- **Stitching mode.** Mark stitches with a tap, a drag, a rectangle or a whole area of one colour;
+  park threads, jump to the next stitch and see today's count and a likely finish date. The screen
+  stays on while you stitch.
+- **Thread stash.** A list of the skeins you own, with CSV import and export. The wizard can use
+  only those threads or prefer them.
+- **Other designers' PDFs.** Charts whose symbols are text (the kind Pattern Keeper reads) can be
+  imported and stitched in the app, for personal use, after a review screen that shows what was
+  detected.
 
-**Dominio proprio (facoltativo).** Compra un dominio (per esempio `stitchino.app` o `stitchino.it`,
-circa 10–20 € l'anno), poi in **Settings → Pages → Custom domain** inseriscilo e crea dal registrar i
-record DNS indicati da GitHub (`CNAME` verso `<utente>.github.io` per un sottodominio, oppure i
-record `A`/`AAAA` per il dominio principale). Attiva **Enforce HTTPS**.
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/wizard.png" alt="The new pattern wizard with versions of 20, 29 and 39 colours side by side"></td>
+    <td width="50%"><img src="docs/images/editor.png" alt="The editor zoomed in on the chart, with symbols, rulers and the list of threads"></td>
+  </tr>
+  <tr>
+    <td>Three versions to pick from, with stitch count, difficulty and the hours it'll take.</td>
+    <td>The editor: symbols, rulers, palette and a minimap.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/stitching.png" alt="Stitching mode on a tablet, with a block of stitches marked as done and progress per colour on the side"></td>
+    <td><img src="docs/images/real-size.png" alt="The real size page with the design in a frame and its measurements"></td>
+  </tr>
+  <tr>
+    <td>Stitching mode on a tablet. Done stitches lose their symbol under a highlighter.</td>
+    <td>Real size, with the frame, the fabric to buy and the time it needs.</td>
+  </tr>
+</table>
 
-## Donazioni
+<img src="docs/images/pdf.png" alt="Three pages of the PDF: the cover, the key with Anchor equivalents and skein counts, and a chart page">
 
-L'app non ha pubblicità né tracciamento. L'unica richiesta di sostegno è la pagina «Sostieni
-Stitchino» (link a piè di pagina) e una riga di ringraziamento dopo un'esportazione, dalla terza in
-poi, al massimo ogni quattro mesi e disattivabile per sempre.
+<sub>The PDF: cover, key with Anchor equivalents and skein counts, and one of the chart pages.</sub>
 
-1. Crea gli account che vuoi: [Ko-fi](https://ko-fi.com) (donazioni singole),
-   [GitHub Sponsors](https://github.com/sponsors) (mensili) e/o [Liberapay](https://liberapay.com)
-   (ricorrenti, senza commissioni della piattaforma).
-2. Inserisci i link in `src/core/brand.ts` (`LINKS`): finché un link è vuoto l'app non lo mostra.
-3. Togli il commento alle righe giuste in `.github/FUNDING.yml` per il pulsante «Sponsor» del
-   repository.
+## Install it
 
-## Sviluppo
+Stitchino is a web app. Installed from the browser, it gets its own icon and window and works
+offline.
 
-Requisiti: Node.js 22 o successivo.
+<table>
+  <tr>
+    <td><img src="https://img.shields.io/badge/Android-34A853?logo=android&logoColor=white" alt="Android"></td>
+    <td>Chrome: menu <b>⋮</b> → <b>Install app</b></td>
+  </tr>
+  <tr>
+    <td><img src="https://img.shields.io/badge/iPhone_%26_iPad-000000?logo=apple&logoColor=white" alt="iPhone and iPad"></td>
+    <td>Safari: <b>Share</b> → <b>Add to Home Screen</b></td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://img.shields.io/badge/Windows-0078D4?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjIiIHk9IjMiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxNCIgcng9IjIiLz48cGF0aCBkPSJNOCAyMWg4TTEyIDE3djQiLz48L3N2Zz4=" alt="Windows">
+      <img src="https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white" alt="macOS">
+      <img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" alt="Linux">
+      <img src="https://img.shields.io/badge/ChromeOS-4285F4?logo=googlechrome&logoColor=white" alt="ChromeOS">
+    </td>
+    <td>Chrome or Edge: the install button at the right end of the address bar</td>
+  </tr>
+</table>
+
+Your projects are saved in the browser, on that device. Make a backup from **Settings** every now
+and then; on iPhone and iPad, adding the app to the Home Screen also stops Safari from clearing its
+data after a week without visits.
+
+## Privacy
+
+There are no accounts, cookies, analytics or ads. Photos and projects stay in your browser's
+storage (IndexedDB) and nothing gets uploaded, because the conversion and the PDF export run on
+your device in Web Workers. The site itself is a set of static files on GitHub Pages, which keeps
+the usual server logs; see
+[GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement).
+
+## Help wanted
+
+Some things can only be checked by people who stitch. If you're one of them:
+
+- open a PDF exported with the **For Pattern Keeper** preset in Pattern Keeper on Android and check
+  that the symbols highlight and the counts match;
+- compare the skein estimate (about 1,650 stitches per skein on 14-count Aida with 2 strands) with
+  a real piece;
+- import PDFs from different designers and say which ones fail;
+- print the 1:1 page and measure its ruler, which should be exactly 5 cm;
+- try it on an iPhone or iPad, where it has barely been tested.
+
+[Open an issue](https://github.com/mrheltic/stitchino/issues) with what you find.
+
+## Development
+
+Stitchino is built with React, Vite and Tailwind CSS, with Radix UI, Zustand, Dexie, Comlink,
+pdf-lib and PDF.js doing a lot of the work. You need Node.js 22 or newer.
 
 ```sh
 npm install
-npm run dev          # server di sviluppo
-npm test             # test unitari (Vitest)
-npm run e2e          # test end-to-end (Playwright; in locale usa Chrome installato)
+npm run dev        # dev server
+npm test           # unit tests (Vitest)
+npm run e2e        # end-to-end tests on desktop, tablet and phone (Playwright)
 npm run lint && npm run typecheck
-npm run build        # build di produzione in dist/
+npm run build      # production build in dist/
 ```
 
-Dati generati (da rifare solo quando cambiano le sorgenti):
+Locally the end-to-end tests run in the Chrome you have installed; CI downloads Playwright's
+Chromium instead.
+
+The thread catalogues and the symbol font are generated, so rebuild them only when their sources
+change:
 
 ```sh
-npm run build:threads   # src/core/threads/data/*.json dai cataloghi KXStitch
-npm run build:font      # public/fonts/pc-symbols.ttf (serve Python 3 con fontTools)
+npm run build:threads   # src/core/threads/data/*.json from the KXStitch colour schemes
+npm run build:font      # public/fonts/pc-symbols.ttf (needs Python 3 with fontTools)
 ```
 
-Struttura: `src/core` contiene la logica pura (colore, fili, conversione, misure, PDF, avanzamento),
-testabile senza browser; `src/render` il disegno su canvas; `src/storage` IndexedDB; `src/ui`
-l'interfaccia React. Nome e link del progetto sono in `src/core/brand.ts`. «PuntoCroce» era il nome
-di lavoro: resta nei nomi interni dell'archivio, così i dati salvati restano leggibili.
+| Folder        | Contents                                                                                                                           |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `src/core`    | colour matching, thread catalogues, conversion, sizes, PDF export and import, progress. Plain TypeScript, tested without a browser |
+| `src/render`  | canvas drawing: the chart, the stitched preview, mockups                                                                           |
+| `src/storage` | IndexedDB through Dexie: projects, progress, inventory, backup                                                                     |
+| `src/workers` | photo conversion and PDF export, off the main thread                                                                               |
+| `src/ui`      | the React app                                                                                                                      |
 
-## Da verificare con chi ricama
+The IndexedDB database and the localStorage keys still carry the working name "puntocroce", so
+data saved by the first builds stays readable.
 
-- PDF in preset Pattern Keeper aperto nell'app su Android: simboli evidenziabili, legenda
-  riconosciuta, conteggi uguali.
-- Stima delle matasse (circa 1.650 punti per matassa su Aida 14 con 2 capi): da tarare con un
-  campione ricamato.
-- Lettura di PDF comprati da designer diversi (WinStitch, PCStitch, Pic2Pat…): i PDF di prova vanno
-  in `test-corpus/`, che è escluso dal repository.
-- Stampa 1:1: il righello di controllo deve misurare 5 cm.
+### Publishing your own copy
 
-## English
+Fork the repository, enable workflows in the **Actions** tab and set **Settings → Pages → Source**
+to **GitHub Actions**. After that, every push to `main` runs the checks and publishes the site at
+`https://<user>.github.io/stitchino/`. Paths are relative and routing uses `#`, so it works from
+any sub-path. The app name and its links (repository, donation pages) live in `src/core/brand.ts`.
 
-Stitchino turns photos into cross-stitch patterns, prints them and tracks your stitching. It is a
-free, open-source progressive web app: no account, no server, works offline, and your photos never
-leave your device. It reads Pattern Keeper-style PDFs for personal stitching, keeps a thread stash,
-and the interface is available in Italian and English. Try it at
-<https://mrheltic.github.io/stitchino/>. See the sections above to build, test and deploy your own
-copy to GitHub Pages.
+## Supporting the project
 
-## Licenza / Licence
+Stitchino is free and has no ads. A star helps people find it, and so does mentioning it to a
+stitching group or reporting a bug.
 
-Codice: [GNU GPL v3.0 o successiva](LICENSE). Font dei simboli: SIL Open Font License 1.1.
-Componenti e dati di terze parti: vedi [THIRD_PARTY.md](THIRD_PARTY.md).
+## Licence
 
-DMC e Anchor sono marchi dei rispettivi titolari. Stitchino usa solo i codici dei colori come
-riferimento e non è affiliato ai produttori. I colori a schermo sono approssimazioni.
+The code is under the [GNU GPL v3.0 or later](LICENSE). The symbol font is under the SIL Open Font
+Licence 1.1, and the other third-party data and components are listed in
+[THIRD_PARTY.md](THIRD_PARTY.md).
+
+DMC and Anchor are trademarks of their owners. Stitchino uses their colour codes only as a
+reference and isn't affiliated with either. Colours on screen are approximations of the real
+threads.
