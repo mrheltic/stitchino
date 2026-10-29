@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { FileUp, FolderInput, ImagePlus, Square } from 'lucide-react';
+import { FileUp, FolderInput, ImagePlus, Sparkles, Square } from 'lucide-react';
 import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router';
@@ -10,6 +10,9 @@ import { createProject, importProjectFile, listProjects } from '../../storage/pr
 import { ProjectCard } from '../components/ProjectCard.tsx';
 import { Card, LinkButton, Page } from '../components/ui.tsx';
 import { patternThumbnail } from '../patternPaint.ts';
+
+const moreLink =
+  'inline-flex items-center gap-1.5 font-medium text-ink underline-offset-2 hover:underline';
 
 export function Home() {
   const { t } = useTranslation();
@@ -64,16 +67,23 @@ export function Home() {
             <ImagePlus size={20} aria-hidden />
             {t('home.fromPhoto')}
           </LinkButton>
-          <LinkButton to="/new?blank=1">
-            <Square size={18} aria-hidden />
+          <LinkButton to="/new?example=1" className="px-5 py-2.5 text-base">
+            <Sparkles size={18} aria-hidden />
+            {t('home.example')}
+          </LinkButton>
+        </div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted">
+          <span>{t('home.moreWays')}</span>
+          <Link to="/new?blank=1" className={moreLink}>
+            <Square size={16} aria-hidden />
             {t('home.blank')}
-          </LinkButton>
-          <LinkButton to="/import-pdf">
-            <FileUp size={18} aria-hidden />
+          </Link>
+          <Link to="/import-pdf" className={moreLink}>
+            <FileUp size={16} aria-hidden />
             {t('home.importPdf')}
-          </LinkButton>
-          <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium hover:bg-surface-2 has-focus-visible:outline-2">
-            <FolderInput size={18} aria-hidden />
+          </Link>
+          <label className={`${moreLink} cursor-pointer has-focus-visible:outline-2`}>
+            <FolderInput size={16} aria-hidden />
             {t('home.openFile')}
             <input
               type="file"

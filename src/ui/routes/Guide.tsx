@@ -1,6 +1,8 @@
+import { Compass } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Page, PageHeader } from '../components/ui.tsx';
+import { Button, Page, PageHeader } from '../components/ui.tsx';
 import { guideContent } from '../guide/content.tsx';
+import { useTour } from '../tour/store.ts';
 
 export default function Guide() {
   const { t, i18n } = useTranslation();
@@ -9,6 +11,10 @@ export default function Guide() {
     <Page>
       <PageHeader title={t('pages.guide')} />
       <p className="-mt-3 mb-6 max-w-2xl text-muted">{content.intro}</p>
+      <Button variant="primary" className="mb-8" onClick={() => useTour.getState().start()}>
+        <Compass size={18} aria-hidden />
+        {t('tour.open')}
+      </Button>
       <nav aria-label={t('guide.contents')} className="mb-8">
         <ul className="flex flex-wrap gap-2">
           {content.sections.map((s) => (

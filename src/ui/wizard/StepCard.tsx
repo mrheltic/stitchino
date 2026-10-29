@@ -8,6 +8,7 @@ export function StepCard({
   open,
   disabled,
   onOpen,
+  tour,
   children,
 }: {
   n: number;
@@ -16,10 +17,13 @@ export function StepCard({
   open: boolean;
   disabled?: boolean;
   onOpen: () => void;
+  /** Anchor for the guided tour. */
+  tour?: string;
   children: ReactNode;
 }) {
   return (
     <section
+      data-tour={tour}
       className={`rounded-xl border bg-surface ${open ? 'border-accent/60' : 'border-line'} ${disabled ? 'opacity-50' : ''}`}
     >
       <h2>

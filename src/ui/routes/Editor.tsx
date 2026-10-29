@@ -436,6 +436,7 @@ function Workspace({
           className={`${iconButton} lg:hidden`}
           onClick={() => setPaletteOpen(!paletteOpen)}
           aria-expanded={paletteOpen}
+          data-tour="palette"
           aria-label={t('editor.palette.toggle')}
         >
           <PaletteIcon size={18} aria-hidden />
@@ -491,6 +492,7 @@ function Workspace({
           className={`${iconButton} w-auto gap-1.5 px-2`}
           onClick={() => setDialog('export')}
           disabled={summary.imported}
+          data-tour="export"
           title={summary.imported ? t('export.imported') : t('export.title')}
         >
           <Download size={18} aria-hidden />
@@ -504,14 +506,18 @@ function Workspace({
         >
           <Ruler size={18} aria-hidden />
         </Link>
-        <Link to={`/project/${id}/stitch`} className={buttonClass('primary', 'px-3 py-1.5')}>
+        <Link
+          to={`/project/${id}/stitch`}
+          className={buttonClass('primary', 'px-3 py-1.5')}
+          data-tour="stitch"
+        >
           <Hand size={16} aria-hidden />
           <span className="max-sm:sr-only">{t('home.stitch')}</span>
         </Link>
       </div>
 
       <div className="flex min-h-0 flex-1">
-        <aside className="hidden border-r border-line bg-surface p-1.5 lg:block">
+        <aside className="hidden border-r border-line bg-surface p-1.5 lg:block" data-tour="tools">
           <Toolbar vertical />
         </aside>
         <div className="flex min-w-0 flex-1 flex-col">
@@ -551,11 +557,15 @@ function Workspace({
               />
             )}
           </div>
-          <div className="overflow-x-auto border-t border-line bg-surface p-1.5 lg:hidden">
+          <div
+            className="overflow-x-auto border-t border-line bg-surface p-1.5 lg:hidden"
+            data-tour="tools"
+          >
             <Toolbar vertical={false} />
           </div>
         </div>
         <aside
+          data-tour="palette"
           className={`flex min-h-0 flex-col border-l border-line bg-surface max-lg:absolute max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-20 max-lg:max-h-[55vh] max-lg:rounded-t-2xl max-lg:border-t max-lg:shadow-2xl lg:w-80 ${
             paletteOpen ? '' : 'max-lg:hidden'
           }`}

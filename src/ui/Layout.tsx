@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink, Outlet, useMatches } from 'react-router';
 import { UpdatePrompt } from './components/UpdatePrompt.tsx';
+import { Tour } from './tour/Tour.tsx';
 
 export interface RouteHandle {
   /** Full-screen work area (editor, stitching): no footer, main fills the viewport. */
@@ -104,6 +105,7 @@ export function Layout() {
         </footer>
       )}
       <UpdatePrompt />
+      <Tour />
     </div>
   );
 }

@@ -291,8 +291,9 @@ function PhotoWizard() {
               },
         );
         setConv(null);
-        setStep('crop');
-        setView('photo');
+        // Result first: the pattern appears at once, the steps above refine it.
+        setStep('create');
+        setView('pattern');
       } catch {
         setError(t('wizard.errors.unsupported'));
       }
@@ -319,19 +320,27 @@ function PhotoWizard() {
     };
   }, [fromId, loadFile]);
 
-  // "Open in Stitchino" on a free pattern's page: its picture and settings, from this site.
-  const picture = search.get('src');
+  // "Open in Stitchino" on a free pattern's page: its picture and settings, from this site;
+  // `example` opens the example picture.
+  const picture = search.get('src') ?? (search.get('example') ? EXAMPLE_PICTURE : null);
   const query = search.toString();
   useEffect(() => {
     if (!picture) return;
     let cancelled = false;
     void fetchPicture(picture).then((f) => {
-      if (!cancelled && f) void loadFile(f, linkSettings(query));
+      if (cancelled || !f) return;
+      const example = picture === EXAMPLE_PICTURE;
+      void loadFile(
+        f,
+        example
+          ? { title: t('wizard.photo.exampleTitle'), autoSubject: true }
+          : linkSettings(query),
+      );
     });
     return () => {
       cancelled = true;
     };
-  }, [picture, query, loadFile]);
+  }, [picture, query, loadFile, t]);
 
   const loadExample = async () => {
     const f = await fetchPicture(EXAMPLE_PICTURE);
@@ -426,6 +435,7 @@ function PhotoWizard() {
     open: step === id,
     disabled: id !== 'photo' && !has,
     onOpen: () => goTo(id),
+    tour: `step-${id}`,
   });
 
   const preset = FABRIC_PRESETS.find((p) => p.kind === s.fabric.kind)!;
@@ -520,43 +530,50 @@ function PhotoWizard() {
               format={pct}
               onChange={(v) => set({ adjustments: { ...s.adjustments, contrast: v } })}
             />
-            <SliderField
-              label={t('wizard.adjust.saturation')}
-              value={s.adjustments.saturation}
-              min={-1}
-              max={1}
-              step={0.05}
-              format={pct}
-              onChange={(v) => set({ adjustments: { ...s.adjustments, saturation: v } })}
-            />
-            <SliderField
-              label={t('wizard.adjust.midtones')}
-              value={s.adjustments.gamma}
-              min={0.5}
-              max={2}
-              step={0.05}
-              format={(v) => formatDecimal(v, 2, lng)}
-              onChange={(v) => set({ adjustments: { ...s.adjustments, gamma: v } })}
-            />
-            <SliderField
-              label={t('wizard.adjust.sharpen')}
-              value={s.adjustments.sharpen}
-              min={0}
-              max={1}
-              step={0.05}
-              format={pct}
-              onChange={(v) => set({ adjustments: { ...s.adjustments, sharpen: v } })}
-            />
-            <SliderField
-              label={t('wizard.adjust.denoise')}
-              hint={t('wizard.adjust.denoiseHint')}
-              value={s.adjustments.denoise}
-              min={0}
-              max={1}
-              step={0.05}
-              format={pct}
-              onChange={(v) => set({ adjustments: { ...s.adjustments, denoise: v } })}
-            />
+            <details className="group rounded-lg border border-line px-3 py-2">
+              <summary className="cursor-pointer text-sm font-medium">
+                {t('wizard.moreAdjustments')}
+              </summary>
+              <div className="mt-3 space-y-4">
+                <SliderField
+                  label={t('wizard.adjust.saturation')}
+                  value={s.adjustments.saturation}
+                  min={-1}
+                  max={1}
+                  step={0.05}
+                  format={pct}
+                  onChange={(v) => set({ adjustments: { ...s.adjustments, saturation: v } })}
+                />
+                <SliderField
+                  label={t('wizard.adjust.midtones')}
+                  value={s.adjustments.gamma}
+                  min={0.5}
+                  max={2}
+                  step={0.05}
+                  format={(v) => formatDecimal(v, 2, lng)}
+                  onChange={(v) => set({ adjustments: { ...s.adjustments, gamma: v } })}
+                />
+                <SliderField
+                  label={t('wizard.adjust.sharpen')}
+                  value={s.adjustments.sharpen}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  format={pct}
+                  onChange={(v) => set({ adjustments: { ...s.adjustments, sharpen: v } })}
+                />
+                <SliderField
+                  label={t('wizard.adjust.denoise')}
+                  hint={t('wizard.adjust.denoiseHint')}
+                  value={s.adjustments.denoise}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  format={pct}
+                  onChange={(v) => set({ adjustments: { ...s.adjustments, denoise: v } })}
+                />
+              </div>
+            </details>
             <Button variant="ghost" onClick={() => set({ adjustments: NO_ADJUSTMENTS })}>
               <Undo2 size={16} aria-hidden />
               {t('wizard.adjust.reset')}
@@ -793,52 +810,61 @@ function PhotoWizard() {
                 </Button>
               )}
             </div>
-            <Field label={t('wizard.colors.cleanup')} hint={t('wizard.colors.cleanupHint')}>
-              <Choice<CleanupLevel>
-                name="cleanup"
-                size="sm"
-                value={s.cleanup}
-                onChange={(cleanup) => set({ cleanup })}
-                options={([0, 1, 2, 3] as const).map((v) => ({
-                  value: v,
-                  label: t(`wizard.colors.cleanupLevels.${v}`),
-                }))}
-              />
-            </Field>
-            <Toggle checked={s.protectDetails} onChange={(v) => set({ protectDetails: v })}>
-              {t('wizard.colors.protectDetails')}
-            </Toggle>
-            <SliderField
-              label={t('wizard.colors.minStitches')}
-              hint={t('wizard.colors.minStitchesHint')}
-              value={s.minStitches}
-              min={0}
-              max={30}
-              onChange={(v) => set({ minStitches: v })}
-            />
-            <Field label={t('wizard.colors.dither')} hint={t('wizard.colors.ditherHint')}>
-              <Choice<DitherMethod>
-                name="dither"
-                size="sm"
-                value={s.dither}
-                onChange={(dither) => set({ dither })}
-                options={(['none', 'floyd-steinberg', 'atkinson', 'ordered'] as const).map((d) => ({
-                  value: d,
-                  label: t(`wizard.colors.dithers.${d}`),
-                }))}
-              />
-            </Field>
-            {s.dither !== 'none' && (
-              <SliderField
-                label={t('wizard.colors.ditherStrength')}
-                value={s.ditherStrength}
-                min={0.1}
-                max={1}
-                step={0.05}
-                format={pct}
-                onChange={(v) => set({ ditherStrength: v })}
-              />
-            )}
+            <details className="group rounded-lg border border-line px-3 py-2">
+              <summary className="cursor-pointer text-sm font-medium">
+                {t('wizard.moreOptions')}
+              </summary>
+              <div className="mt-3 space-y-4">
+                <Field label={t('wizard.colors.cleanup')} hint={t('wizard.colors.cleanupHint')}>
+                  <Choice<CleanupLevel>
+                    name="cleanup"
+                    size="sm"
+                    value={s.cleanup}
+                    onChange={(cleanup) => set({ cleanup })}
+                    options={([0, 1, 2, 3] as const).map((v) => ({
+                      value: v,
+                      label: t(`wizard.colors.cleanupLevels.${v}`),
+                    }))}
+                  />
+                </Field>
+                <Toggle checked={s.protectDetails} onChange={(v) => set({ protectDetails: v })}>
+                  {t('wizard.colors.protectDetails')}
+                </Toggle>
+                <SliderField
+                  label={t('wizard.colors.minStitches')}
+                  hint={t('wizard.colors.minStitchesHint')}
+                  value={s.minStitches}
+                  min={0}
+                  max={30}
+                  onChange={(v) => set({ minStitches: v })}
+                />
+                <Field label={t('wizard.colors.dither')} hint={t('wizard.colors.ditherHint')}>
+                  <Choice<DitherMethod>
+                    name="dither"
+                    size="sm"
+                    value={s.dither}
+                    onChange={(dither) => set({ dither })}
+                    options={(['none', 'floyd-steinberg', 'atkinson', 'ordered'] as const).map(
+                      (d) => ({
+                        value: d,
+                        label: t(`wizard.colors.dithers.${d}`),
+                      }),
+                    )}
+                  />
+                </Field>
+                {s.dither !== 'none' && (
+                  <SliderField
+                    label={t('wizard.colors.ditherStrength')}
+                    value={s.ditherStrength}
+                    min={0.1}
+                    max={1}
+                    step={0.05}
+                    format={pct}
+                    onChange={(v) => set({ ditherStrength: v })}
+                  />
+                )}
+              </div>
+            </details>
             <NextButton onClick={nextStep} />
           </StepCard>
 
@@ -853,36 +879,39 @@ function PhotoWizard() {
               />
             </Field>
             {variants && variants.length > 1 && (
-              <Field label={t('wizard.create.variants')}>
-                <div className="grid grid-cols-3 gap-2">
-                  {variants.map((v, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => set({ maxColors: variantCounts[i] })}
-                      className={`rounded-lg border p-1 text-xs ${variantCounts[i] === s.maxColors ? 'border-accent' : 'border-line'}`}
-                    >
-                      <PatternCanvas
-                        width={v.width}
-                        height={v.height}
-                        cells={v.cells}
-                        palette={v.palette}
-                        fabricColor={s.fabric.color}
-                        className="w-full rounded"
-                      />
-                      <span className="mt-1 block">
-                        {t('wizard.colors.summary', { count: v.metrics.colors, brand: s.brand })}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </Field>
+              <div data-tour="variants">
+                <Field label={t('wizard.create.variants')}>
+                  <div className="grid grid-cols-3 gap-2">
+                    {variants.map((v, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => set({ maxColors: variantCounts[i] })}
+                        className={`rounded-lg border p-1 text-xs ${variantCounts[i] === s.maxColors ? 'border-accent' : 'border-line'}`}
+                      >
+                        <PatternCanvas
+                          width={v.width}
+                          height={v.height}
+                          cells={v.cells}
+                          palette={v.palette}
+                          fabricColor={s.fabric.color}
+                          className="w-full rounded"
+                        />
+                        <span className="mt-1 block">
+                          {t('wizard.colors.summary', { count: v.metrics.colors, brand: s.brand })}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </Field>
+              </div>
             )}
             <Button
               variant="primary"
               className="w-full py-2.5 text-base"
               disabled={!result || saving || busy}
               onClick={() => void create()}
+              data-tour="create"
             >
               {saving && <Loader2 size={18} className="animate-spin" aria-hidden />}
               {t('wizard.create.button')}
@@ -890,7 +919,10 @@ function PhotoWizard() {
           </StepCard>
         </div>
 
-        <div className="sticky top-0 z-10 -mx-4 space-y-3 bg-bg px-4 py-2 max-lg:order-first lg:top-4 lg:mx-0 lg:self-start lg:bg-transparent lg:p-0">
+        <div
+          data-tour="preview"
+          className="sticky top-0 z-10 -mx-4 space-y-3 bg-bg px-4 py-2 max-lg:order-first lg:top-4 lg:mx-0 lg:self-start lg:bg-transparent lg:p-0"
+        >
           {(error ?? conversionError) && (
             <p
               role="alert"

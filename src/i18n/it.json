@@ -45,7 +45,9 @@
       "stitch": "Stampa o ricama",
       "stitchText": "Scarica il PDF, anche per Pattern Keeper, o segna i punti fatti dal tablet.",
       "guide": "Prima volta col punto croce? Leggi la guida"
-    }
+    },
+    "example": "Prova con un esempio",
+    "moreWays": "Oppure parti da:"
   },
   "common": {
     "back": "Indietro",
@@ -257,7 +259,9 @@
       "convert": "La conversione non è riuscita. Prova a cambiare le impostazioni.",
       "noThreads": "Nessun filo disponibile con queste impostazioni.",
       "save": "Non sono riuscito a salvare il progetto."
-    }
+    },
+    "moreAdjustments": "Altre regolazioni",
+    "moreOptions": "Altre opzioni"
   },
   "fabric": {
     "kinds": {
@@ -776,5 +780,72 @@
       "I colori sullo schermo e la stima dei fili sono approssimazioni: controlla con la cartella colori e compra un po' di margine.",
       "DMC e Anchor sono marchi dei rispettivi titolari. Stitchino usa i codici dei colori solo come riferimento e non è affiliato ai produttori."
     ]
+  },
+  "tour": {
+    "start": "Iniziamo",
+    "notNow": "Non ora",
+    "next": "Avanti",
+    "back": "Indietro",
+    "end": "Chiudi il tour",
+    "finish": "Fine",
+    "stepOf": "Passo {{n}} di {{total}}",
+    "clickHint": "Usa il pulsante evidenziato per continuare.",
+    "paused": "Tour guidato in pausa",
+    "resume": "Riprendi",
+    "open": "Fai il tour guidato",
+    "steps": {
+      "welcome": {
+        "title": "Ti diamo il benvenuto in Stitchino",
+        "body": "Facciamo insieme un primo schema, partendo da un'immagine di esempio. Ci vogliono due minuti e vedrai le impostazioni che contano."
+      },
+      "preview": {
+        "title": "Ecco il tuo schema",
+        "body": "Stitchino ha trasformato l'immagine in punti, ognuno con il colore di un filo vero. Ogni passaggio dell'elenco lo modifica."
+      },
+      "crop": {
+        "title": "Inquadratura",
+        "body": "Ritaglia l'immagine per tenere solo quello che vuoi ricamare, e girala se serve."
+      },
+      "adjust": {
+        "title": "Regolazioni",
+        "body": "Luminosità e contrasto, e la possibilità di non ricamare lo sfondo: Stitchino trova il soggetto da solo."
+      },
+      "size": {
+        "title": "Dimensioni e tessuto",
+        "body": "Quanto sarà grande, in punti o in centimetri, e su quale tela. Più grande mostra più dettagli ma richiede più tempo."
+      },
+      "colors": {
+        "title": "Colori",
+        "body": "Quanti fili usare. Meno colori si ricamano prima, più colori somigliano di più alla foto."
+      },
+      "variants": {
+        "title": "Scegli una versione",
+        "body": "Tre versioni con un numero diverso di colori. Scegli quella che ti piace di più."
+      },
+      "create": {
+        "title": "Crea il progetto",
+        "body": "Ti piace? Crea il progetto: nell'editor potrai ancora cambiare tutto."
+      },
+      "palette": {
+        "title": "I tuoi fili",
+        "body": "Ogni filo ha il suo simbolo. Scegline uno per disegnare, o apri il suo menu per cambiarlo."
+      },
+      "tools": {
+        "title": "Strumenti",
+        "body": "Punti interi e mezzi punti, punto scritto, riempimento, selezioni e altro, per correggere i singoli punti. Annulla è sempre in alto."
+      },
+      "export": {
+        "title": "Esporta",
+        "body": "Scarica il PDF da stampare, con la legenda e le matasse da comprare, o una versione per Pattern Keeper."
+      },
+      "stitch": {
+        "title": "Modalità ricamo",
+        "body": "Quando inizi a ricamare, vieni qui: tocca i punti fatti e Stitchino tiene il conto."
+      },
+      "done": {
+        "title": "Tutto pronto",
+        "body": "Il tuo schema è salvato in Progetti. Puoi rifare questo tour dalla Guida."
+      }
+    }
   }
 }

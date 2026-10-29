@@ -10,6 +10,9 @@ test.beforeEach(async ({ page }) => {
 test('creates a project from a photo and lists it on the home page', async ({ page }) => {
   await page.goto('./#/new');
   await page.getByTestId('photo-input').setInputFiles(scene);
+  // The pattern shows up at once; the steps above refine it.
+  await expect(page.getByRole('button', { name: 'Crea il progetto' })).toBeVisible();
+  await page.getByRole('button', { name: /Inquadratura/ }).click();
   await expect(page.getByRole('img', { name: 'Foto da ritagliare' })).toBeVisible();
 
   await page.getByRole('button', { name: /Dimensioni e tessuto/ }).click();

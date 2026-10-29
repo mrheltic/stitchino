@@ -45,7 +45,9 @@
       "stitch": "Print it or stitch it",
       "stitchText": "Download the PDF, also for Pattern Keeper, or mark your stitches on a tablet.",
       "guide": "New to cross stitch? Read the guide"
-    }
+    },
+    "example": "Try an example",
+    "moreWays": "Or start from:"
   },
   "common": {
     "back": "Back",
@@ -257,7 +259,9 @@
       "convert": "The conversion failed. Try different settings.",
       "noThreads": "No threads available with these settings.",
       "save": "The project could not be saved."
-    }
+    },
+    "moreAdjustments": "More adjustments",
+    "moreOptions": "More options"
   },
   "fabric": {
     "kinds": {
@@ -776,5 +780,72 @@
       "On-screen colours and thread estimates are approximations: check against a colour card and buy a little extra.",
       "DMC and Anchor are trademarks of their respective owners. Stitchino uses colour numbers only as a reference and is not affiliated with the makers."
     ]
+  },
+  "tour": {
+    "start": "Start",
+    "notNow": "Not now",
+    "next": "Next",
+    "back": "Back",
+    "end": "End the tour",
+    "finish": "Finish",
+    "stepOf": "Step {{n}} of {{total}}",
+    "clickHint": "Use the highlighted button to carry on.",
+    "paused": "Guided tour paused",
+    "resume": "Resume",
+    "open": "Take the guided tour",
+    "steps": {
+      "welcome": {
+        "title": "Welcome to Stitchino",
+        "body": "Let's make a first pattern together, from an example picture. It takes two minutes and shows you the settings that matter."
+      },
+      "preview": {
+        "title": "Here's your pattern",
+        "body": "Stitchino turned the picture into stitches, each in a real thread colour. Every step in the list changes it."
+      },
+      "crop": {
+        "title": "Framing",
+        "body": "Crop the picture to keep only what you want to stitch, and turn it if needed."
+      },
+      "adjust": {
+        "title": "Adjustments",
+        "body": "Brightness and contrast, and the option to leave the background unstitched: Stitchino finds the subject on its own."
+      },
+      "size": {
+        "title": "Size and fabric",
+        "body": "How big it will be, in stitches or centimetres, and on which fabric. Bigger shows more detail but takes longer to stitch."
+      },
+      "colors": {
+        "title": "Colours",
+        "body": "How many threads to use. Fewer colours are quicker to stitch, more colours look closer to the photo."
+      },
+      "variants": {
+        "title": "Pick a version",
+        "body": "Three versions with different numbers of colours. Choose the one you like best."
+      },
+      "create": {
+        "title": "Create the project",
+        "body": "Happy with it? Create the project: you can still change anything in the editor."
+      },
+      "palette": {
+        "title": "Your threads",
+        "body": "Each thread has its own symbol. Pick one to draw with it, or open its menu to change it."
+      },
+      "tools": {
+        "title": "Tools",
+        "body": "Full and half stitches, backstitch, fill, selections and more, to fix single stitches. Undo is always at the top."
+      },
+      "export": {
+        "title": "Export",
+        "body": "Download the PDF to print, with the key and the skeins to buy, or a version for Pattern Keeper."
+      },
+      "stitch": {
+        "title": "Stitching mode",
+        "body": "When you start stitching, come here: tap the stitches you've done and Stitchino keeps count."
+      },
+      "done": {
+        "title": "You're ready",
+        "body": "Your pattern is saved in Projects. You can take this tour again from the Guide."
+      }
+    }
   }
 }

@@ -22,7 +22,7 @@ test('a free pattern opens in the wizard with its picture and settings', async (
     /lighthouse-at-sunset-pattern-keeper\.pdf$/,
   );
   await page.getByRole('link', { name: 'Change the size or colours in Stitchino' }).click();
-  await expect(page.getByRole('img', { name: 'Photo to crop' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Create the project' })).toBeVisible();
   await page.getByRole('button', { name: /Size and fabric/ }).click();
   await expect(page.getByRole('spinbutton', { name: /^Width/ })).toHaveValue('100');
 });
@@ -30,7 +30,7 @@ test('a free pattern opens in the wizard with its picture and settings', async (
 test('the wizard can start from an example picture', async ({ page }) => {
   await page.goto('./#/new');
   await page.getByRole('button', { name: 'Try an example' }).click();
-  await expect(page.getByRole('img', { name: 'Photo to crop' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Create the project' })).toBeVisible();
 });
 
 test('the static pages still load once the offline app is installed', async ({ page }) => {
