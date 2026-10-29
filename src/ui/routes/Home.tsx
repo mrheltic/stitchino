@@ -3,10 +3,12 @@ import { FileUp, FolderInput, ImagePlus, Square } from 'lucide-react';
 import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { PROJECT_EXTENSION } from '../../core/io/projectFile.ts';
-import { importProjectFile, listProjects } from '../../storage/projects.ts';
+import { importOxs } from '../../core/io/oxs.ts';
+import { PROJECT_EXTENSIONS } from '../../core/io/projectFile.ts';
+import { createProject, importProjectFile, listProjects } from '../../storage/projects.ts';
 import { ProjectCard } from '../components/ProjectCard.tsx';
 import { Card, LinkButton, Page } from '../components/ui.tsx';
+import { patternThumbnail } from '../patternPaint.ts';
 
 export function Home() {
   const { t } = useTranslation();
@@ -20,8 +22,23 @@ export function Home() {
     if (!file) return;
     setError(null);
     try {
-      const id = await importProjectFile(new Uint8Array(await file.arrayBuffer()));
-      navigate(`/project/${id}`);
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      // Project files are zips ("PK"); anything else is tried as OXS (XML).
+      if (bytes[0] === 0x50 && bytes[1] === 0x4b) {
+        navigate(`/project/${await importProjectFile(bytes)}`);
+        return;
+      }
+      const { pattern, report } = importOxs(new TextDecoder().decode(bytes));
+      pattern.meta.title ||= file.name.replace(/\.[^.]+$/, '');
+      const thumbnail = await patternThumbnail(
+        pattern.width,
+        pattern.height,
+        pattern.cells,
+        pattern.palette,
+        pattern.fabric.color,
+      );
+      const id = await createProject(pattern, { thumbnail });
+      navigate(`/project/${id}`, { state: { oxsReport: report } });
     } catch {
       setError(t('home.openError'));
     }
@@ -52,7 +69,7 @@ export function Home() {
             {t('home.openFile')}
             <input
               type="file"
-              accept={PROJECT_EXTENSION}
+              accept={[...PROJECT_EXTENSIONS, '.oxs', '.xml'].join(',')}
               className="sr-only"
               onChange={(e) => void openFile(e)}
             />
