@@ -166,7 +166,16 @@
         "floyd-steinberg": "Floyd–Steinberg",
         "atkinson": "Atkinson",
         "ordered": "Regolare"
-      }
+      },
+      "threads": "Fili da usare",
+      "threadsModes": {
+        "all": "Tutti",
+        "prefer": "Preferisci i miei",
+        "only": "Solo i miei"
+      },
+      "threadsOwned_one": "Nel tuo inventario c'è {{count}} filo.",
+      "threadsOwned_other": "Nel tuo inventario ci sono {{count}} fili.",
+      "threadsEmpty": "Segna i fili che hai in «I miei fili» per usare solo quelli."
     },
     "create": {
       "name": "Nome del progetto",
@@ -427,7 +436,15 @@
       "heading": "$t(app.name) – lista della spesa: {{title}}",
       "fabricLine": "Tela: {{fabric}}, almeno {{size}}",
       "needleLine": "Ago da ricamo a punta arrotondata n. {{needle}}",
-      "estimateNote": "Le matasse sono una stima (8 m, 6 capi) con un margine di sicurezza: compra quelle indicate, eventualmente una in più per i colori più usati."
+      "estimateNote": "Le matasse sono una stima (8 m, 6 capi) con un margine di sicurezza: compra quelle indicate, eventualmente una in più per i colori più usati.",
+      "need": "Servono",
+      "have": "Hai",
+      "buy": "Da comprare",
+      "bought": "Comprato",
+      "boughtHint": "Aggiunge queste matasse ai tuoi fili",
+      "boughtAll": "Ho comprato tutto",
+      "enough": "ne hai abbastanza",
+      "inventoryHint": "Segna i fili che hai già in «I miei fili»: qui vedrai solo cosa manca."
     }
   },
   "pdf": {
@@ -586,5 +603,37 @@
       "empty": "Qui vedrai quanti punti ricami ogni giorno.",
       "today": "oggi"
     }
+  },
+  "inventory": {
+    "title": "I miei fili",
+    "intro": "Segna i fili che hai in casa. Stitchino può creare schemi solo con quelli, o preferirli, e per ogni progetto ti dice cosa manca da comprare.",
+    "add": "Aggiungi fili",
+    "addOne": "Aggiungi una matassa",
+    "have_one": "ne hai {{count}}",
+    "have_other": "ne hai {{count}}",
+    "many": "Più codici insieme",
+    "manyHint": "Separa i codici con virgole o spazi; un trattino indica un intervallo, per esempio 150-168.",
+    "addButton": "Aggiungi",
+    "added_one": "Aggiunto {{count}} filo.",
+    "added_other": "Aggiunti {{count}} fili.",
+    "unknown": "Non trovati: {{list}}.",
+    "imported_one": "Importato {{count}} filo.",
+    "imported_other": "Importati {{count}} fili.",
+    "skippedLines_one": "{{count}} riga non riconosciuta è stata saltata.",
+    "skippedLines_other": "{{count}} righe non riconosciute sono state saltate.",
+    "importCsv": "Importa CSV",
+    "exportCsv": "Esporta CSV",
+    "fileName": "i-miei-fili.csv",
+    "summary_one": "{{count}} colore · {{skeins}} matasse",
+    "summary_other": "{{count}} colori · {{skeins}} matasse",
+    "filter": "Filtra",
+    "empty": "Nessun filo per ora. Cercali per codice o nome qui sopra, oppure importa un file CSV con le colonne marca, codice e matasse.",
+    "less": "Una matassa in meno di {{thread}}",
+    "more": "Una matassa in più di {{thread}}",
+    "skeinsOf": "Matasse di {{thread}}",
+    "remove": "Togli {{thread}}",
+    "clear": "Svuota",
+    "clearTitle": "Svuotare l'inventario?",
+    "clearText": "Tutti i fili segnati verranno tolti da questo dispositivo. Se vuoi conservarli, prima esporta un CSV."
   }
 }

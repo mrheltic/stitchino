@@ -166,7 +166,16 @@
         "floyd-steinberg": "Floyd–Steinberg",
         "atkinson": "Atkinson",
         "ordered": "Regular"
-      }
+      },
+      "threads": "Threads to use",
+      "threadsModes": {
+        "all": "All",
+        "prefer": "Prefer mine",
+        "only": "Only mine"
+      },
+      "threadsOwned_one": "Your stash has {{count}} thread.",
+      "threadsOwned_other": "Your stash has {{count}} threads.",
+      "threadsEmpty": "Add the threads you own in “My threads” to use only those."
     },
     "create": {
       "name": "Project name",
@@ -427,7 +436,15 @@
       "heading": "$t(app.name) – shopping list: {{title}}",
       "fabricLine": "Fabric: {{fabric}}, at least {{size}}",
       "needleLine": "Blunt tapestry needle, size {{needle}}",
-      "estimateNote": "Skeins are an estimate (8 m, 6 strands) with a safety margin: buy the amount shown, perhaps one extra for the most used colours."
+      "estimateNote": "Skeins are an estimate (8 m, 6 strands) with a safety margin: buy the amount shown, perhaps one extra for the most used colours.",
+      "need": "Needed",
+      "have": "You have",
+      "buy": "To buy",
+      "bought": "Bought",
+      "boughtHint": "Adds these skeins to your threads",
+      "boughtAll": "I bought everything",
+      "enough": "you have enough",
+      "inventoryHint": "Add the threads you already own in “My threads”: this list will show only what's missing."
     }
   },
   "pdf": {
@@ -586,5 +603,37 @@
       "empty": "Here you'll see how many stitches you do each day.",
       "today": "today"
     }
+  },
+  "inventory": {
+    "title": "My threads",
+    "intro": "Keep track of the threads you own. Stitchino can make patterns with only those, or prefer them, and tells you what to buy for each project.",
+    "add": "Add threads",
+    "addOne": "Add a skein",
+    "have_one": "you have {{count}}",
+    "have_other": "you have {{count}}",
+    "many": "Several codes at once",
+    "manyHint": "Separate codes with commas or spaces; a dash means a range, for example 150-168.",
+    "addButton": "Add",
+    "added_one": "Added {{count}} thread.",
+    "added_other": "Added {{count}} threads.",
+    "unknown": "Not found: {{list}}.",
+    "imported_one": "Imported {{count}} thread.",
+    "imported_other": "Imported {{count}} threads.",
+    "skippedLines_one": "{{count}} line I couldn't read was skipped.",
+    "skippedLines_other": "{{count}} lines I couldn't read were skipped.",
+    "importCsv": "Import CSV",
+    "exportCsv": "Export CSV",
+    "fileName": "my-threads.csv",
+    "summary_one": "{{count}} colour · {{skeins}} skeins",
+    "summary_other": "{{count}} colours · {{skeins}} skeins",
+    "filter": "Filter",
+    "empty": "No threads yet. Search for them by code or name above, or import a CSV file with brand, code and skeins columns.",
+    "less": "One skein fewer of {{thread}}",
+    "more": "One more skein of {{thread}}",
+    "skeinsOf": "Skeins of {{thread}}",
+    "remove": "Remove {{thread}}",
+    "clear": "Clear",
+    "clearTitle": "Clear the inventory?",
+    "clearText": "All your threads will be removed from this device. To keep them, export a CSV first."
   }
 }
