@@ -16,8 +16,9 @@ import {
   type ChangeEvent,
   type DragEvent,
 } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { NO_ADJUSTMENTS } from '../../core/convert/adjust.ts';
 import type { CleanupLevel } from '../../core/convert/cleanup.ts';
 import type { DitherMethod } from '../../core/convert/dither.ts';
@@ -35,6 +36,7 @@ import { suggestFrame, suggestHoop } from '../../core/size/frames.ts';
 import { stitchingAdvice } from '../../core/size/needles.ts';
 import { getThread } from '../../core/threads/catalog.ts';
 import { BRANDS, type Brand } from '../../core/threads/types.ts';
+import { listInventory } from '../../storage/inventory.ts';
 import { createProject } from '../../storage/projects.ts';
 import { createConvertWorker, type ConvertWorker } from '../../workers/convertClient.ts';
 import { Choice, Field, NumberInput, SliderField, Toggle } from '../components/controls.tsx';
@@ -129,12 +131,18 @@ function PhotoWizard() {
   const [cropW, cropH] = bitmap ? cropPixels(bitmap, s.orientation, s.crop) : [1, 1];
   const height = Math.max(1, Math.round((s.width * cropH) / cropW));
   const advice = stitchingAdvice(s.fabric);
+  const ownedKeys = useLiveQuery(async () => (await listInventory()).map((r) => r.key), []);
+  const inventory = useMemo(
+    () => (s.threads === 'all' || !ownedKeys ? undefined : { keys: ownedKeys, mode: s.threads }),
+    [s.threads, ownedKeys],
+  );
   const params: ConvertParams = useMemo(
     () => ({
       ...DEFAULT_CONVERT_PARAMS,
       width: s.width,
       height,
       brand: s.brand,
+      inventory,
       maxColors: s.maxColors,
       dither: s.dither,
       ditherStrength: s.ditherStrength,
@@ -149,6 +157,7 @@ function PhotoWizard() {
       s.width,
       height,
       s.brand,
+      inventory,
       s.maxColors,
       s.dither,
       s.ditherStrength,
@@ -641,6 +650,28 @@ function PhotoWizard() {
                 value={s.brand}
                 onChange={(brand) => set({ brand })}
                 options={BRANDS.map((b) => ({ value: b, label: b }))}
+              />
+            </Field>
+            <Field
+              label={t('wizard.colors.threads')}
+              hint={
+                (ownedKeys?.length ?? 0) > 0 ? (
+                  t('wizard.colors.threadsOwned', { count: ownedKeys!.length })
+                ) : (
+                  <Link to="/inventory" className="underline underline-offset-2">
+                    {t('wizard.colors.threadsEmpty')}
+                  </Link>
+                )
+              }
+            >
+              <Choice<'all' | 'only' | 'prefer'>
+                name="threads"
+                value={s.threads}
+                onChange={(threads) => set({ threads })}
+                options={(['all', 'prefer', 'only'] as const).map((v) => ({
+                  value: v,
+                  label: t(`wizard.colors.threadsModes.${v}`),
+                }))}
               />
             </Field>
             <div className="space-y-2">

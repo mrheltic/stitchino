@@ -1,3 +1,4 @@
+import { useLiveQuery } from 'dexie-react-hooks';
 import { ArrowLeft, Copy, Download, Loader2, Printer, Share2 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,8 @@ import { suggestFrame, suggestHoop } from '../../core/size/frames.ts';
 import { stitchingAdvice } from '../../core/size/needles.ts';
 import { estimateColor } from '../../core/size/threadEstimate.ts';
 import { getThread } from '../../core/threads/catalog.ts';
+import { threadKey, type ThreadRef } from '../../core/threads/types.ts';
+import { addSkeins, listInventory } from '../../storage/inventory.ts';
 import { frameMockup, hoopMockup, stitchedImage } from '../../render/mockups.ts';
 import type { RealisticStyle } from '../../render/realistic.ts';
 import { realSizeLayout, realSizePdf, type Paper } from '../../render/realSizePdf.ts';
@@ -29,7 +32,6 @@ import { Choice, Field, NumberInput, Toggle } from '../components/controls.tsx';
 import { Button, Card, LinkButton, Page, PageHeader } from '../components/ui.tsx';
 import { downloadBytes, safeFileName } from '../download.ts';
 import { ChartView } from '../editor/ChartView.tsx';
-import { SymbolSwatch } from '../editor/PalettePanel.tsx';
 import { formatInt, formatSize } from '../format.ts';
 import { patternThumbnail } from '../patternPaint.ts';
 import { useSettings } from '../state/settings.ts';
@@ -106,6 +108,29 @@ function RealSizeView({ id, pattern }: { id: string; pattern: Pattern }) {
     };
   });
   const totalSkeins = list.reduce((s, x) => s + x.skeins, 0);
+  // Per thread: a blend shares its skeins between its threads; a thread may be in several entries.
+  const inventory = useLiveQuery(() => listInventory(), []);
+  const have = new Map(inventory?.map((r) => [r.key, r.skeins]));
+  const perThread = new Map<string, { ref: ThreadRef; need: number; stitches: number }>();
+  for (const x of list) {
+    if (x.stitches === 0) continue;
+    for (const ref of x.entry.threads) {
+      const key = threadKey(ref);
+      const cur = perThread.get(key) ?? { ref, need: 0, stitches: 0 };
+      cur.need += x.skeins / x.entry.threads.length;
+      cur.stitches += x.stitches;
+      perThread.set(key, cur);
+    }
+  }
+  const threads = [...perThread.entries()]
+    .map(([key, v]) => {
+      const need = Math.ceil(v.need - 1e-9);
+      const owned = have.get(key) ?? 0;
+      return { key, ref: v.ref, stitches: v.stitches, need, owned, buy: Math.max(0, need - owned) };
+    })
+    .sort((a, b) => b.stitches - a.stitches);
+  const toBuyThreads = threads.filter((x) => x.buy > 0);
+  const hasInventory = (inventory?.length ?? 0) > 0;
   const layout = realSizeLayout(pattern, style, paper);
   const fabricChanged = JSON.stringify(fabric) !== JSON.stringify(savedFabric);
 
@@ -119,11 +144,9 @@ function RealSizeView({ id, pattern }: { id: string; pattern: Pattern }) {
       }),
       t('realSize.shopping.needleLine', { needle: advice.needles.join('/') }),
       '',
-      ...list
-        .filter((x) => x.stitches > 0)
-        .map((x) =>
-          `• ${x.entry.threads.map((th) => `${th.brand} ${th.code}`).join(' + ')} ${getThread(x.entry.threads[0])?.name ?? ''} — ${t('editor.palette.skeins', { count: x.skeins })}`.trim(),
-        ),
+      ...toBuyThreads.map((x) =>
+        `• ${x.ref.brand} ${x.ref.code} ${getThread(x.ref)?.name ?? ''} — ${t('editor.palette.skeins', { count: x.buy })}`.trim(),
+      ),
     ];
     return lines.join('\n');
   };
@@ -404,33 +427,73 @@ function RealSizeView({ id, pattern }: { id: string; pattern: Pattern }) {
               <thead className="text-left text-xs text-muted">
                 <tr>
                   <th className="px-4 py-2 font-normal">{t('editor.thread')}</th>
-                  <th className="py-2 text-right font-normal">{t('editor.stitches')}</th>
-                  <th className="px-4 py-2 text-right font-normal">{t('editor.skeins')}</th>
+                  <th className="py-2 text-right font-normal">{t('realSize.shopping.need')}</th>
+                  <th className="py-2 pl-3 text-right font-normal">
+                    {t('realSize.shopping.have')}
+                  </th>
+                  <th className="px-4 py-2 text-right font-normal">{t('realSize.shopping.buy')}</th>
                 </tr>
               </thead>
               <tbody>
-                {list
-                  .filter((x) => x.stitches > 0)
-                  .sort((a, b) => b.stitches - a.stitches)
-                  .map((x) => (
-                    <tr key={x.entry.id} className="border-t border-line">
+                {threads.map((x) => {
+                  const th = getThread(x.ref);
+                  const [r, g, b] = th?.rgb ?? [200, 200, 200];
+                  return (
+                    <tr key={x.key} className="border-t border-line">
                       <td className="flex items-center gap-2 px-4 py-1.5">
-                        <SymbolSwatch entry={x.entry} size={22} />
+                        <span
+                          className="size-5 shrink-0 rounded border border-black/10"
+                          style={{ background: `rgb(${r},${g},${b})` }}
+                          aria-hidden
+                        />
                         <span>
                           <span className="font-medium">
-                            {x.entry.threads.map((th) => `${th.brand} ${th.code}`).join(' + ')}
+                            {x.ref.brand} {x.ref.code}
                           </span>{' '}
-                          <span className="text-muted">{getThread(x.entry.threads[0])?.name}</span>
+                          <span className="text-muted">{th?.name}</span>
                         </span>
                       </td>
-                      <td className="py-1.5 text-right tabular-nums">
-                        {formatInt(x.stitches, lng)}
+                      <td className="py-1.5 text-right tabular-nums">{x.need}</td>
+                      <td className="py-1.5 pl-3 text-right tabular-nums text-muted">{x.owned}</td>
+                      <td className="px-4 py-1.5 text-right">
+                        {x.buy > 0 ? (
+                          <span className="inline-flex items-center gap-2">
+                            <span className="font-medium tabular-nums">{x.buy}</span>
+                            <button
+                              type="button"
+                              className="rounded-md border border-line px-1.5 py-0.5 text-xs hover:bg-surface-2"
+                              onClick={() => void addSkeins([{ ref: x.ref, skeins: x.buy }])}
+                              title={t('realSize.shopping.boughtHint')}
+                            >
+                              {t('realSize.shopping.bought')}
+                            </button>
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted">
+                            {t('realSize.shopping.enough')}
+                          </span>
+                        )}
                       </td>
-                      <td className="px-4 py-1.5 text-right tabular-nums">{x.skeins}</td>
                     </tr>
-                  ))}
+                  );
+                })}
               </tbody>
             </table>
+            {toBuyThreads.length > 1 && (
+              <div className="flex justify-end px-4 pt-2">
+                <Button
+                  className="px-3 py-1.5 text-xs"
+                  onClick={() =>
+                    void addSkeins(toBuyThreads.map((x) => ({ ref: x.ref, skeins: x.buy })))
+                  }
+                >
+                  {t('realSize.shopping.boughtAll')}
+                </Button>
+              </div>
+            )}
+            {!hasInventory && (
+              <p className="px-4 pt-3 text-xs text-muted">{t('realSize.shopping.inventoryHint')}</p>
+            )}
             <p className="px-4 py-3 text-xs text-muted">{t('realSize.shopping.estimateNote')}</p>
           </Card>
         </div>

@@ -32,6 +32,8 @@ export interface WizardSettings {
   width: number;
   fabric: Fabric;
   brand: Brand;
+  /** Which threads to use: any, only those in the inventory, or those preferably. */
+  threads: 'all' | 'only' | 'prefer';
   maxColors: number;
   dither: DitherMethod;
   ditherStrength: number;
@@ -52,6 +54,7 @@ export const DEFAULT_WIZARD: WizardSettings = {
   width: 120,
   fabric: DEFAULT_FABRIC,
   brand: 'DMC',
+  threads: 'all',
   maxColors: 30,
   dither: 'none',
   ditherStrength: 0.6,
@@ -145,6 +148,7 @@ export function sanitizeSettings(raw: unknown): WizardSettings {
         typeof f.color === 'string' && /^#[0-9a-f]{6}$/i.test(f.color) ? f.color : d.fabric.color,
     },
     brand: r.brand === 'Anchor' ? 'Anchor' : 'DMC',
+    threads: r.threads === 'only' || r.threads === 'prefer' ? r.threads : 'all',
     maxColors: Math.round(num(r.maxColors, 2, 80, d.maxColors)),
     dither:
       (['none', 'floyd-steinberg', 'atkinson', 'ordered'] as const).find((x) => x === r.dither) ??
