@@ -43,6 +43,14 @@ const router = createHashRouter([
         path: 'guide',
         lazy: async () => ({ Component: (await import('./routes/Guide.tsx')).default }),
       },
+      {
+        path: 'support',
+        lazy: async () => ({ Component: (await import('./routes/Support.tsx')).default }),
+      },
+      {
+        path: 'privacy',
+        lazy: async () => ({ Component: (await import('./routes/Privacy.tsx')).default }),
+      },
       { path: '*', element: <NotFound /> },
     ],
   },

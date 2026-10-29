@@ -85,8 +85,15 @@ export function Layout() {
         <Outlet />
       </main>
       {!fullscreen && (
-        <footer className="border-t border-line px-4 py-4 text-center text-xs text-muted">
-          {t('footer.privacy')} · {t('footer.license')}
+        <footer className="flex flex-wrap justify-center gap-x-3 gap-y-1 border-t border-line px-4 py-4 text-center text-xs text-muted">
+          <span>{t('footer.privacy')}</span>
+          <span>{t('footer.license')}</span>
+          <Link to="/privacy" className="underline-offset-2 hover:text-ink hover:underline">
+            {t('footer.privacyLink')}
+          </Link>
+          <Link to="/support" className="text-accent underline-offset-2 hover:underline">
+            ♥ {t('footer.support')}
+          </Link>
         </footer>
       )}
       <UpdatePrompt />

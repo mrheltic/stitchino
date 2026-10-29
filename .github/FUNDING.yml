@@ -1,0 +1,5 @@
+# Shows the "Sponsor" button on the GitHub repository. Uncomment the lines for the accounts
+# you have created (and put the same links in src/core/brand.ts, so the app shows them too).
+# github: [your-github-username]
+# ko_fi: your-kofi-name
+# liberapay: your-liberapay-name
