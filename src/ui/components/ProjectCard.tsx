@@ -15,7 +15,14 @@ import { useObjectUrl } from '../useObjectUrl.ts';
 import { ConfirmDialog } from './ConfirmDialog.tsx';
 import { LinkButton } from './ui.tsx';
 
-export function ProjectCard({ project }: { project: ProjectSummary }) {
+export function ProjectCard({
+  project,
+  progress,
+}: {
+  project: ProjectSummary;
+  /** Share of stitches done, if stitching has started. */
+  progress?: number;
+}) {
   const { t, i18n } = useTranslation();
   const lng = i18n.resolvedLanguage;
   const thumbUrl = useObjectUrl(project.thumbnail);
@@ -55,6 +62,26 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
           })}
           {project.imported && ` · ${t('home.imported')}`}
         </p>
+        {progress !== undefined && progress > 0 && (
+          <p className="flex items-center gap-2 text-xs text-muted">
+            <span
+              className="h-1.5 flex-1 overflow-hidden rounded-full"
+              style={{ background: 'color-mix(in srgb, var(--accent) 18%, var(--surface))' }}
+              aria-hidden
+            >
+              <span
+                className="block h-full rounded-full bg-accent"
+                style={{ width: `${progress * 100}%` }}
+              />
+            </span>
+            {t('home.progress', {
+              percent: new Intl.NumberFormat(lng, {
+                style: 'percent',
+                maximumFractionDigits: 0,
+              }).format(progress < 1 ? Math.min(progress, 0.99) : 1),
+            })}
+          </p>
+        )}
         <div className="mt-auto flex items-center gap-1 pt-2">
           <LinkButton
             to={`/project/${project.id}/stitch`}

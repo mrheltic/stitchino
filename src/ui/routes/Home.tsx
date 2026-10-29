@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { importOxs } from '../../core/io/oxs.ts';
 import { PROJECT_EXTENSIONS } from '../../core/io/projectFile.ts';
+import { db } from '../../storage/db.ts';
 import { createProject, importProjectFile, listProjects } from '../../storage/projects.ts';
 import { ProjectCard } from '../components/ProjectCard.tsx';
 import { Card, LinkButton, Page } from '../components/ui.tsx';
@@ -14,6 +15,10 @@ export function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const projects = useLiveQuery(() => listProjects(), []);
+  const progress = useLiveQuery(async () => {
+    const rows = await db.progress.toArray();
+    return new Map(rows.map((r) => [r.projectId, r.total ? r.done / r.total : 0]));
+  }, []);
   const [error, setError] = useState<string | null>(null);
 
   const openFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +92,7 @@ export function Home() {
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {projects.map((p) => (
-            <ProjectCard key={p.id} project={p} />
+            <ProjectCard key={p.id} project={p} progress={progress?.get(p.id)} />
           ))}
         </ul>
       )}
