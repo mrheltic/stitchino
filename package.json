@@ -1,7 +1,7 @@
 {
   "name": "stitchino",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "Free, open-source web app to turn photos into cross-stitch patterns, print them and track your stitching.",
   "license": "GPL-3.0-or-later",
   "type": "module",
