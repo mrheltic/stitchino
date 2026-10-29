@@ -2,7 +2,7 @@ import { countStitches, totalStitches, type Pattern } from '../core/model/patter
 import { decodeProject, encodeProject, type ProjectSource } from '../core/io/projectFile.ts';
 import { progressExtras, restoreProgress } from '../core/progress/serialize.ts';
 import { ProgressTracker, type ProgressData } from '../core/progress/tracker.ts';
-import { db, type StitchinoDb, type ProjectRow } from './db.ts';
+import { db, requestPersistentStorage, type StitchinoDb, type ProjectRow } from './db.ts';
 
 export type ProjectSummary = Omit<ProjectRow, 'data'>;
 
@@ -33,18 +33,28 @@ export async function listProjects(store: StitchinoDb = db): Promise<ProjectSumm
   return rows.map(({ data: _data, ...summary }) => summary);
 }
 
+export interface CreateOptions {
+  thumbnail?: Blob;
+  source?: ProjectSource;
+  imported?: boolean;
+  /** When restoring a backup: the original id and dates. */
+  id?: string;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
 export async function createProject(
   pattern: Pattern,
-  opts: { thumbnail?: Blob; source?: ProjectSource; imported?: boolean } = {},
+  opts: CreateOptions = {},
   store: StitchinoDb = db,
 ): Promise<string> {
-  const id = crypto.randomUUID();
+  const id = opts.id ?? crypto.randomUUID();
   const now = Date.now();
   await store.transaction('rw', store.projects, store.sources, async () => {
     await store.projects.add({
       id,
-      createdAt: now,
-      updatedAt: now,
+      createdAt: opts.createdAt ?? now,
+      updatedAt: opts.updatedAt ?? now,
       imported: opts.imported ?? false,
       thumbnail: opts.thumbnail,
       data: encodeProject({ pattern }),
@@ -52,6 +62,8 @@ export async function createProject(
     });
     if (opts.source) await store.sources.put({ projectId: id, ...opts.source });
   });
+  // With work worth keeping, ask the browser not to evict it (Safari does, after a while).
+  void requestPersistentStorage();
   return id;
 }
 
@@ -110,11 +122,17 @@ export async function duplicateProject(
   );
 }
 
-/** Full project file with photo and progress, for backup or moving to another device. */
+/** Full project file with photo and progress, for moving to another device. */
 export async function exportProjectFile(id: string, store: StitchinoDb = db): Promise<Uint8Array> {
   const row = await store.projects.get(id);
   if (!row) throw new Error(`Project ${id} not found`);
   if (row.imported) throw new ImportedPatternError();
+  return projectFileOf(row, store);
+}
+
+/** The project file of a row, imported patterns included (only for the owner's own backups). */
+export async function projectFileOf(row: ProjectRow, store: StitchinoDb = db): Promise<Uint8Array> {
+  const id = row.id;
   const pattern = decodeProject(row.data).pattern;
   const [source, progress] = await Promise.all([store.sources.get(id), store.progress.get(id)]);
   return encodeProject({
@@ -128,9 +146,10 @@ export async function exportProjectFile(id: string, store: StitchinoDb = db): Pr
 export async function importProjectFile(
   bytes: Uint8Array,
   store: StitchinoDb = db,
+  opts: Omit<CreateOptions, 'source'> = {},
 ): Promise<string> {
   const bundle = decodeProject(bytes);
-  const id = await createProject(bundle.pattern, { source: bundle.source }, store);
+  const id = await createProject(bundle.pattern, { ...opts, source: bundle.source }, store);
   if (bundle.progress) {
     const { data } = restoreProgress(bundle.pattern, {
       bits: bundle.progress,

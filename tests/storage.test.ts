@@ -77,3 +77,25 @@ describe('project storage', () => {
     await expect(duplicateProject(id, 'x', store)).rejects.toThrow(ImportedPatternError);
   });
 });
+
+describe('backup', () => {
+  it('restores projects (imported ones too) and the inventory on another device', async () => {
+    const { exportBackup, restoreBackup } = await import('../src/storage/backup.ts');
+    const { setSkeins } = await import('../src/storage/inventory.ts');
+    const here = new StitchinoDb(`test-${Math.random()}`);
+    const a = await createProject(pattern('Mio'), {}, here);
+    await createProject(pattern('Comprato'), { imported: true }, here);
+    await setSkeins({ brand: 'DMC', code: '310' }, 3, here);
+    const file = await exportBackup(here);
+
+    const there = new StitchinoDb(`test-${Math.random()}`);
+    expect(await restoreBackup(file, there)).toEqual({ added: 2, skipped: 0, threads: 1 });
+    const list = await listProjects(there);
+    expect(list.map((p) => p.title).sort()).toEqual(['Comprato', 'Mio']);
+    expect(list.find((p) => p.title === 'Comprato')?.imported).toBe(true);
+    expect((await there.inventory.get('DMC:310'))?.skeins).toBe(3);
+    expect((await loadProject(a, there))?.pattern.cells[0]).toBe(1);
+    // Restoring twice adds nothing.
+    expect((await restoreBackup(file, there)).skipped).toBe(2);
+  });
+});
