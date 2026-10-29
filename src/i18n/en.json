@@ -422,5 +422,39 @@
       "needleLine": "Blunt tapestry needle, size {{needle}}",
       "estimateNote": "Skeins are an estimate (8 m, 6 strands) with a safety margin: buy the amount shown, perhaps one extra for the most used colours."
     }
+  },
+  "pdf": {
+    "coverSubtitle": "Cross-stitch pattern",
+    "by": "by {{author}}",
+    "page": "Page {{n}} of {{total}}",
+    "region": "columns {{x0}}–{{x1}}, rows {{y0}}–{{y1}}",
+    "credit": "Made with PuntoCroce, free cross-stitch software",
+    "overTwo": "over 2",
+    "info": {
+      "size": "Size",
+      "stitchesValue": "{{w}} × {{h}} stitches",
+      "colors": "Colours",
+      "stitches": "Stitches",
+      "fabric": "Fabric",
+      "finished": "Finished size",
+      "otherFabrics": "On other fabrics",
+      "toBuy": "Fabric to buy"
+    },
+    "key": {
+      "title": "Key",
+      "symbol": "Symbol",
+      "thread": "Thread",
+      "name": "Name",
+      "equivalent": "Equivalent",
+      "strands": "Strands",
+      "stitches": "Stitches",
+      "skeins": "Skeins {{fabric}}",
+      "backstitch": "Backstitch",
+      "length": "strands and length",
+      "knots": "French knots",
+      "count": "strands and number",
+      "partialNote": "Pattern Keeper does not read partial stitches, backstitch and knots: use the full PDF for those."
+    },
+    "pageMap": "Page map"
   }
 }

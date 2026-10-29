@@ -18,6 +18,7 @@ from fontTools.pens.recordingPen import DecomposingRecordingPen
 from fontTools.pens.roundingPen import RoundingPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
+from fontTools.misc.timeTools import timestampFromString
 from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -142,14 +143,17 @@ def main() -> None:
         achVendID="PNTC",
     )
     fb.setupPost()
+    # Fixed timestamps keep rebuilds byte-identical.
+    fb.font["head"].created = fb.font["head"].modified = timestampFromString("Thu Oct 29 00:00:00 2026")
     out = ROOT / "public" / "fonts" / "pc-symbols.ttf"
     out.parent.mkdir(parents=True, exist_ok=True)
     fb.save(out)
 
     (out.parent / "OFL.txt").write_text(
         "PuntoCroce Symbols (pc-symbols.ttf) is a modified version of Atkinson Hyperlegible Bold and\n"
-        "Noto Sans Symbols 2: glyphs were selected, scaled and re-centred. It is distributed under the\n"
-        "SIL Open Font License 1.1, reproduced below for each source font.\n\n"
+        "Noto Sans Symbols 2: glyphs were selected, scaled and re-centred. AtkinsonHyperlegible-Regular.ttf\n"
+        "and AtkinsonHyperlegible-Bold.ttf are included unmodified for PDF text. All are distributed under\n"
+        "the SIL Open Font License 1.1, reproduced below for each source font.\n\n"
         + "\n\n".join(licences)
     )
     (ROOT / "src" / "core" / "model" / "symbolSet.json").write_text(

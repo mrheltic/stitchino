@@ -422,5 +422,39 @@
       "needleLine": "Ago da ricamo a punta arrotondata n. {{needle}}",
       "estimateNote": "Le matasse sono una stima (8 m, 6 capi) con un margine di sicurezza: compra quelle indicate, eventualmente una in più per i colori più usati."
     }
+  },
+  "pdf": {
+    "coverSubtitle": "Schema a punto croce",
+    "by": "di {{author}}",
+    "page": "Pagina {{n}} di {{total}}",
+    "region": "colonne {{x0}}–{{x1}}, righe {{y0}}–{{y1}}",
+    "credit": "Creato con PuntoCroce, software libero per il punto croce",
+    "overTwo": "su 2 fili",
+    "info": {
+      "size": "Dimensioni",
+      "stitchesValue": "{{w}} × {{h}} punti",
+      "colors": "Colori",
+      "stitches": "Punti",
+      "fabric": "Tela",
+      "finished": "Misura finita",
+      "otherFabrics": "Su altre tele",
+      "toBuy": "Tela da comprare"
+    },
+    "key": {
+      "title": "Legenda",
+      "symbol": "Simbolo",
+      "thread": "Filo",
+      "name": "Nome",
+      "equivalent": "Equivalente",
+      "strands": "Fili",
+      "stitches": "Punti",
+      "skeins": "Matasse {{fabric}}",
+      "backstitch": "Punto scritto",
+      "length": "fili e lunghezza",
+      "knots": "Nodini francesi",
+      "count": "fili e numero",
+      "partialNote": "Pattern Keeper non legge punti frazionati, punto scritto e nodini: per questi usa il PDF completo."
+    },
+    "pageMap": "Mappa delle pagine"
   }
 }
