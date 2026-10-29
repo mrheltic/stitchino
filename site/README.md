@@ -13,20 +13,27 @@ running JavaScript:
 
 ## Adding a free pattern
 
-1. Make the pattern in Stitchino from a picture you have the rights to: your own drawing or photo,
-   or a public-domain image with a CC0 licence (the open access collections of the Met, the
-   Rijksmuseum and the Art Institute of Chicago have plenty). Skip images of works held by Italian
-   state museums, which have their own rules on reproductions, and anything with characters or
-   logos.
-2. Export the project file (Export → Project file) and save it as
-   `site/patterns/<slug>/pattern.stitchino`. It carries the picture and the settings used, which the
-   page's "Change it in Stitchino" button reuses.
-3. In Real size choose "From afar", download the image and save it as
-   `site/patterns/<slug>/preview.png`, or as `preview.jpg` (about 1000 px wide), which is lighter and
-   also goes on the PDF cover.
-4. Add an entry to `FREE_PATTERNS` in `patterns.ts`: slugs, titles, a one-line description and the
-   credit, in English and Italian.
-5. Run `npm test`: it checks that the pages, the PDFs and the links are there.
+1. Pick a picture you have the rights to: your own drawing or photo, or a public-domain image
+   (Wikimedia Commons marks them; NASA photos are public domain). Skip images of works held by
+   Italian state museums, which have their own rules on reproductions, and anything with
+   characters or logos from films, games or comics.
+2. Build once (`npm run build`), then let the app make the pattern:
+   ```sh
+   npm run pattern -- picture.jpg my-slug --width 100 --colors 24
+   ```
+   Add `--background` to leave the background unstitched. The project file (with the picture and
+   the settings) and the stitched preview land in `site/patterns/my-slug/`.
+3. Add an entry to `FREE_PATTERNS` in `patterns.ts`: slugs, titles, a one-line description, the
+   byline and the credit, in English and Italian.
+4. Run `npm test`: it checks that the pages, the PDFs and the links are there.
 
 For every pattern the build makes four PDFs: English on A4 and US Letter, one for Pattern Keeper,
 and Italian on A4.
+
+## Pinterest pins
+
+`npm run build && npm run pins -- --start 2026-11-02` draws a 1000 × 1500 pin in English and one
+in Italian for every pattern into `site/pins/`, with `pinterest.csv` for Pinterest's bulk upload
+(one pattern a day from the start date; Pinterest takes dates up to two weeks ahead). The pins are
+published with the site, so push before uploading the CSV: its image links point there. The boards
+must be called "Free cross stitch patterns" and "Schemi punto croce gratis".

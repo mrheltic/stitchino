@@ -40,7 +40,13 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,mjs,css,html,svg,png,ttf,woff2,json}'],
         // The static pages and free patterns are ordinary web pages: not part of the offline app.
-        globIgnores: ['patterns/**', 'it/**', 'photo-to-cross-stitch-pattern/**', 'site/**'],
+        globIgnores: [
+          'patterns/**',
+          'it/**',
+          'photo-to-cross-stitch-pattern/**',
+          'site/**',
+          'pins/**',
+        ],
         navigateFallbackDenylist: [/\/(patterns|it|photo-to-cross-stitch-pattern)\//],
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
       },

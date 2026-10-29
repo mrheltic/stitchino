@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { rgbToHex } from '../src/core/color/srgb.ts';
 import { decodeProject } from '../src/core/io/projectFile.ts';
@@ -100,6 +100,31 @@ export async function buildSite(
     );
     infos.push(info);
   }
+
+  // What scripts/pins.mjs needs to draw the Pinterest pins.
+  files.push({
+    fileName: 'patterns/index.json',
+    source: JSON.stringify(
+      infos.map((i) => ({
+        slug: i.entry.slug,
+        title: i.entry.title,
+        byline: i.entry.byline,
+        description: i.entry.description,
+        width: i.width,
+        height: i.height,
+        colours: i.threads.length,
+        brand: i.brand,
+        finishedCm: i.finishedCm,
+        files: { preview: i.files.preview, source: i.files.source },
+        pages: { en: patternPath('en', i.entry), it: patternPath('it', i.entry) },
+      })),
+    ),
+  });
+  // Pins for Pinterest (made by scripts/pins.mjs), served so a bulk upload can fetch them.
+  const pinsDir = join(root, 'site/pins');
+  if (existsSync(pinsDir))
+    for (const name of readdirSync(pinsDir).filter((f) => f.endsWith('.jpg')))
+      files.push({ fileName: `pins/${name}`, source: read(`site/pins/${name}`) });
 
   const pages: Page[] = LANGS.flatMap((lang) => [
     landingPage(lang),
