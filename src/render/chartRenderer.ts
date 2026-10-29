@@ -2,6 +2,7 @@ import { hexToRgb, relativeLuminance, type Rgb } from '../core/color/srgb.ts';
 import type { ChangeInfo, CellRect } from '../core/model/document.ts';
 import { ARM, type PaletteEntry, type PartialStitch, type Pattern } from '../core/model/pattern.ts';
 import { entryRgb } from '../core/model/entryColor.ts';
+import { RealisticPainter, type RealisticStyle } from './realistic.ts';
 import { SymbolAtlas, makeCanvas, type Ink } from './symbolAtlas.ts';
 import type { Viewport } from './viewport.ts';
 
@@ -41,6 +42,8 @@ export interface RenderOptions {
   overlay?: Overlay;
   /** Extra cell layer drawn over the colours (stitching progress). */
   layer?: { image: CanvasImageSource; scale: number };
+  /** Fabric and strands for the stitched view; defaults to the pattern's fabric. */
+  realistic?: RealisticStyle;
 }
 
 interface Swatch {
@@ -72,6 +75,7 @@ export class ChartRenderer {
   private swatches = new Map<number, Swatch>();
   private fabric: Rgb;
   private atlas = new SymbolAtlas();
+  private painter: RealisticPainter | null = null;
 
   constructor(pattern: Pattern) {
     this.pattern = pattern;
@@ -95,6 +99,7 @@ export class ChartRenderer {
     }
     if (info.palette || info.meta || info.resized) {
       this.fabric = hexToRgb(p.fabric.color);
+      this.painter?.refreshColours();
       this.rebuildSwatches();
       this.paintColours(fullRectOf(p));
       this.dimKey = '';
@@ -235,9 +240,16 @@ export class ChartRenderer {
     const vh = (v.y1 - v.y0) * s;
 
     // Fabric and colours.
-    ctx.fillStyle = o.mode === 'symbols' ? '#ffffff' : p.fabric.color;
+    ctx.fillStyle =
+      o.mode === 'symbols' ? '#ffffff' : (o.realistic?.fabric.color ?? p.fabric.color);
     ctx.fillRect(vx, vy, vw, vh);
-    if (o.mode !== 'symbols') {
+    if (o.mode === 'realistic' && s >= 1.5) {
+      this.painter ??= new RealisticPainter(p);
+      this.painter.setStyle(o.realistic ?? { fabric: p.fabric });
+      ctx.imageSmoothingEnabled = true;
+      this.painter.draw(ctx, vp.ox, vp.oy, s, s * vp.dpr, v);
+      ctx.imageSmoothingEnabled = false;
+    } else if (o.mode !== 'symbols') {
       ctx.drawImage(
         this.colours as CanvasImageSource,
         v.x0 * 2,
@@ -298,8 +310,10 @@ export class ChartRenderer {
 
     if (o.grid && s >= 4) this.drawGrid(ctx, vp, v);
     this.drawBorderAndCentre(ctx, vp);
-    this.drawBackstitches(ctx, vp, o);
-    this.drawKnots(ctx, vp, o);
+    if (o.mode !== 'realistic') {
+      this.drawBackstitches(ctx, vp, o);
+      this.drawKnots(ctx, vp, o);
+    }
     if (o.overlay) this.drawOverlay(ctx, vp, o.overlay);
     if (o.rulers) this.drawRulers(ctx, vp, o);
   }
