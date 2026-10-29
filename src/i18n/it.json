@@ -128,7 +128,9 @@
       "choose": "Scegli una foto",
       "change": "Cambia foto",
       "camera": "Scatta una foto",
-      "privacy": "La foto resta sul tuo dispositivo: non viene caricata su nessun server."
+      "privacy": "La foto resta sul tuo dispositivo: non viene caricata su nessun server.",
+      "example": "Prova con un esempio",
+      "exampleTitle": "Faro al tramonto"
     },
     "crop": {
       "area": "Foto da ritagliare",

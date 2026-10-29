@@ -128,7 +128,9 @@
       "choose": "Choose a photo",
       "change": "Change photo",
       "camera": "Take a photo",
-      "privacy": "Your photo stays on your device: it is never uploaded."
+      "privacy": "Your photo stays on your device: it is never uploaded.",
+      "example": "Try an example",
+      "exampleTitle": "Lighthouse at sunset"
     },
     "crop": {
       "area": "Photo to crop",

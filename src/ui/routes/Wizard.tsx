@@ -5,6 +5,7 @@ import {
   Loader2,
   RotateCcw,
   RotateCw,
+  Sparkles,
   Undo2,
 } from 'lucide-react';
 import {
@@ -60,6 +61,7 @@ import {
 } from '../wizard/image.ts';
 import { floodSelect } from '../wizard/magicWand.ts';
 import { RasterView } from '../wizard/RasterView.tsx';
+import { EXAMPLE_PICTURE, fetchPicture, linkSettings } from '../wizard/samples.ts';
 import { StepCard } from '../wizard/StepCard.tsx';
 import {
   ASPECTS,
@@ -289,6 +291,25 @@ function PhotoWizard() {
     };
   }, [fromId, loadFile]);
 
+  // "Open in Stitchino" on a free pattern's page: its picture and settings, from this site.
+  const picture = search.get('src');
+  const query = search.toString();
+  useEffect(() => {
+    if (!picture) return;
+    let cancelled = false;
+    void fetchPicture(picture).then((f) => {
+      if (!cancelled && f) void loadFile(f, linkSettings(query));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [picture, query, loadFile]);
+
+  const loadExample = async () => {
+    const f = await fetchPicture(EXAMPLE_PICTURE);
+    if (f) await loadFile(f, { title: t('wizard.photo.exampleTitle') });
+  };
+
   useEffect(() => {
     const onPaste = (e: ClipboardEvent) => {
       const item = [...(e.clipboardData?.files ?? [])].find((f) => f.type.startsWith('image/'));
@@ -381,7 +402,7 @@ function PhotoWizard() {
       <div className="grid gap-6 lg:grid-cols-[minmax(320px,400px)_1fr]">
         <div className="space-y-3">
           <StepCard {...stepProps('photo', 1)} summary={file?.name}>
-            <PhotoPicker onFile={loadFile} hasPhoto={has} />
+            <PhotoPicker onFile={loadFile} onExample={loadExample} hasPhoto={has} />
           </StepCard>
 
           <StepCard
@@ -950,7 +971,15 @@ function NextButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-function PhotoPicker({ onFile, hasPhoto }: { onFile: (f: File) => void; hasPhoto: boolean }) {
+function PhotoPicker({
+  onFile,
+  onExample,
+  hasPhoto,
+}: {
+  onFile: (f: File) => void;
+  onExample: () => void;
+  hasPhoto: boolean;
+}) {
   const { t } = useTranslation();
   const [over, setOver] = useState(false);
   const pick = (e: ChangeEvent<HTMLInputElement>) => {
@@ -998,6 +1027,16 @@ function PhotoPicker({ onFile, hasPhoto }: { onFile: (f: File) => void; hasPhoto
             onChange={pick}
           />
         </label>
+        {!hasPhoto && (
+          <button
+            type="button"
+            onClick={onExample}
+            className="inline-flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-medium hover:bg-surface-2"
+          >
+            <Sparkles size={18} aria-hidden />
+            {t('wizard.photo.example')}
+          </button>
+        )}
       </div>
       <p className="text-xs text-muted">{t('wizard.photo.privacy')}</p>
     </div>
