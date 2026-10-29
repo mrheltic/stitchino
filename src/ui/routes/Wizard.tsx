@@ -23,9 +23,11 @@ import { Link, useNavigate, useSearchParams } from 'react-router';
 import { NO_ADJUSTMENTS } from '../../core/convert/adjust.ts';
 import type { CleanupLevel } from '../../core/convert/cleanup.ts';
 import type { DitherMethod } from '../../core/convert/dither.ts';
+import { paintStroke } from '../../core/convert/mask.ts';
 import type { ConvertOutput, ConvertParams } from '../../core/convert/pipeline.ts';
 import { DEFAULT_CONVERT_PARAMS } from '../../core/convert/pipeline.ts';
 import type { RasterImage } from '../../core/convert/raster.ts';
+import { withOutline } from '../../core/model/outline.ts';
 import { createPattern, type FabricKind } from '../../core/model/pattern.ts';
 import {
   FABRIC_COLORS,
@@ -74,6 +76,7 @@ import {
 import { db } from '../../storage/db.ts';
 
 const STEPS = ['photo', 'crop', 'adjust', 'size', 'colors', 'create'] as const;
+type BgTool = 'keep' | 'remove' | 'wand';
 type Step = (typeof STEPS)[number];
 
 /** Photos up to this size are stored as they are; larger ones are re-encoded. */
@@ -108,6 +111,10 @@ function PhotoWizard() {
   const [adjusted, setAdjusted] = useState<RasterImage | null>(null);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(0);
+  // The subject found automatically, for the picture loaded as number `key`.
+  const [subject, setSubject] = useState<{ key: number; mask: Uint8Array } | null>(null);
+  const [bgTool, setBgTool] = useState<BgTool>('keep');
+  const [brushSize, setBrushSize] = useState(0.04);
   const worker = useRef<ConvertWorker | null>(null);
 
   useEffect(() => {
@@ -122,13 +129,20 @@ function PhotoWizard() {
     () => (bitmap ? renderRaster(bitmap, s.orientation, s.crop, WORKING_MAX_SIDE) : null),
     [bitmap, s.orientation, s.crop],
   );
+  const autoMask =
+    s.removeBackground && s.autoSubject && subject?.key === loaded ? subject.mask : undefined;
+  const finding = loaded > 0 && s.removeBackground && s.autoSubject && subject?.key !== loaded;
+  // Background: the subject found automatically, then wand taps, then brush strokes on top.
   const mask = useMemo(() => {
-    if (!working || !s.removeBackground || s.wandSeeds.length === 0) return undefined;
-    const m = new Uint8Array(working.width * working.height);
+    if (!working || !s.removeBackground) return undefined;
+    if (!autoMask && s.wandSeeds.length === 0 && s.bgStrokes.length === 0) return undefined;
+    const size = working.width * working.height;
+    const m = autoMask?.length === size ? new Uint8Array(autoMask) : new Uint8Array(size);
     for (const [fx, fy] of s.wandSeeds)
       floodSelect(working, fx * working.width, fy * working.height, s.wandTolerance, m);
+    for (const stroke of s.bgStrokes) paintStroke(m, working.width, working.height, stroke);
     return m;
-  }, [working, s.removeBackground, s.wandSeeds, s.wandTolerance]);
+  }, [working, s.removeBackground, autoMask, s.wandSeeds, s.wandTolerance, s.bgStrokes]);
 
   const [cropW, cropH] = bitmap ? cropPixels(bitmap, s.orientation, s.crop) : [1, 1];
   const height = Math.max(1, Math.round((s.width * cropH) / cropW));
@@ -183,6 +197,18 @@ function PhotoWizard() {
     if (loaded) void worker.current?.api.setMask(mask ?? null);
   }, [mask, loaded]);
 
+  const subjectKey = subject?.key;
+  useEffect(() => {
+    if (!loaded || !s.removeBackground || !s.autoSubject || subjectKey === loaded) return;
+    let cancelled = false;
+    void worker.current?.api.subject().then((m) => {
+      if (!cancelled) setSubject({ key: loaded, mask: m });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [loaded, s.removeBackground, s.autoSubject, subjectKey]);
+
   useEffect(() => {
     if (!loaded) return;
     let cancelled = false;
@@ -197,7 +223,8 @@ function PhotoWizard() {
   }, [loaded, s.adjustments]);
 
   // Results remember the request they answer: the preview is "busy" until they match.
-  const requestKey = `${loaded}|${s.removeBackground}|${s.wandTolerance}|${JSON.stringify(s.wandSeeds)}|${JSON.stringify(params)}`;
+  const strokesKey = useMemo(() => JSON.stringify(s.bgStrokes), [s.bgStrokes]);
+  const requestKey = `${loaded}|${s.removeBackground}|${autoMask ? 1 : 0}|${s.wandTolerance}|${JSON.stringify(s.wandSeeds)}|${strokesKey}|${JSON.stringify(params)}`;
   useEffect(() => {
     if (!loaded) return;
     let cancelled = false;
@@ -259,6 +286,7 @@ function PhotoWizard() {
                 crop: FULL_CROP,
                 aspect: 'free',
                 wandSeeds: [],
+                bgStrokes: [],
                 title: f.name.replace(/\.[^.]+$/, ''),
               },
         );
@@ -307,7 +335,7 @@ function PhotoWizard() {
 
   const loadExample = async () => {
     const f = await fetchPicture(EXAMPLE_PICTURE);
-    if (f) await loadFile(f, { title: t('wizard.photo.exampleTitle') });
+    if (f) await loadFile(f, { title: t('wizard.photo.exampleTitle'), autoSubject: true });
   };
 
   useEffect(() => {
@@ -332,6 +360,7 @@ function PhotoWizard() {
       crop: FULL_CROP,
       aspect: 'free',
       wandSeeds: [],
+      bgStrokes: [],
     });
   };
 
@@ -339,19 +368,25 @@ function PhotoWizard() {
     const ratio = ASPECTS[aspect];
     if (!bitmap) return;
     const [Wo, Ho] = orientedSize(bitmap, s.orientation.rotation);
-    set({ aspect, crop: ratio === null ? s.crop : cropForAspect(ratio, Wo, Ho), wandSeeds: [] });
+    set({
+      aspect,
+      crop: ratio === null ? s.crop : cropForAspect(ratio, Wo, Ho),
+      wandSeeds: [],
+      bgStrokes: [],
+    });
   };
 
   const create = async () => {
     if (!result || !file || !bitmap) return;
     setSaving(true);
     try {
-      const pattern = createPattern(result.width, result.height, {
+      let pattern = createPattern(result.width, result.height, {
         cells: result.cells,
         palette: result.palette,
         fabric: s.fabric,
         meta: { title: s.title.trim() || t('wizard.create.untitled'), source: 'photo' },
       });
+      if (s.removeBackground && s.outline) pattern = withOutline(pattern, 'design');
       const thumbnail = await patternThumbnail(
         result.width,
         result.height,
@@ -441,6 +476,7 @@ function PhotoWizard() {
                   set({
                     orientation: { ...s.orientation, flip: !s.orientation.flip },
                     wandSeeds: [],
+                    bgStrokes: [],
                   })
                 }
                 aria-pressed={s.orientation.flip}
@@ -451,7 +487,9 @@ function PhotoWizard() {
               </Button>
               <Button
                 variant="ghost"
-                onClick={() => set({ crop: FULL_CROP, aspect: 'free', wandSeeds: [] })}
+                onClick={() =>
+                  set({ crop: FULL_CROP, aspect: 'free', wandSeeds: [], bgStrokes: [] })
+                }
               >
                 {t('wizard.crop.reset')}
               </Button>
@@ -529,31 +567,73 @@ function PhotoWizard() {
               </Toggle>
               {s.removeBackground && (
                 <>
-                  <p className="text-xs text-muted">{t('wizard.adjust.backgroundHint')}</p>
-                  <SliderField
-                    label={t('wizard.adjust.tolerance')}
-                    value={s.wandTolerance}
-                    min={0.02}
-                    max={0.25}
-                    step={0.01}
-                    format={(v) => formatInt(v * 400, lng)}
-                    onChange={(v) => set({ wandTolerance: v })}
-                  />
-                  <div className="flex gap-2">
+                  <Toggle checked={s.autoSubject} onChange={(v) => set({ autoSubject: v })}>
+                    {t('wizard.adjust.autoSubject')}
+                  </Toggle>
+                  {finding && (
+                    <p role="status" className="flex items-center gap-2 text-xs text-muted">
+                      <Loader2 size={14} className="animate-spin" aria-hidden />
+                      {t('wizard.adjust.finding')}
+                    </p>
+                  )}
+                  <Field label={t('wizard.adjust.tool')}>
+                    <Choice<BgTool>
+                      name="bg-tool"
+                      size="sm"
+                      value={bgTool}
+                      onChange={setBgTool}
+                      options={(['keep', 'remove', 'wand'] as const).map((v) => ({
+                        value: v,
+                        label: t(`wizard.adjust.tools.${v}`),
+                      }))}
+                    />
+                  </Field>
+                  <p className="text-xs text-muted">{t(`wizard.adjust.toolHints.${bgTool}`)}</p>
+                  {bgTool === 'wand' ? (
+                    <SliderField
+                      label={t('wizard.adjust.tolerance')}
+                      value={s.wandTolerance}
+                      min={0.02}
+                      max={0.25}
+                      step={0.01}
+                      format={(v) => formatInt(v * 400, lng)}
+                      onChange={(v) => set({ wandTolerance: v })}
+                    />
+                  ) : (
+                    <SliderField
+                      label={t('wizard.adjust.brushSize')}
+                      value={brushSize}
+                      min={0.01}
+                      max={0.12}
+                      step={0.005}
+                      format={(v) => formatInt(v * 100, lng)}
+                      onChange={setBrushSize}
+                    />
+                  )}
+                  <div className="flex flex-wrap gap-2">
                     <Button
-                      disabled={s.wandSeeds.length === 0}
-                      onClick={() => set({ wandSeeds: s.wandSeeds.slice(0, -1) })}
+                      disabled={!s.wandSeeds.length && !s.bgStrokes.length}
+                      onClick={() =>
+                        // Brush strokes come after wand taps, so they're undone first.
+                        s.bgStrokes.length
+                          ? set({ bgStrokes: s.bgStrokes.slice(0, -1) })
+                          : set({ wandSeeds: s.wandSeeds.slice(0, -1) })
+                      }
                     >
                       {t('wizard.adjust.undoPick')}
                     </Button>
                     <Button
                       variant="ghost"
-                      disabled={s.wandSeeds.length === 0}
-                      onClick={() => set({ wandSeeds: [] })}
+                      disabled={!s.wandSeeds.length && !s.bgStrokes.length}
+                      onClick={() => set({ wandSeeds: [], bgStrokes: [] })}
                     >
                       {t('wizard.adjust.clearPicks')}
                     </Button>
                   </div>
+                  <Toggle checked={s.outline} onChange={(v) => set({ outline: v })}>
+                    {t('wizard.adjust.outline')}
+                  </Toggle>
+                  <p className="text-xs text-muted">{t('wizard.adjust.outlineHint')}</p>
                 </>
               )}
             </div>
@@ -850,7 +930,7 @@ function PhotoWizard() {
                   orientation={s.orientation}
                   crop={s.crop}
                   ratio={ASPECTS[s.aspect]}
-                  onChange={(crop) => set({ crop, wandSeeds: [] })}
+                  onChange={(crop) => set({ crop, wandSeeds: [], bgStrokes: [] })}
                 />
               ) : view === 'photo' ? (
                 (adjusted ?? working) && (
@@ -863,10 +943,16 @@ function PhotoWizard() {
                     mask={mask}
                     label={t('wizard.preview.photo')}
                     onPick={
-                      step === 'adjust' && s.removeBackground
+                      step === 'adjust' && s.removeBackground && bgTool === 'wand'
                         ? (fx, fy) => set({ wandSeeds: [...s.wandSeeds, [fx, fy]] })
                         : undefined
                     }
+                    brush={
+                      step === 'adjust' && s.removeBackground && bgTool !== 'wand'
+                        ? { mode: bgTool, size: brushSize }
+                        : undefined
+                    }
+                    onStroke={(stroke) => set({ bgStrokes: [...s.bgStrokes, stroke] })}
                   />
                 )
               ) : result ? (

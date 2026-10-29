@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { NO_ADJUSTMENTS, type Adjustments } from '../../core/convert/adjust.ts';
 import type { CleanupLevel } from '../../core/convert/cleanup.ts';
 import type { DitherMethod } from '../../core/convert/dither.ts';
+import { sanitizeStrokes, type MaskStroke } from '../../core/convert/mask.ts';
 import { DEFAULT_FABRIC, type Fabric } from '../../core/model/pattern.ts';
 import type { Brand } from '../../core/threads/types.ts';
 import { FULL_CROP, type Crop, type Orientation } from './image.ts';
@@ -26,9 +27,15 @@ export interface WizardSettings {
   aspect: AspectPreset;
   adjustments: Adjustments;
   removeBackground: boolean;
+  /** Find the subject on its own (GrabCut) before the wand and the brush. */
+  autoSubject: boolean;
   wandTolerance: number;
   /** Magic-wand clicks, as fractions of the cropped image. */
   wandSeeds: [number, number][];
+  /** Brush corrections, applied last. */
+  bgStrokes: MaskStroke[];
+  /** Backstitch outline around the subject, added when the project is created. */
+  outline: boolean;
   width: number;
   fabric: Fabric;
   brand: Brand;
@@ -49,8 +56,11 @@ export const DEFAULT_WIZARD: WizardSettings = {
   aspect: 'free',
   adjustments: NO_ADJUSTMENTS,
   removeBackground: false,
+  autoSubject: true,
   wandTolerance: 0.08,
   wandSeeds: [],
+  bgStrokes: [],
+  outline: false,
   width: 120,
   fabric: DEFAULT_FABRIC,
   brand: 'DMC',
@@ -129,6 +139,8 @@ export function sanitizeSettings(raw: unknown): WizardSettings {
       denoise: num(a.denoise, 0, 1, 0),
     },
     removeBackground: r.removeBackground === true,
+    // Settings saved before automatic subject finding existed keep their result.
+    autoSubject: r.autoSubject === true,
     wandTolerance: num(r.wandTolerance, 0.02, 0.25, d.wandTolerance),
     wandSeeds: Array.isArray(r.wandSeeds)
       ? r.wandSeeds
@@ -139,6 +151,8 @@ export function sanitizeSettings(raw: unknown): WizardSettings {
           .slice(0, 200)
           .map(([x, y]) => [num(x, 0, 1, 0), num(y, 0, 1, 0)] as [number, number])
       : [],
+    bgStrokes: sanitizeStrokes(r.bgStrokes),
+    outline: r.outline === true,
     width: Math.round(num(r.width, 10, 1000, d.width)),
     fabric: {
       kind: (['aida', 'evenweave', 'linen'] as const).find((k) => k === f.kind) ?? 'aida',

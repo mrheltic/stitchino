@@ -154,10 +154,25 @@
       "reset": "Reset adjustments",
       "background": "Leave the background unstitched",
       "backgroundOn": "Background left unstitched",
-      "backgroundHint": "Tap the background in the preview: the area of similar colour will stay bare fabric. You can tap several spots.",
       "tolerance": "Tolerance",
-      "undoPick": "Undo last tap",
-      "clearPicks": "Start over"
+      "undoPick": "Undo the last change",
+      "clearPicks": "Start over",
+      "autoSubject": "Find the subject automatically",
+      "finding": "Looking for the subject…",
+      "tool": "Fix by hand",
+      "tools": {
+        "keep": "Keep",
+        "remove": "Remove",
+        "wand": "Magic wand"
+      },
+      "toolHints": {
+        "keep": "Paint over the parts of the subject that went missing.",
+        "remove": "Paint over the background that's still there.",
+        "wand": "Tap the background: the area of similar colour around the tap goes. You can tap several spots."
+      },
+      "brushSize": "Brush size",
+      "outline": "Outline the subject in backstitch",
+      "outlineHint": "A very dark grey line around the subject, handy when it's light on light fabric. You'll see it in the editor."
     },
     "size": {
       "width": "Width",

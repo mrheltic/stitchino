@@ -61,6 +61,7 @@ describe('static site', async () => {
       width: undefined,
       maxColors: undefined,
       title: '',
+      autoSubject: true,
     });
   });
 });

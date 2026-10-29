@@ -154,10 +154,25 @@
       "reset": "Azzera regolazioni",
       "background": "Non ricamare lo sfondo",
       "backgroundOn": "Sfondo non ricamato",
-      "backgroundHint": "Tocca lo sfondo nell'anteprima: la zona di colore simile resterà tela libera. Puoi toccare più punti.",
       "tolerance": "Tolleranza",
-      "undoPick": "Annulla l'ultimo tocco",
-      "clearPicks": "Ricomincia"
+      "undoPick": "Annulla l'ultima modifica",
+      "clearPicks": "Ricomincia",
+      "autoSubject": "Trova il soggetto da solo",
+      "finding": "Cerco il soggetto…",
+      "tool": "Correggi a mano",
+      "tools": {
+        "keep": "Tieni",
+        "remove": "Togli",
+        "wand": "Bacchetta magica"
+      },
+      "toolHints": {
+        "keep": "Passa il pennello sulle parti del soggetto che sono sparite.",
+        "remove": "Passa il pennello sullo sfondo rimasto.",
+        "wand": "Tocca lo sfondo: se ne va l'area di colore simile attorno al punto. Puoi toccare più punti."
+      },
+      "brushSize": "Grandezza del pennello",
+      "outline": "Contorna il soggetto a punto scritto",
+      "outlineHint": "Una linea grigio molto scuro attorno al soggetto, utile quando è chiaro su tela chiara. La vedrai nell'editor."
     },
     "size": {
       "width": "Larghezza",

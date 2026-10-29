@@ -6,3 +6,5 @@ export * from './dither.ts';
 export * from './cleanup.ts';
 export * from './metrics.ts';
 export * from './pipeline.ts';
+export * from './mask.ts';
+export * from './subject.ts';

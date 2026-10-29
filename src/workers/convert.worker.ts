@@ -5,9 +5,11 @@ import {
   type ConvertOutput,
   type ConvertParams,
   type RasterImage,
+  findSubject,
 } from '../core/convert/index.ts';
 
 let session: ConvertSession | undefined;
+let picture: RasterImage | undefined;
 
 function current(): ConvertSession {
   if (!session) throw new Error('No image loaded');
@@ -17,6 +19,13 @@ function current(): ConvertSession {
 const api = {
   load(image: RasterImage): void {
     session = new ConvertSession(image);
+    picture = image;
+  },
+  /** Background mask (1 = background) found around the subject of the loaded picture. */
+  subject(): Uint8Array {
+    if (!picture) throw new Error('No image loaded');
+    const mask = findSubject(picture);
+    return transfer(mask, [mask.buffer]);
   },
   setMask(mask: Uint8Array | null): void {
     current().setMask(mask ?? undefined);

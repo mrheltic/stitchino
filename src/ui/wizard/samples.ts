@@ -29,5 +29,10 @@ export function linkSettings(query: string): Record<string, unknown> {
     const v = Number(search.get(key));
     return Number.isFinite(v) && v > 0 ? Math.round(v) : undefined;
   };
-  return { width: int('w'), maxColors: int('colors'), title: search.get('title') ?? '' };
+  return {
+    width: int('w'),
+    maxColors: int('colors'),
+    title: search.get('title') ?? '',
+    autoSubject: true,
+  };
 }
