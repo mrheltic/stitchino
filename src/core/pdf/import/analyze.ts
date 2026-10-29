@@ -221,14 +221,22 @@ export function detectLattice(all: readonly Glyph[]): Lattice | null {
     cells.push({ col, row, ch: g.ch });
   }
   if (cells.length < glyphs.length * 0.8) return null;
-  const minCol = Math.min(...cells.map((c) => c.col));
-  const minRow = Math.min(...cells.map((c) => c.row));
+  let minCol = Infinity;
+  let minRow = Infinity;
+  for (const c of cells) {
+    if (c.col < minCol) minCol = c.col;
+    if (c.row < minRow) minRow = c.row;
+  }
   for (const c of cells) {
     c.col -= minCol;
     c.row -= minRow;
   }
-  const cols = Math.max(...cells.map((c) => c.col)) + 1;
-  const rows = Math.max(...cells.map((c) => c.row)) + 1;
+  let cols = 0;
+  let rows = 0;
+  for (const c of cells) {
+    if (c.col >= cols) cols = c.col + 1;
+    if (c.row >= rows) rows = c.row + 1;
+  }
   if (cols < 3 || rows < 3 || cells.length < 0.05 * cols * rows) return null;
   return {
     x0: fx.o + minCol * fx.s,

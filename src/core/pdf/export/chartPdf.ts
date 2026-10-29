@@ -205,6 +205,11 @@ export async function chartPdf(pattern: Pattern, o: ChartPdfOptions): Promise<Ui
 const X = (mm: number) => mm * PT;
 const Y = (ctx: Ctx, mmFromTop: number) => (ctx.ph - mmFromTop) * PT;
 
+/** Adds operators in chunks: spreading hundreds of thousands of arguments overflows the stack. */
+function pushOps(page: PDFPage, ops: PDFOperator[]): void {
+  for (let i = 0; i < ops.length; i += 8192) page.pushOperators(...ops.slice(i, i + 8192));
+}
+
 function newPage(ctx: Ctx): PDFPage {
   return ctx.pdf.addPage([ctx.pw * PT, ctx.ph * PT]);
 }
@@ -280,7 +285,7 @@ function symbolOps(
     ops.push(showText(ctx.sym.encodeText(it.s)));
   }
   ops.push(endText(), popGraphicsState());
-  page.pushOperators(...ops);
+  pushOps(page, ops);
 }
 
 const QUAD: Record<number, [number, number]> = {
@@ -413,7 +418,7 @@ function blocksPreview(ctx: Ctx, page: PDFPage, x: number, y: number, w: number,
     ops.push(fill());
   }
   ops.push(popGraphicsState());
-  page.pushOperators(...ops);
+  pushOps(page, ops);
 }
 
 // --- Key ---------------------------------------------------------------------------------------
@@ -837,7 +842,7 @@ function chartPage(
       ops.push(fill());
     }
     ops.push(popGraphicsState());
-    page.pushOperators(...ops);
+    pushOps(page, ops);
   }
 
   // Symbols.
@@ -904,7 +909,7 @@ function chartPage(
       }
     }
     ops.push(popGraphicsState());
-    if (any) page.pushOperators(...ops);
+    if (any) pushOps(page, ops);
   }
 
   // Grid: thin lines for every cell, heavy every 10, nothing else (Pattern Keeper friendly).
@@ -921,7 +926,7 @@ function chartPage(
   for (let y = dy0; y <= dy1; y++)
     if (y % 10 === 0 || y === dy0 || y === dy1) line(gx(dx0), gy(y), gx(dx1), gy(y));
   ops.push(stroke(), popGraphicsState());
-  page.pushOperators(...ops);
+  pushOps(page, ops);
 
   // Row and column numbers every 10, and centre arrows.
   for (let x = Math.ceil(dx0 / 10) * 10; x <= dx1; x += 10) {
@@ -984,7 +989,7 @@ function chartPage(
       );
     }
     bs.push(popGraphicsState());
-    if (any) page.pushOperators(...bs);
+    if (any) pushOps(page, bs);
     for (const k of p.knots) {
       const kx = k.x / 2;
       const ky = k.y / 2;
