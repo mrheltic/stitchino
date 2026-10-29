@@ -12,7 +12,7 @@ export interface SettingsState {
 }
 
 /** localStorage can be missing or throw (private mode, blocked storage): fall back to memory. */
-const safeStorage: StateStorage = (() => {
+export const safeStorage: StateStorage = (() => {
   const memory = new Map<string, string>();
   return {
     getItem: (key) => {

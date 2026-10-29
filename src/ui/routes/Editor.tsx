@@ -18,10 +18,10 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../../storage/db.ts';
-import { PROJECT_EXTENSION } from '../../core/io/projectFile.ts';
+import type { OxsImportReport } from '../../core/io/oxs.ts';
 import { CompositeCommand, EditorDocument } from '../../core/model/document.ts';
 import {
   clearCommand,
@@ -33,17 +33,12 @@ import {
   rotateClip,
 } from '../../core/model/ops.ts';
 import type { ViewMode } from '../../render/chartRenderer.ts';
-import {
-  exportProjectFile,
-  loadProject,
-  saveProject,
-  type ProjectSummary,
-} from '../../storage/projects.ts';
+import { loadProject, saveProject, type ProjectSummary } from '../../storage/projects.ts';
 import { buttonClass } from '../components/buttonClass.ts';
 import { LinkButton, Page, PageHeader } from '../components/ui.tsx';
-import { downloadBytes, safeFileName } from '../download.ts';
 import { ChartView, type ChartViewHandle } from '../editor/ChartView.tsx';
 import { CleanupDialog, PropertiesDialog, ResizeDialog, TextDialog } from '../editor/dialogs.tsx';
+import { ExportDialog } from '../export/ExportDialog.tsx';
 import { Minimap, type MinimapHandle } from '../editor/Minimap.tsx';
 import { PalettePanel, SymbolSwatch } from '../editor/PalettePanel.tsx';
 import { INITIAL_EDITOR, useEditor } from '../editor/store.ts';
@@ -117,7 +112,14 @@ function Workspace({
   const chart = useRef<ChartViewHandle>(null);
   const minimap = useRef<MinimapHandle>(null);
   const [saveState, setSaveState] = useState<SaveState>('saved');
-  const [dialog, setDialog] = useState<'resize' | 'properties' | 'text' | 'cleanup' | null>(null);
+  const [dialog, setDialog] = useState<
+    'resize' | 'properties' | 'text' | 'cleanup' | 'export' | null
+  >(null);
+  const flushRef = useRef<() => Promise<void>>(async () => {});
+  const location = useLocation();
+  const [oxsReport, setOxsReport] = useState<OxsImportReport | undefined>(
+    (location.state as { oxsReport?: OxsImportReport } | null)?.oxsReport,
+  );
   const [paletteOpen, setPaletteOpen] = useState(false);
   const navigate = useNavigate();
   const hasSource = useLiveQuery(
@@ -149,6 +151,7 @@ function Workspace({
         setSaveState('error');
       }
     };
+    flushRef.current = flush;
     const unsubscribe = doc.subscribe(() => {
       dirty = true;
       setSaveState('saving');
@@ -464,19 +467,24 @@ function Workspace({
               <DropdownMenu.Item
                 className={menuItem}
                 disabled={summary.imported}
-                onSelect={async () =>
-                  downloadBytes(
-                    await exportProjectFile(id),
-                    safeFileName(p.meta.title) + PROJECT_EXTENSION,
-                  )
-                }
+                onSelect={() => setDialog('export')}
               >
                 <Download size={16} aria-hidden />
-                {t('home.export')}
+                {t('editor.export')}…
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
+        <button
+          type="button"
+          className={`${iconButton} w-auto gap-1.5 px-2`}
+          onClick={() => setDialog('export')}
+          disabled={summary.imported}
+          title={summary.imported ? t('export.imported') : t('export.title')}
+        >
+          <Download size={18} aria-hidden />
+          <span className="text-sm max-md:sr-only">{t('editor.export')}</span>
+        </button>
         <Link
           to={`/project/${id}/real-size`}
           className={iconButton}
@@ -510,6 +518,7 @@ function Workspace({
             <span className="h-5 w-px bg-line" />
             <ToolOptions onSelectionAction={selectionAction} />
           </div>
+          {oxsReport && <OxsBanner report={oxsReport} onClose={() => setOxsReport(undefined)} />}
           <div className="relative flex min-h-0 flex-1 flex-col">
             <ChartView
               ref={chart}
@@ -578,6 +587,40 @@ function Workspace({
         open={dialog === 'cleanup'}
         onOpenChange={(o) => setDialog(o ? 'cleanup' : null)}
       />
+      {!summary.imported && (
+        <ExportDialog
+          open={dialog === 'export'}
+          onOpenChange={(o) => setDialog(o ? 'export' : null)}
+          projectId={id}
+          pattern={p}
+          beforeExport={() => flushRef.current()}
+        />
+      )}
+    </div>
+  );
+}
+
+function OxsBanner({ report, onClose }: { report: OxsImportReport; onClose: () => void }) {
+  const { t } = useTranslation();
+  const list = report.substituted.map((x) => `${x.original} → ${x.replacement}`).join(', ');
+  return (
+    <div
+      role="status"
+      className="flex items-start gap-3 border-b border-line bg-surface-2 px-3 py-2 text-sm"
+    >
+      <p className="flex-1">
+        {t('home.oxsOpened')}{' '}
+        {report.substituted.length > 0 &&
+          t('home.oxsSubstituted', { count: report.substituted.length, list })}{' '}
+        {report.skipped > 0 && t('home.oxsSkipped', { count: report.skipped })}
+      </p>
+      <button
+        type="button"
+        onClick={onClose}
+        className="rounded-md px-2 py-0.5 text-muted hover:bg-surface"
+      >
+        {t('common.close')}
+      </button>
     </div>
   );
 }

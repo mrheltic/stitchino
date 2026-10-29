@@ -25,3 +25,22 @@ export function safeFileName(title: string, fallback = 'schema'): string {
     .slice(0, 80);
   return name || fallback;
 }
+
+/** True when the system share sheet can take this file (phones and tablets, mostly). */
+export function canShareFile(file: File): boolean {
+  try {
+    return typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] });
+  } catch {
+    return false;
+  }
+}
+
+/** Opens the share sheet (e.g. to send a PDF to Pattern Keeper); false if sharing failed. */
+export async function shareFile(file: File, title: string): Promise<boolean> {
+  try {
+    await navigator.share({ files: [file], title });
+    return true;
+  } catch (e) {
+    return (e as DOMException).name === 'AbortError';
+  }
+}
