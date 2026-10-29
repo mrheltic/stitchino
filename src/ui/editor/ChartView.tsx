@@ -40,6 +40,7 @@ export function ChartView({
   label,
   ref,
   onViewChange,
+  initialView,
 }: {
   doc: EditorDocument;
   options: Omit<RenderOptions, 'overlay'>;
@@ -50,6 +51,8 @@ export function ChartView({
   label: string;
   ref?: Ref<ChartViewHandle>;
   onViewChange?: (vp: Viewport) => void;
+  /** Centre (in cells) and zoom to open at, instead of fitting the pattern. */
+  initialView?: { cx: number; cy: number; scale: number };
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -66,6 +69,7 @@ export function ChartView({
   const pinch = useRef<{ dist: number; mx: number; my: number } | null>(null);
   const panning = useRef<{ x: number; y: number } | null>(null);
   const space = useRef(false);
+  const initialViewRef = useRef(initialView);
 
   // One render per animation frame at most; reads the latest props through refs.
   const redraw = useCallback(() => {
@@ -122,7 +126,16 @@ export function ChartView({
       canvas.width = Math.max(1, Math.round(rect.width * dpr));
       canvas.height = Math.max(1, Math.round(rect.height * dpr));
       vp.current.setSize(rect.width, rect.height, dpr);
-      if (!userMoved.current && rect.width > 0)
+      const start = initialViewRef.current;
+      if (!userMoved.current && rect.width > 0 && start) {
+        initialViewRef.current = undefined;
+        userMoved.current = true;
+        const v = vp.current;
+        v.scale = Math.min(v.maxScale, Math.max(v.minScale, start.scale));
+        v.ox = v.width / 2 - start.cx * v.scale;
+        v.oy = v.height / 2 - start.cy * v.scale;
+        v.clamp(doc.pattern.width, doc.pattern.height);
+      } else if (!userMoved.current && rect.width > 0)
         vp.current.fit(doc.pattern.width, doc.pattern.height);
       schedule.current();
     });

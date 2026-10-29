@@ -1,5 +1,5 @@
 import { hexToRgb, relativeLuminance, type Rgb } from '../core/color/srgb.ts';
-import type { ChangeInfo, CellRect } from '../core/model/document.ts';
+import { itemKey, type CellRect, type ChangeInfo } from '../core/model/document.ts';
 import { ARM, type PaletteEntry, type PartialStitch, type Pattern } from '../core/model/pattern.ts';
 import { entryRgb } from '../core/model/entryColor.ts';
 import { RealisticPainter, type RealisticStyle } from './realistic.ts';
@@ -25,6 +25,20 @@ export interface Overlay {
   path?: readonly (readonly [number, number])[];
   /** Pasted content being placed: cells with their colours, and its frame. */
   clip?: { cells: [number, number, string][]; rect: CellRect };
+  /** Parking marks (stitching mode): a pin in the thread colour on each cell. */
+  markers?: readonly { x: number; y: number; color: string }[];
+  /** A cell to point out, e.g. the next stitch to do. */
+  ring?: { x: number; y: number };
+}
+
+/** What has been stitched (stitching mode). */
+export interface DoneMarks {
+  bits: Uint8Array;
+  partials: ReadonlyMap<number, number>;
+  backstitches: ReadonlySet<string>;
+  knots: ReadonlySet<string>;
+  /** Colour for done backstitch and knots. */
+  color: string;
 }
 
 export interface RenderOptions {
@@ -44,6 +58,8 @@ export interface RenderOptions {
   layer?: { image: CanvasImageSource; scale: number };
   /** Fabric and strands for the stitched view; defaults to the pattern's fabric. */
   realistic?: RealisticStyle;
+  /** Done stitches lose their symbol; done backstitch and knots take the done colour. */
+  done?: DoneMarks;
 }
 
 interface Swatch {
@@ -279,7 +295,7 @@ export class ChartRenderer {
 
     // Symbols.
     if (o.mode !== 'colors' && o.mode !== 'realistic' && s >= 9)
-      this.drawSymbols(ctx, vp, v, o.mode);
+      this.drawSymbols(ctx, vp, v, o.mode, o.done);
 
     const dim = this.dimLayer(o.highlightId, o.hidden);
     if (dim)
@@ -323,6 +339,7 @@ export class ChartRenderer {
     vp: Viewport,
     v: CellRect,
     mode: ViewMode,
+    done?: DoneMarks,
   ): void {
     const p = this.pattern;
     const s = vp.scale;
@@ -337,15 +354,17 @@ export class ChartRenderer {
         const full = p.cells[i];
         const [sx, sy] = vp.toScreen(x, y);
         if (full) {
+          if (done && (done.bits[i >> 3] >> (i & 7)) & 1) continue;
           const e = byId.get(full);
           if (e?.symbol) this.atlas.draw(ctx, e.symbol, ink(full), sx + s / 2, sy + s / 2, s * 0.8);
           continue;
         }
         const partials = p.partials.get(i);
         if (partials && s >= 14) {
+          const doneArms = done?.partials.get(i) ?? 0;
           for (const st of partials) {
             const e = byId.get(st.id);
-            if (!e?.symbol) continue;
+            if (!e?.symbol || (doneArms & st.mask) === st.mask) continue;
             const [qx, qy] = centroid(st);
             if (mode === 'symbols') {
               ctx.strokeStyle = 'rgba(0,0,0,0.5)';
@@ -444,6 +463,7 @@ export class ChartRenderer {
       )
         continue;
       const faded = o.highlightId !== null ? b.id !== o.highlightId : o.hidden.has(b.id);
+      const isDone = o.done?.backstitches.has(itemKey(b));
       ctx.globalAlpha = faded ? 0.2 : 1;
       ctx.strokeStyle = 'rgba(0,0,0,0.55)';
       ctx.lineWidth = width + 1.5;
@@ -451,7 +471,7 @@ export class ChartRenderer {
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
       ctx.stroke();
-      ctx.strokeStyle = this.swatches.get(b.id)?.css ?? '#000';
+      ctx.strokeStyle = isDone ? o.done!.color : (this.swatches.get(b.id)?.css ?? '#000');
       ctx.lineWidth = width;
       ctx.stroke();
     }
@@ -469,7 +489,9 @@ export class ChartRenderer {
       ctx.globalAlpha = faded ? 0.2 : 1;
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
-      ctx.fillStyle = this.swatches.get(k.id)?.css ?? '#000';
+      ctx.fillStyle = o.done?.knots.has(itemKey(k))
+        ? o.done.color
+        : (this.swatches.get(k.id)?.css ?? '#000');
       ctx.fill();
       ctx.lineWidth = 1.2;
       ctx.strokeStyle = 'rgba(0,0,0,0.6)';
@@ -565,6 +587,43 @@ export class ChartRenderer {
       ctx.arc(x, y, Math.max(3, s * 0.15), 0, Math.PI * 2);
       ctx.strokeStyle = '#1d4ed8';
       ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    if (ov.markers) {
+      const r = Math.max(5, s * 0.36);
+      for (const m of ov.markers) {
+        const [sx, sy] = vp.toScreen(m.x + 0.5, m.y + 0.5);
+        if (sx < -r || sy < -r || sx > vp.width + r || sy > vp.height + r) continue;
+        // A pin: coloured head with a white ring, and a short dark point at the cell centre.
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx - r * 0.45, sy - r * 1.2);
+        ctx.lineTo(sx + r * 0.45, sy - r * 1.2);
+        ctx.closePath();
+        ctx.fillStyle = '#1f1a17';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(sx, sy - r * 1.55, r * 0.75, 0, Math.PI * 2);
+        ctx.fillStyle = m.color;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#1f1a17';
+        ctx.stroke();
+      }
+    }
+    if (ov.ring) {
+      const [sx, sy] = vp.toScreen(ov.ring.x + 0.5, ov.ring.y + 0.5);
+      const r = Math.max(14, s * 0.9);
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI * 2);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = '#9e2f45';
       ctx.stroke();
     }
     if (ov.cursor && s >= 4) {
