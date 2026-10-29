@@ -1,4 +1,4 @@
-import { deltaE2000Raw, type Lab } from '../color/index.ts';
+import { matchDistance, type Lab } from '../color/index.ts';
 import type { CatalogThread } from './catalog.ts';
 
 /**
@@ -13,7 +13,8 @@ export interface Match {
 }
 
 /**
- * Exact nearest-thread search by CIEDE2000 (plus an optional non-negative per-thread penalty).
+ * Exact nearest-thread search by `matchDistance` (CIEDE2000 tuned for dark colours) plus an
+ * optional non-negative per-thread penalty. The query is the first argument of the distance.
  * Candidates are sorted by lightness and scanned outwards from the query, stopping as soon as the
  * lightness bound above proves no remaining thread can beat the current k-th best.
  */
@@ -62,7 +63,7 @@ export class ThreadMatcher {
       const index = this.order[takeLo ? lo-- : hi++];
       const j = index * 3;
       const deltaE =
-        deltaE2000Raw(L, a, b, labs[j], labs[j + 1], labs[j + 2]) + this.penalty[index];
+        matchDistance(L, a, b, labs[j], labs[j + 1], labs[j + 2]) + this.penalty[index];
       insertSorted(best, { index, deltaE }, k);
     }
     return best;

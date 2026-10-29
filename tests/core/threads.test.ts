@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { deltaE2000, rgbToLab } from '../../src/core/color/index.ts';
+import { matchDistance, rgbToLab } from '../../src/core/color/index.ts';
 import {
   ThreadMatcher,
   equivalentThread,
@@ -61,18 +61,23 @@ describe('ThreadMatcher', () => {
     }
   });
 
-  it('agrees with a brute-force CIEDE2000 search', () => {
+  it('agrees with a brute-force search', () => {
     let seed = 7;
     const rand = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff) * 255;
     for (let n = 0; n < 3000; n++) {
       const rgb = [Math.round(rand()), Math.round(rand()), Math.round(rand())] as const;
       const lab = rgbToLab(rgb);
-      const all = dmc.map((t) => deltaE2000(lab, t.lab)).sort((a, b) => a - b);
+      const all = dmc.map((t) => matchDistance(...lab, ...t.lab)).sort((a, b) => a - b);
       const top3 = matcher.nearestK(lab, 3).map((m) => m.deltaE);
       expect(top3[0]).toBeCloseTo(all[0], 9);
       expect(top3[1]).toBeCloseTo(all[1], 9);
       expect(top3[2]).toBeCloseTo(all[2], 9);
     }
+  });
+
+  it('matches near-black shadows to dark neutrals rather than vivid navy', () => {
+    const shadow = rgbToLab([21, 18, 38]);
+    expect(['310', '3371']).toContain(dmc[matcher.nearest(shadow).index].code);
   });
 
   it('prefers unpenalised threads when a penalty is set', () => {
