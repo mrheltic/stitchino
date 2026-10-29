@@ -11,6 +11,7 @@ import {
   Palette as PaletteIcon,
   Redo2,
   Sparkles,
+  Spline,
   Type,
   Undo2,
   ZoomIn,
@@ -37,7 +38,13 @@ import { loadProject, saveProject, type ProjectSummary } from '../../storage/pro
 import { buttonClass } from '../components/buttonClass.ts';
 import { LinkButton, Page, PageHeader } from '../components/ui.tsx';
 import { ChartView, type ChartViewHandle } from '../editor/ChartView.tsx';
-import { CleanupDialog, PropertiesDialog, ResizeDialog, TextDialog } from '../editor/dialogs.tsx';
+import {
+  CleanupDialog,
+  OutlineDialog,
+  PropertiesDialog,
+  ResizeDialog,
+  TextDialog,
+} from '../editor/dialogs.tsx';
 import { ExportDialog } from '../export/ExportDialog.tsx';
 import { Minimap, type MinimapHandle } from '../editor/Minimap.tsx';
 import { PalettePanel, SymbolSwatch } from '../editor/PalettePanel.tsx';
@@ -113,7 +120,7 @@ function Workspace({
   const minimap = useRef<MinimapHandle>(null);
   const [saveState, setSaveState] = useState<SaveState>('saved');
   const [dialog, setDialog] = useState<
-    'resize' | 'properties' | 'text' | 'cleanup' | 'export' | null
+    'resize' | 'properties' | 'text' | 'cleanup' | 'outline' | 'export' | null
   >(null);
   const flushRef = useRef<() => Promise<void>>(async () => {});
   const location = useLocation();
@@ -450,6 +457,10 @@ function Workspace({
                 <Sparkles size={16} aria-hidden />
                 {t('editor.cleanup.title')}
               </DropdownMenu.Item>
+              <DropdownMenu.Item className={menuItem} onSelect={() => setDialog('outline')}>
+                <Spline size={16} aria-hidden />
+                {t('editor.outline.title')}
+              </DropdownMenu.Item>
               <DropdownMenu.Item className={menuItem} onSelect={() => setDialog('resize')}>
                 <Expand size={16} aria-hidden />
                 {t('editor.resize.title')}
@@ -586,6 +597,11 @@ function Workspace({
         doc={doc}
         open={dialog === 'cleanup'}
         onOpenChange={(o) => setDialog(o ? 'cleanup' : null)}
+      />
+      <OutlineDialog
+        doc={doc}
+        open={dialog === 'outline'}
+        onOpenChange={(o) => setDialog(o ? 'outline' : null)}
       />
       {!summary.imported && (
         <ExportDialog

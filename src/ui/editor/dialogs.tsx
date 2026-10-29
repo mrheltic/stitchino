@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import type { CleanupLevel } from '../../core/convert/cleanup.ts';
 import { MetaCommand, type EditorDocument } from '../../core/model/document.ts';
 import { cleanupCommand, isolatedCount, resizeCommand, type Clip } from '../../core/model/ops.ts';
+import { outlineCommand, type OutlineTarget } from '../../core/model/outline.ts';
 import { MAX_SIDE, type Fabric, type FabricKind } from '../../core/model/pattern.ts';
 import { FABRIC_COLORS, FABRIC_PRESETS, finishedSize } from '../../core/size/fabric.ts';
 import { Choice, Field, NumberInput, SliderField, Toggle } from '../components/controls.tsx';
 import { Dialog } from '../components/Dialog.tsx';
 import { Button } from '../components/ui.tsx';
-import { formatInt, formatSize } from '../format.ts';
+import { getThread } from '../../core/threads/catalog.ts';
+import { formatInt, formatSize, threadLabel } from '../format.ts';
 import { useSettings } from '../state/settings.ts';
 import { textClip } from './text.ts';
 
@@ -402,6 +404,61 @@ export function CleanupDialog({
           {t('wizard.colors.protectDetails')}
         </Toggle>
       </div>
+    </Dialog>
+  );
+}
+
+export function OutlineDialog({
+  doc,
+  open,
+  onOpenChange,
+}: {
+  doc: EditorDocument;
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+}) {
+  const { t } = useTranslation();
+  const [target, setTarget] = useState<OutlineTarget>('design');
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={t('editor.outline.title')}
+      description={t('editor.outline.description')}
+      footer={
+        <>
+          <Button onClick={() => onOpenChange(false)}>{t('common.cancel')}</Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              const cmd = outlineCommand(doc.pattern, target);
+              if (cmd) doc.execute(cmd);
+              onOpenChange(false);
+            }}
+          >
+            {t('editor.outline.apply')}
+          </Button>
+        </>
+      }
+    >
+      <Field label={t('editor.outline.around')}>
+        <select
+          value={String(target)}
+          onChange={(e) =>
+            setTarget(e.target.value === 'design' ? 'design' : Number(e.target.value))
+          }
+          className="w-full rounded-lg border border-line bg-surface px-2 py-1.5 text-sm"
+        >
+          <option value="design">{t('editor.outline.design')}</option>
+          {doc.pattern.palette.map((e) => (
+            <option key={e.id} value={e.id}>
+              {e.threads
+                .map((r) => `${threadLabel(r.brand, r.code)} ${getThread(r)?.name ?? ''}`.trim())
+                .join(' + ')}
+            </option>
+          ))}
+        </select>
+      </Field>
     </Dialog>
   );
 }

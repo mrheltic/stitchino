@@ -434,7 +434,14 @@
     },
     "minimap": "Overview",
     "regenerate": "Regenerate from the photo",
-    "export": "Export"
+    "export": "Export",
+    "outline": {
+      "title": "Outline",
+      "description": "Adds a very dark grey backstitch line along the edge you choose. Handy for light colours on light fabric.",
+      "around": "Around",
+      "design": "The whole design",
+      "apply": "Add the outline"
+    }
   },
   "picker": {
     "search": "Search by code or name",

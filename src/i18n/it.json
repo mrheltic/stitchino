@@ -434,7 +434,14 @@
     },
     "minimap": "Panoramica",
     "regenerate": "Rigenera dalla foto",
-    "export": "Esporta"
+    "export": "Esporta",
+    "outline": {
+      "title": "Contorno",
+      "description": "Aggiunge una linea a punto scritto grigio molto scuro lungo il bordo che scegli. Utile per i colori chiari su tela chiara.",
+      "around": "Attorno a",
+      "design": "Tutto il disegno",
+      "apply": "Aggiungi il contorno"
+    }
   },
   "picker": {
     "search": "Cerca per codice o nome",
