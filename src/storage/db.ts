@@ -32,7 +32,9 @@ export interface ProgressRow {
   projectId: string;
   /** One bit per cell: full stitch done. */
   bits: Uint8Array;
+  /** Stitches (full and partial) done, and in all, for progress bars in lists. */
   done: number;
+  total?: number;
   updatedAt: number;
   /** Stitches marked per local day (YYYY-MM-DD). */
   daily: Record<string, number>;

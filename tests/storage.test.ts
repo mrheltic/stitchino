@@ -53,17 +53,19 @@ describe('project storage', () => {
       { source: { bytes: Uint8Array.from([9, 9]), mime: 'image/png' } },
       store,
     );
+    // Cells 0 and 2 have stitches; the bit for empty cell 1 is a leftover and gets dropped.
     await store.progress.put({
       projectId: id,
-      bits: Uint8Array.from([0b11]),
-      done: 2,
+      bits: Uint8Array.from([0b111]),
+      done: 3,
       updatedAt: 1,
-      daily: {},
+      daily: { '2026-10-28': 2 },
     });
     const file = await exportProjectFile(id, store);
     const copy = await importProjectFile(file, store);
     expect((await store.sources.get(copy))?.bytes).toEqual(Uint8Array.from([9, 9]));
-    expect((await store.progress.get(copy))?.done).toBe(2);
+    const progress = await store.progress.get(copy);
+    expect(progress).toMatchObject({ done: 2, total: 2, daily: { '2026-10-28': 2 } });
     const dup = await duplicateProject(id, 'Copia', store);
     expect((await loadProject(dup, store))?.summary.title).toBe('Copia');
   });

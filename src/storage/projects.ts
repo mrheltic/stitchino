@@ -1,5 +1,7 @@
 import { countStitches, totalStitches, type Pattern } from '../core/model/pattern.ts';
 import { decodeProject, encodeProject, type ProjectSource } from '../core/io/projectFile.ts';
+import { progressExtras, restoreProgress } from '../core/progress/serialize.ts';
+import { ProgressTracker, type ProgressData } from '../core/progress/tracker.ts';
 import { db, type StitchinoDb, type ProjectRow } from './db.ts';
 
 export type ProjectSummary = Omit<ProjectRow, 'data'>;
@@ -119,6 +121,7 @@ export async function exportProjectFile(id: string, store: StitchinoDb = db): Pr
     pattern,
     source: source && { bytes: source.bytes, mime: source.mime, settings: source.settings },
     progress: progress?.bits,
+    progressInfo: progress && { daily: progress.daily, extras: progress.extras },
   });
 }
 
@@ -129,15 +132,41 @@ export async function importProjectFile(
   const bundle = decodeProject(bytes);
   const id = await createProject(bundle.pattern, { source: bundle.source }, store);
   if (bundle.progress) {
-    let done = 0;
-    for (const byte of bundle.progress) for (let b = byte; b; b &= b - 1) done++;
-    await store.progress.put({
-      projectId: id,
+    const { data } = restoreProgress(bundle.pattern, {
       bits: bundle.progress,
-      done,
-      updatedAt: Date.now(),
-      daily: {},
+      daily: bundle.progressInfo?.daily ?? {},
+      extras: bundle.progressInfo?.extras,
     });
+    await putProgress(id, new ProgressTracker(bundle.pattern, data), store);
   }
   return id;
+}
+
+// --- Stitching progress ----------------------------------------------------------------------
+
+/** Progress for the pattern as it is now; `reset` when the size changed since it was saved. */
+export async function loadProgress(
+  id: string,
+  pattern: Pattern,
+  store: StitchinoDb = db,
+): Promise<{ data: ProgressData; reset: boolean }> {
+  const row = await store.progress.get(id);
+  return restoreProgress(pattern, row && { bits: row.bits, daily: row.daily, extras: row.extras });
+}
+
+export async function putProgress(
+  id: string,
+  tracker: ProgressTracker,
+  store: StitchinoDb = db,
+): Promise<void> {
+  const d = tracker.data;
+  await store.progress.put({
+    projectId: id,
+    bits: d.bits,
+    done: tracker.total.done,
+    total: tracker.total.total,
+    updatedAt: Date.now(),
+    daily: { ...d.daily },
+    extras: progressExtras(d),
+  });
 }

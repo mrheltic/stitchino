@@ -18,7 +18,8 @@ import { BRANDS, type ThreadRef } from '../threads/types.ts';
  * `.stitchino` project file (`.puntocroce` in early builds): a zip with
  * - project.json: format marker, version and everything but the cells;
  * - cells.bin: full stitches as little-endian uint16 palette ids, row-major;
- * - progress.bin (optional): stitched-cell bitset; source.* (optional): the original photo.
+ * - progress.bin (optional): stitched-cell bitset; progress.json (optional): daily counts and
+ *   other marks (see core/progress/serialize.ts); source.* (optional): the original photo.
  */
 export const PROJECT_FORMAT = 'stitchino';
 /** Format marker written by builds made under the working name. */
@@ -40,6 +41,8 @@ export interface ProjectBundle {
   source?: ProjectSource;
   /** One bit per cell, set when the full stitch has been stitched. */
   progress?: Uint8Array;
+  /** Stitching marks beyond full stitches, kept as stored (validated when restored). */
+  progressInfo?: { daily: Record<string, number>; extras?: unknown };
 }
 
 interface ProjectJson {
@@ -84,6 +87,8 @@ export function encodeProject(bundle: ProjectBundle): Uint8Array {
     files[file] = bundle.source.bytes;
   }
   if (bundle.progress) files['progress.bin'] = bundle.progress;
+  if (bundle.progress && bundle.progressInfo)
+    files['progress.json'] = strToU8(JSON.stringify(bundle.progressInfo));
   files['project.json'] = strToU8(JSON.stringify(json));
   // Photos are already compressed; storing them avoids wasting time on deflate.
   return zipSync(
@@ -185,8 +190,26 @@ export function decodeProject(bytes: Uint8Array): ProjectBundle {
     if (progress.length !== Math.ceil((width * height) / 8))
       throw new InvalidProjectFileError('bad progress');
     bundle.progress = progress;
+    const info = files['progress.json'];
+    if (info) {
+      try {
+        const parsed = JSON.parse(strFromU8(info)) as { daily?: unknown; extras?: unknown };
+        bundle.progressInfo = { daily: validDaily(parsed.daily), extras: parsed.extras };
+      } catch {
+        // Marks beyond full stitches are optional: a broken file just loses them.
+      }
+    }
   }
   return bundle;
+}
+
+function validDaily(value: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (!value || typeof value !== 'object') return out;
+  for (const [day, n] of Object.entries(value)) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(day) && Number.isInteger(n)) out[day] = n as number;
+  }
+  return out;
 }
 
 function validatePalette(value: unknown): PaletteEntry[] {
