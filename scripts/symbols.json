@@ -1,0 +1,33 @@
+{
+  "comment": "Chart symbols in order of legibility at small print sizes: the most used colours get the first ones. 'noto' = Noto Sans Symbols 2, 'atk' = Atkinson Hyperlegible Bold. Similar-looking letters/digits (I O Q 0 1 2 5 8, b d p q) are left out on purpose. Also left out after normalisation: X (looks like ✖), ✗, ⬥ ⬦ (same as ◆ ◇), ⧫, ▯ (too thin).",
+  "tiers": [
+    {
+      "font": "noto",
+      "chars": "●■▲◆★♥♣♠✚✖▼⬟"
+    },
+    {
+      "font": "noto",
+      "chars": "○□△◇☆♡♧♤▽⬠⬡"
+    },
+    {
+      "font": "atk",
+      "chars": "ABCDEFGHJKLMNPRSTUVWYZ"
+    },
+    {
+      "font": "atk",
+      "chars": "34679"
+    },
+    {
+      "font": "noto",
+      "chars": "◐◑◒◓◧◨◩◪◉◎▣◈⬢✦✧✪❖✿❀✤✣✜✓▤▥▦▧▨▩◢◣◤◥◭◮▰▱▮▬▭✱✲"
+    },
+    {
+      "font": "atk",
+      "chars": "aefghkmnrtuy"
+    },
+    {
+      "font": "atk",
+      "chars": "#@%&?!$="
+    }
+  ]
+}
