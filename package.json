@@ -4,6 +4,11 @@
   "version": "0.9.0",
   "description": "Free, open-source web app to turn photos into cross-stitch patterns, print them and track your stitching.",
   "license": "GPL-3.0-or-later",
+  "homepage": "https://mrheltic.github.io/stitchino/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrheltic/stitchino.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

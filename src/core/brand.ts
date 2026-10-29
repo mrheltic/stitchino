@@ -10,16 +10,16 @@ export const APP_NAME = 'Stitchino';
  * and a link to an unclaimed donation page could send money to a stranger.
  */
 export const LINKS = {
-  /** Public repository, e.g. https://github.com/<user>/stitchino */
-  source: '',
+  /** Public repository */
+  source: 'https://github.com/mrheltic/stitchino',
   /** One-off donations, e.g. https://ko-fi.com/<name> */
   kofi: '',
   /** Monthly sponsorship, e.g. https://github.com/sponsors/<user> */
   githubSponsors: '',
   /** Recurring donations without platform fees, e.g. https://liberapay.com/<name> */
   liberapay: '',
-  /** Bug reports and ideas, e.g. https://github.com/<user>/stitchino/issues */
-  issues: '',
+  /** Bug reports and ideas */
+  issues: 'https://github.com/mrheltic/stitchino/issues',
 } as const;
 
 export type LinkKey = keyof typeof LINKS;

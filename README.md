@@ -4,6 +4,8 @@
 stampa e ti accompagna mentre ricami. È gratis, senza limiti e senza account: tutto funziona nel
 browser, anche offline, e le foto non lasciano mai il dispositivo.
 
+**Prova Stitchino: <https://mrheltic.github.io/stitchino/>**
+
 > Stato: beta (0.9). Mancano le prove sul campo con chi ricama: vedi «Da verificare» più sotto.
 
 ## Cosa fa
@@ -30,14 +32,13 @@ browser, anche offline, e le foto non lasciano mai il dispositivo.
 Il sito è statico: basta un hosting di file. Il workflow `.github/workflows/ci.yml` controlla il
 codice a ogni push e, sul ramo `main`, pubblica la build su GitHub Pages. Costo: zero.
 
-1. Crea su GitHub un repository **pubblico**, per esempio `stitchino`.
-2. Collega e carica il progetto:
-   ```sh
-   git remote add origin https://github.com/<utente>/stitchino.git
-   git push -u origin main
-   ```
-3. Su GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-4. Al termine del workflow il sito è su `https://<utente>.github.io/stitchino/`.
+Per pubblicare una tua copia:
+
+1. Fai un fork del repository (deve restare **pubblico**) e attiva le Actions dalla scheda
+   **Actions**.
+2. Su GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. Al prossimo push su `main`, finito il workflow, il sito è su
+   `https://<utente>.github.io/stitchino/`.
 
 Le pagine usano percorsi relativi e il routing con `#`, quindi funzionano anche in una
 sottocartella, senza configurazioni del server.
@@ -100,8 +101,9 @@ di lavoro: resta nei nomi interni dell'archivio, così i dati salvati restano le
 Stitchino turns photos into cross-stitch patterns, prints them and tracks your stitching. It is a
 free, open-source progressive web app: no account, no server, works offline, and your photos never
 leave your device. It reads Pattern Keeper-style PDFs for personal stitching, keeps a thread stash,
-and the interface is available in Italian and English. See the sections above to build, test and
-deploy it to GitHub Pages.
+and the interface is available in Italian and English. Try it at
+<https://mrheltic.github.io/stitchino/>. See the sections above to build, test and deploy your own
+copy to GitHub Pages.
 
 ## Licenza / Licence
 
