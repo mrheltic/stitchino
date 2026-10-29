@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { FileUp, FolderInput, ImagePlus, Square } from 'lucide-react';
 import { useState, type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { importOxs } from '../../core/io/oxs.ts';
 import { PROJECT_EXTENSIONS } from '../../core/io/projectFile.ts';
 import { db } from '../../storage/db.ts';
@@ -52,6 +52,9 @@ export function Home() {
   return (
     <Page wide>
       <section className="mb-10 rounded-2xl border border-line bg-surface px-6 py-10 text-center sm:px-10">
+        <p className="mb-3 text-sm font-medium text-accent">
+          {t('app.name')} · {t('app.tagline')}
+        </p>
         <h1 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
           {t('home.title')}
         </h1>
@@ -88,7 +91,27 @@ export function Home() {
       </section>
       <h2 className="mb-3 text-lg font-semibold">{t('home.projects')}</h2>
       {projects === undefined ? null : projects.length === 0 ? (
-        <Card className="text-center text-muted">{t('home.noProjects')}</Card>
+        <Card>
+          <p className="mb-4 text-center text-muted">{t('home.noProjects')}</p>
+          <ol className="grid gap-4 sm:grid-cols-3">
+            {(['photo', 'edit', 'stitch'] as const).map((k, i) => (
+              <li key={k} className="flex gap-3">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-ink">
+                  {i + 1}
+                </span>
+                <span className="text-sm">
+                  <span className="block font-medium">{t(`home.how.${k}`)}</span>
+                  <span className="text-muted">{t(`home.how.${k}Text`)}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-4 text-center text-sm">
+            <Link to="/guide" className="text-accent underline underline-offset-2">
+              {t('home.how.guide')}
+            </Link>
+          </p>
+        </Card>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {projects.map((p) => (
