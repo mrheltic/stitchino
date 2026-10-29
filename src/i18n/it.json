@@ -36,10 +36,18 @@
     "oxsSubstituted_other": "{{count}} colori di marche che non conosco sono stati sostituiti con i DMC più simili: {{list}}.",
     "oxsSkipped_one": "{{count}} elemento non supportato (perline o punti speciali) è stato ignorato.",
     "oxsSkipped_other": "{{count}} elementi non supportati (perline o punti speciali) sono stati ignorati.",
-    "progress": "Ricamato al {{percent}}"
+    "progress": "Ricamato al {{percent}}",
+    "how": {
+      "photo": "Scegli una foto",
+      "photoText": "Ritaglia, regola i colori e scegli la misura: lo schema si crea in un attimo, sul tuo dispositivo.",
+      "edit": "Sistemalo e preparati",
+      "editText": "Correggi i punti nell'editor, guarda la misura reale e la lista dei fili da comprare.",
+      "stitch": "Stampa o ricama",
+      "stitchText": "Scarica il PDF, anche per Pattern Keeper, o segna i punti fatti dal tablet.",
+      "guide": "Prima volta col punto croce? Leggi la guida"
+    }
   },
   "common": {
-    "comingSoon": "Questa sezione è in costruzione.",
     "back": "Indietro",
     "cancel": "Annulla",
     "close": "Chiudi",
@@ -63,7 +71,30 @@
     "themeDark": "Scuro",
     "units": "Unità di misura",
     "metric": "Centimetri",
-    "imperial": "Pollici"
+    "imperial": "Pollici",
+    "backup": {
+      "title": "Copia di sicurezza",
+      "text": "I tuoi progetti sono salvati solo in questo browser. Ogni tanto scarica una copia: contiene tutti i progetti, con foto e avanzamento, e i tuoi fili. Per passare a un altro dispositivo, ripristinala lì.",
+      "download": "Scarica la copia",
+      "restore": "Ripristina una copia",
+      "restored_one": "Ripristinato {{count}} progetto.",
+      "restored_other": "Ripristinati {{count}} progetti.",
+      "skipped_one": "{{count}} c'era già.",
+      "skipped_other": "{{count}} c'erano già.",
+      "threads_one": "Aggiornato {{count}} filo.",
+      "threads_other": "Aggiornati {{count}} fili.",
+      "invalid": "Questo file non è una copia di sicurezza di $t(app.name).",
+      "persisted": "Il browser tiene i tuoi dati al sicuro anche quando lo spazio scarseggia.",
+      "notPersisted": "Il browser potrebbe cancellare i dati se lo spazio scarseggia.",
+      "ios": "Su iPhone e iPad installa $t(app.name) nella schermata Home (Condividi → Aggiungi alla schermata Home): Safari cancella i dati dei siti non usati per qualche settimana."
+    },
+    "about": {
+      "title": "Informazioni",
+      "license": "software libero con licenza GPL-3.0",
+      "credits": "Colori DMC e Anchor dai cataloghi di KXStitch, font Atkinson Hyperlegible e Noto Sans Symbols 2. DMC e Anchor sono marchi dei rispettivi titolari.",
+      "source": "Codice sorgente",
+      "issues": "Segnala un problema"
+    }
   },
   "pwa": {
     "updateAvailable": "È disponibile una nuova versione.",
@@ -77,7 +108,9 @@
   },
   "footer": {
     "privacy": "Nessun tracciamento: tutto resta nel tuo browser.",
-    "license": "Software libero, licenza GPL-3.0"
+    "license": "Software libero, licenza GPL-3.0",
+    "privacyLink": "Privacy e condizioni",
+    "support": "Sostieni Stitchino"
   },
   "wizard": {
     "title": "Nuovo schema da foto",
@@ -533,7 +566,22 @@
       "kofi": "Offrimi un caffè",
       "githubSponsors": "Sostienimi su GitHub",
       "liberapay": "Dona con Liberapay"
-    }
+    },
+    "title": "Sostieni Stitchino",
+    "intro": "Stitchino è gratis, senza pubblicità, senza account e senza limiti, e resterà così. Lo sviluppo si fa nel tempo libero: se ti è utile, ecco come puoi dare una mano.",
+    "linkHints": {
+      "kofi": "Una donazione una tantum, anche piccola.",
+      "githubSponsors": "Un piccolo contributo ogni mese.",
+      "liberapay": "Donazioni ricorrenti, senza commissioni della piattaforma."
+    },
+    "otherWays": "Anche senza soldi",
+    "share": "Parlane",
+    "shareText": "Consiglialo nel tuo gruppo di ricamo, sui social o a chi ti chiede come hai fatto il tuo schema.",
+    "feedback": "Racconta cosa non va",
+    "feedbackText": "Un errore, uno schema venuto male, una funzione che ti manca: ogni segnalazione aiuta.",
+    "feedbackLink": "Scrivi qui",
+    "test": "Prova e misura",
+    "testText": "Chi ricama può aiutare a tarare la stima dei fili e a provare i PDF con Pattern Keeper: basta un piccolo campione."
   },
   "stitch": {
     "canvas": "Schema da ricamare «{{title}}»",
@@ -680,5 +728,28 @@
     "pickTitle": "Filo per il simbolo {{symbol}}",
     "found_one": "Schema di {{w}} × {{h}} punti, {{colors}} colori, da {{count}} pagina.",
     "found_other": "Schema di {{w}} × {{h}} punti, {{colors}} colori, da {{count}} pagine."
+  },
+  "guide": {
+    "contents": "Indice della guida"
+  },
+  "privacy": {
+    "title": "Privacy e condizioni d'uso",
+    "dataTitle": "I tuoi dati",
+    "data": [
+      "Non ci sono account, cookie, pubblicità né sistemi di tracciamento.",
+      "Foto, schemi, avanzamento e fili restano nel browser di questo dispositivo e non vengono inviati a nessun server: la conversione e i PDF si fanno sul dispositivo.",
+      "Il sito è ospitato su GitHub Pages: come ogni server web, GitHub può registrare dati tecnici delle visite, per esempio l'indirizzo IP, per sicurezza e funzionamento.",
+      "I link per le donazioni portano a siti esterni, ciascuno con la propria informativa.",
+      "Per cancellare tutto elimina i progetti, oppure cancella i dati del sito dalle impostazioni del browser."
+    ],
+    "githubLink": "Informativa sulla privacy di GitHub",
+    "termsTitle": "Condizioni d'uso",
+    "terms": [
+      "Stitchino è software libero con licenza GPL-3.0 o successiva ed è fornito così com'è, senza garanzie.",
+      "Usa foto di cui hai i diritti. Gli schemi che crei dalle tue foto sono tuoi.",
+      "I PDF di altri designer che importi restano per il tuo uso personale: l'app non li esporta né li condivide.",
+      "I colori sullo schermo e la stima dei fili sono approssimazioni: controlla con la cartella colori e compra un po' di margine.",
+      "DMC e Anchor sono marchi dei rispettivi titolari. Stitchino usa i codici dei colori solo come riferimento e non è affiliato ai produttori."
+    ]
   }
 }

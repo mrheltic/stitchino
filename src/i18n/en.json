@@ -36,10 +36,18 @@
     "oxsSubstituted_other": "{{count}} colours from brands I don't know were replaced by the closest DMC: {{list}}.",
     "oxsSkipped_one": "{{count}} unsupported item (beads or special stitches) was skipped.",
     "oxsSkipped_other": "{{count}} unsupported items (beads or special stitches) were skipped.",
-    "progress": "{{percent}} stitched"
+    "progress": "{{percent}} stitched",
+    "how": {
+      "photo": "Pick a photo",
+      "photoText": "Crop it, adjust the colours and choose the size: the pattern is ready in a moment, on your device.",
+      "edit": "Tidy it up and get ready",
+      "editText": "Fix stitches in the editor, see the real size and the list of threads to buy.",
+      "stitch": "Print it or stitch it",
+      "stitchText": "Download the PDF, also for Pattern Keeper, or mark your stitches on a tablet.",
+      "guide": "New to cross stitch? Read the guide"
+    }
   },
   "common": {
-    "comingSoon": "This section is under construction.",
     "back": "Back",
     "cancel": "Cancel",
     "close": "Close",
@@ -63,7 +71,30 @@
     "themeDark": "Dark",
     "units": "Units",
     "metric": "Centimetres",
-    "imperial": "Inches"
+    "imperial": "Inches",
+    "backup": {
+      "title": "Backup",
+      "text": "Your projects are saved only in this browser. Download a backup now and then: it holds every project, with photos and progress, and your threads. To move to another device, restore it there.",
+      "download": "Download a backup",
+      "restore": "Restore a backup",
+      "restored_one": "Restored {{count}} project.",
+      "restored_other": "Restored {{count}} projects.",
+      "skipped_one": "{{count}} was already here.",
+      "skipped_other": "{{count}} were already here.",
+      "threads_one": "Updated {{count}} thread.",
+      "threads_other": "Updated {{count}} threads.",
+      "invalid": "This file is not a $t(app.name) backup.",
+      "persisted": "The browser keeps your data safe even when space runs low.",
+      "notPersisted": "The browser may clear your data when space runs low.",
+      "ios": "On iPhone and iPad, add $t(app.name) to the Home Screen (Share → Add to Home Screen): Safari clears data of sites not used for a few weeks."
+    },
+    "about": {
+      "title": "About",
+      "license": "free software under the GPL-3.0 licence",
+      "credits": "DMC and Anchor colours from the KXStitch catalogues, Atkinson Hyperlegible and Noto Sans Symbols 2 fonts. DMC and Anchor are trademarks of their respective owners.",
+      "source": "Source code",
+      "issues": "Report a problem"
+    }
   },
   "pwa": {
     "updateAvailable": "A new version is available.",
@@ -77,7 +108,9 @@
   },
   "footer": {
     "privacy": "No tracking: everything stays in your browser.",
-    "license": "Free software, GPL-3.0 licence"
+    "license": "Free software, GPL-3.0 licence",
+    "privacyLink": "Privacy and terms",
+    "support": "Support Stitchino"
   },
   "wizard": {
     "title": "New pattern from a photo",
@@ -533,7 +566,22 @@
       "kofi": "Buy me a coffee",
       "githubSponsors": "Sponsor on GitHub",
       "liberapay": "Donate on Liberapay"
-    }
+    },
+    "title": "Support Stitchino",
+    "intro": "Stitchino is free, with no ads, no accounts and no limits, and it will stay that way. It is built in spare time: if you find it useful, here is how you can help.",
+    "linkHints": {
+      "kofi": "A one-off donation, however small.",
+      "githubSponsors": "A small contribution every month.",
+      "liberapay": "Recurring donations with no platform fee."
+    },
+    "otherWays": "Without spending a penny",
+    "share": "Spread the word",
+    "shareText": "Recommend it in your stitching group, on social media, or to whoever asks how you made your pattern.",
+    "feedback": "Tell us what's wrong",
+    "feedbackText": "A bug, a pattern that came out badly, a feature you miss: every report helps.",
+    "feedbackLink": "Write here",
+    "test": "Try and measure",
+    "testText": "Stitchers can help tune the thread estimate and test PDFs with Pattern Keeper: a small sample is enough."
   },
   "stitch": {
     "canvas": "Pattern to stitch “{{title}}”",
@@ -680,5 +728,28 @@
     "pickTitle": "Thread for symbol {{symbol}}",
     "found_one": "Pattern of {{w}} × {{h}} stitches, {{colors}} colours, from {{count}} page.",
     "found_other": "Pattern of {{w}} × {{h}} stitches, {{colors}} colours, from {{count}} pages."
+  },
+  "guide": {
+    "contents": "Guide contents"
+  },
+  "privacy": {
+    "title": "Privacy and terms of use",
+    "dataTitle": "Your data",
+    "data": [
+      "There are no accounts, cookies, ads or trackers.",
+      "Photos, patterns, progress and threads stay in this device's browser and are never sent to a server: conversion and PDFs happen on the device.",
+      "The site is hosted on GitHub Pages: like any web server, GitHub may log technical visit data such as the IP address, for security and operation.",
+      "Donation links lead to outside sites, each with its own privacy policy.",
+      "To delete everything, delete your projects or clear the site's data in your browser settings."
+    ],
+    "githubLink": "GitHub's privacy statement",
+    "termsTitle": "Terms of use",
+    "terms": [
+      "Stitchino is free software under the GPL-3.0 licence or later, provided as is, without warranty.",
+      "Use photos you have the rights to. Patterns you make from your own photos are yours.",
+      "PDFs from other designers that you import stay for your personal use: the app doesn't export or share them.",
+      "On-screen colours and thread estimates are approximations: check against a colour card and buy a little extra.",
+      "DMC and Anchor are trademarks of their respective owners. Stitchino uses colour numbers only as a reference and is not affiliated with the makers."
+    ]
   }
 }
