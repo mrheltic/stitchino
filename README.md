@@ -11,6 +11,8 @@ stitching. It's free, there's no account, and your pictures never leave your dev
 
 [![Open Stitchino](https://img.shields.io/badge/Open_Stitchino-9e2f45?style=for-the-badge&logo=pwa&logoColor=white)](https://mrheltic.github.io/stitchino/)
 
+[Free patterns](https://mrheltic.github.io/stitchino/patterns/) · [Guide](https://mrheltic.github.io/stitchino/#/guide) · [Italiano](https://mrheltic.github.io/stitchino/it/schema-punto-croce-da-foto/)
+
 [![CI](https://img.shields.io/github/actions/workflow/status/mrheltic/stitchino/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/mrheltic/stitchino/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/github/package-json/v/mrheltic/stitchino?color=9e2f45)](package.json)
 [![Licence](https://img.shields.io/github/license/mrheltic/stitchino?color=blue&logo=gnu&logoColor=white)](LICENSE)
@@ -55,6 +57,10 @@ you go.
 - **Other designers' PDFs.** Charts whose symbols are text (the kind Pattern Keeper reads) can be
   imported and stitched in the app, for personal use, after a review screen that shows what was
   detected.
+
+There's also a small library of [free patterns](https://mrheltic.github.io/stitchino/patterns/)
+made with Stitchino, each with PDFs (A4, US Letter, Pattern Keeper) and a button that opens the
+picture in the app so you can change the size and colours.
 
 <table>
   <tr>
@@ -162,6 +168,7 @@ npm run build:font      # public/fonts/pc-symbols.ttf (needs Python 3 with fontT
 | `src/storage` | IndexedDB through Dexie: projects, progress, inventory, backup                                                                     |
 | `src/workers` | photo conversion and PDF export, off the main thread                                                                               |
 | `src/ui`      | the React app                                                                                                                      |
+| `site`        | landing pages and the free pattern library, generated as plain HTML at build time (see `site/README.md`)                           |
 
 The IndexedDB database and the localStorage keys still carry the working name "puntocroce", so
 data saved by the first builds stays readable.
