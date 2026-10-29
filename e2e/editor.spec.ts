@@ -22,7 +22,10 @@ async function drag(page: Page, from: [number, number], to: [number, number]) {
   await page.mouse.up();
 }
 
-test('adds a colour, draws, undoes and keeps the work after a reload', async ({ page, isMobile }) => {
+test('adds a colour, draws, undoes and keeps the work after a reload', async ({
+  page,
+  isMobile,
+}) => {
   test.skip(isMobile, 'Mouse drawing is covered on desktop and tablet');
   await newBlank(page, 'Prova editor');
   await page.getByRole('button', { name: 'Aggiungi', exact: true }).click();

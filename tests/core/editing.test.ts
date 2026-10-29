@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { CellsCommand, EditorDocument, ListCommand, readCell } from '../../src/core/model/document.ts';
+import {
+  CellsCommand,
+  EditorDocument,
+  ListCommand,
+  readCell,
+} from '../../src/core/model/document.ts';
 import {
   cleanupCommand,
   clearCommand,
@@ -22,7 +27,13 @@ import {
   withStitch,
   withoutStitch,
 } from '../../src/core/model/ops.ts';
-import { ARM, FULL_MASK, HALF_SLASH, createPattern, type Pattern } from '../../src/core/model/pattern.ts';
+import {
+  ARM,
+  FULL_MASK,
+  HALF_SLASH,
+  createPattern,
+  type Pattern,
+} from '../../src/core/model/pattern.ts';
 
 function sample(w = 6, h = 4): Pattern {
   const p = createPattern(w, h);
@@ -53,7 +64,10 @@ describe('cell states', () => {
       { mask: ARM.TR, id: 2 },
       { mask: FULL_MASK & ~ARM.TR, id: 1 },
     ]);
-    expect(withoutStitch(st, ARM.TR)).toEqual({ full: 0, partials: [{ mask: FULL_MASK & ~ARM.TR, id: 1 }] });
+    expect(withoutStitch(st, ARM.TR)).toEqual({
+      full: 0,
+      partials: [{ mask: FULL_MASK & ~ARM.TR, id: 1 }],
+    });
   });
 
   it('turns an overlapped half into the remaining arm', () => {
