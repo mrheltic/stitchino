@@ -1,6 +1,6 @@
 import symbolSet from './symbolSet.json';
 
-/** Chart symbols, most legible first. All are glyphs of the bundled "PuntoCroce Symbols" font. */
+/** Chart symbols, most legible first. All are glyphs of the bundled "Stitchino Symbols" font. */
 export const SYMBOLS: readonly string[] = symbolSet.symbols;
 export const SYMBOL_FONT_FAMILY = symbolSet.font;
 /** Height of the glyph centre above the baseline, in em. */

@@ -11,17 +11,22 @@ import {
   type Pattern,
   type PatternMeta,
 } from '../model/pattern.ts';
+import { APP_NAME } from '../brand.ts';
 import { BRANDS, type ThreadRef } from '../threads/types.ts';
 
 /**
- * `.puntocroce` project file: a zip with
+ * `.stitchino` project file (`.puntocroce` in early builds): a zip with
  * - project.json: format marker, version and everything but the cells;
  * - cells.bin: full stitches as little-endian uint16 palette ids, row-major;
  * - progress.bin (optional): stitched-cell bitset; source.* (optional): the original photo.
  */
-export const PROJECT_FORMAT = 'puntocroce';
+export const PROJECT_FORMAT = 'stitchino';
+/** Format marker written by builds made under the working name. */
+const LEGACY_FORMAT = 'puntocroce';
 export const PROJECT_VERSION = 1;
-export const PROJECT_EXTENSION = '.puntocroce';
+export const PROJECT_EXTENSION = '.stitchino';
+/** Extensions the open dialogs accept. */
+export const PROJECT_EXTENSIONS = ['.stitchino', '.puntocroce'];
 
 export interface ProjectSource {
   bytes: Uint8Array;
@@ -38,7 +43,7 @@ export interface ProjectBundle {
 }
 
 interface ProjectJson {
-  format: typeof PROJECT_FORMAT;
+  format: typeof PROJECT_FORMAT | typeof LEGACY_FORMAT;
   version: number;
   width: number;
   height: number;
@@ -106,9 +111,10 @@ export function decodeProject(bytes: Uint8Array): ProjectBundle {
   } catch {
     throw new InvalidProjectFileError('project.json is not valid JSON');
   }
-  if (json?.format !== PROJECT_FORMAT) throw new InvalidProjectFileError('unknown format');
+  if (json?.format !== PROJECT_FORMAT && json?.format !== LEGACY_FORMAT)
+    throw new InvalidProjectFileError('unknown format');
   if (json.version > PROJECT_VERSION)
-    throw new InvalidProjectFileError('made by a newer version of PuntoCroce');
+    throw new InvalidProjectFileError(`made by a newer version of ${APP_NAME}`);
 
   const { width, height } = json;
   if (!isInt(width, 1, MAX_SIDE) || !isInt(height, 1, MAX_SIDE))

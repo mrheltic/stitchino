@@ -23,6 +23,7 @@ import {
   type PDFOperator,
   type PDFPage,
 } from 'pdf-lib';
+import { APP_NAME } from '../../brand.ts';
 import { hexToRgb, relativeLuminance, type Rgb } from '../../color/srgb.ts';
 import { entryRgb } from '../../model/entryColor.ts';
 import {
@@ -166,8 +167,8 @@ export async function chartPdf(pattern: Pattern, o: ChartPdfOptions): Promise<Ui
   const title = pattern.meta.title || o.labels.untitled;
   pdf.setTitle(title);
   if (pattern.meta.author) pdf.setAuthor(pattern.meta.author);
-  pdf.setCreator('PuntoCroce');
-  pdf.setProducer('PuntoCroce');
+  pdf.setCreator(APP_NAME);
+  pdf.setProducer(APP_NAME);
   // The symbol font is embedded whole so every glyph keeps its character mapping (Pattern Keeper
   // reads symbols as text).
   const sym = await pdf.embedFont(o.fonts.symbols, { subset: false });

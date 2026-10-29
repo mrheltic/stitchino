@@ -49,12 +49,13 @@ export interface InventoryRow {
   updatedAt: number;
 }
 
-export class PuntoCroceDb extends Dexie {
+export class StitchinoDb extends Dexie {
   projects!: EntityTable<ProjectRow, 'id'>;
   sources!: EntityTable<SourceRow, 'projectId'>;
   progress!: EntityTable<ProgressRow, 'projectId'>;
   inventory!: EntityTable<InventoryRow, 'key'>;
 
+  // Database name from the working title, kept so data from earlier builds stays.
   constructor(name = 'puntocroce') {
     super(name);
     this.version(1).stores({
@@ -66,7 +67,7 @@ export class PuntoCroceDb extends Dexie {
   }
 }
 
-export const db = new PuntoCroceDb();
+export const db = new StitchinoDb();
 
 /** Asks the browser not to evict our data under storage pressure (Safari is aggressive). */
 export async function requestPersistentStorage(): Promise<boolean> {

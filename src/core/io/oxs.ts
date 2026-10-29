@@ -1,3 +1,4 @@
+import { APP_NAME } from '../brand.ts';
 import { hexToRgb, rgbToHex, rgbToLab } from '../color/index.ts';
 import { entryRgb } from '../model/entryColor.ts';
 import {
@@ -42,7 +43,7 @@ const QUARTER_OFFSET: Record<number, [number, number]> = {
   [ARM.BR]: [0.5, 0.5],
 };
 
-export function exportOxs(p: Pattern, software = 'PuntoCroce', version = '1'): string {
+export function exportOxs(p: Pattern, software = APP_NAME, version = '1'): string {
   const index = new Map(p.palette.map((e, i) => [e.id, i + 1]));
   const out: string[] = ['<?xml version="1.0" encoding="UTF-8"?>', '<chart>'];
   out.push(

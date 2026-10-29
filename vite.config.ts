@@ -14,8 +14,8 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: ['favicon.svg', 'fonts/*.ttf'],
       manifest: {
-        name: 'PuntoCroce',
-        short_name: 'PuntoCroce',
+        name: 'Stitchino – punto croce',
+        short_name: 'Stitchino',
         description:
           'Schemi a punto croce dalle tue foto: crea, stampa e ricama. Gratis, open source, offline.',
         lang: 'it',

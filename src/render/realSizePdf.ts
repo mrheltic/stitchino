@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from 'pdf-lib';
+import { APP_NAME } from '../core/brand.ts';
 import type { Pattern } from '../core/model/pattern.ts';
 import { cellSizeMm, stitchesPerInch } from '../core/size/fabric.ts';
 import { RealisticPainter, type RealisticStyle } from './realistic.ts';
@@ -68,7 +69,7 @@ export async function realSizePdf(
   const painter = new RealisticPainter(pattern, style);
   const pdf = await PDFDocument.create();
   pdf.setTitle(labels.title);
-  pdf.setCreator('PuntoCroce');
+  pdf.setCreator(APP_NAME);
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
   const total = layout.cols * layout.rows;

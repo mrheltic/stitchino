@@ -23,7 +23,7 @@ from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / ".cache" / "font-sources"
-FAMILY = "PuntoCroce Symbols"
+FAMILY = "Stitchino Symbols"
 UPM = 1000
 ADVANCE = 1000
 ASCENT, DESCENT = 880, -120
@@ -127,8 +127,8 @@ def main() -> None:
             "styleName": "Regular",
             "uniqueFontIdentifier": f"{FAMILY} Regular",
             "fullName": f"{FAMILY} Regular",
-            "psName": "PuntoCroceSymbols-Regular",
-            "copyright": "Copyright 2020 Braille Institute of America, Inc.; Copyright 2022 The Noto Project Authors. Modified for PuntoCroce.",
+            "psName": "StitchinoSymbols-Regular",
+            "copyright": "Copyright 2020 Braille Institute of America, Inc.; Copyright 2022 The Noto Project Authors. Modified for Stitchino.",
             "licenseDescription": "This Font Software is licensed under the SIL Open Font License, Version 1.1.",
             "licenseInfoURL": "https://openfontlicense.org",
         }
@@ -140,7 +140,7 @@ def main() -> None:
         usWinAscent=ASCENT,
         usWinDescent=-DESCENT,
         fsType=0,
-        achVendID="PNTC",
+        achVendID="STCH",
     )
     fb.setupPost()
     # Fixed timestamps keep rebuilds byte-identical.
@@ -150,7 +150,7 @@ def main() -> None:
     fb.save(out)
 
     (out.parent / "OFL.txt").write_text(
-        "PuntoCroce Symbols (pc-symbols.ttf) is a modified version of Atkinson Hyperlegible Bold and\n"
+        "Stitchino Symbols (pc-symbols.ttf) is a modified version of Atkinson Hyperlegible Bold and\n"
         "Noto Sans Symbols 2: glyphs were selected, scaled and re-centred. AtkinsonHyperlegible-Regular.ttf\n"
         "and AtkinsonHyperlegible-Bold.ttf are included unmodified for PDF text. All are distributed under\n"
         "the SIL Open Font License 1.1, reproduced below for each source font.\n\n"

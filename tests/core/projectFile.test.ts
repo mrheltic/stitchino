@@ -1,4 +1,4 @@
-import { zipSync, strToU8 } from 'fflate';
+import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
 import { describe, expect, it } from 'vitest';
 import { ARM, HALF_SLASH, createPattern } from '../../src/core/model/index.ts';
 import {
@@ -116,5 +116,16 @@ describe('project file', () => {
       'cells.bin': Uint8Array.from([0, 0, 0, 0]),
     });
     expect(() => decodeProject(overlap)).toThrow(/partial/);
+  });
+});
+
+describe('legacy project files', () => {
+  it('opens files written under the working name', () => {
+    const files = unzipSync(encodeProject({ pattern: createPattern(3, 2) }));
+    const json = JSON.parse(strFromU8(files['project.json']));
+    expect(json.format).toBe('stitchino');
+    json.format = 'puntocroce';
+    files['project.json'] = strToU8(JSON.stringify(json));
+    expect(decodeProject(zipSync(files)).pattern.width).toBe(3);
   });
 });

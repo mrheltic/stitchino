@@ -3,7 +3,7 @@
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 @font-face {
-  font-family: 'PuntoCroce Symbols';
+  font-family: 'Stitchino Symbols';
   src: url('/fonts/pc-symbols.ttf') format('truetype');
   font-display: block;
 }
@@ -46,7 +46,7 @@
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-accent-ink: var(--accent-ink);
-  --font-symbols: 'PuntoCroce Symbols';
+  --font-symbols: 'Stitchino Symbols';
 }
 
 html,

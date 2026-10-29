@@ -1,4 +1,4 @@
-PuntoCroce Symbols (pc-symbols.ttf) is a modified version of Atkinson Hyperlegible Bold and
+Stitchino Symbols (pc-symbols.ttf) is a modified version of Atkinson Hyperlegible Bold and
 Noto Sans Symbols 2: glyphs were selected, scaled and re-centred. AtkinsonHyperlegible-Regular.ttf
 and AtkinsonHyperlegible-Bold.ttf are included unmodified for PDF text. All are distributed under
 the SIL Open Font License 1.1, reproduced below for each source font.

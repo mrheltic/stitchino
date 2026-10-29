@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "PuntoCroce",
-    "tagline": "Cross-stitch patterns from your photos"
+    "name": "Stitchino",
+    "tagline": "Your photos, stitch by stitch"
   },
   "nav": {
     "projects": "Projects",
@@ -30,7 +30,12 @@
     "copyOf": "{{title}} (copy)",
     "deleteTitle": "Delete the project?",
     "deleteText": "“{{title}}” and its progress will be removed from this device. This can't be undone.",
-    "openError": "This file is not a valid PuntoCroce project."
+    "openError": "This file is not a valid $t(app.name) project or OXS file.",
+    "oxsOpened": "OXS file opened.",
+    "oxsSubstituted_one": "{{count}} colour from a brand I don't know was replaced by the closest DMC: {{list}}.",
+    "oxsSubstituted_other": "{{count}} colours from brands I don't know were replaced by the closest DMC: {{list}}.",
+    "oxsSkipped_one": "{{count}} unsupported item (beads or special stitches) was skipped.",
+    "oxsSkipped_other": "{{count}} unsupported items (beads or special stitches) were skipped."
   },
   "common": {
     "comingSoon": "This section is under construction.",
@@ -62,7 +67,7 @@
   "pwa": {
     "updateAvailable": "A new version is available.",
     "update": "Update",
-    "offlineReady": "PuntoCroce now works offline too.",
+    "offlineReady": "$t(app.name) now works offline too.",
     "dismiss": "Dismiss"
   },
   "notFound": {
@@ -367,7 +372,8 @@
       "apply": "Clean up"
     },
     "minimap": "Overview",
-    "regenerate": "Regenerate from the photo"
+    "regenerate": "Regenerate from the photo",
+    "export": "Export"
   },
   "picker": {
     "search": "Search by code or name",
@@ -417,7 +423,7 @@
       "copy": "Copy",
       "copied": "Copied",
       "share": "Share",
-      "heading": "PuntoCroce – shopping list: {{title}}",
+      "heading": "$t(app.name) – shopping list: {{title}}",
       "fabricLine": "Fabric: {{fabric}}, at least {{size}}",
       "needleLine": "Blunt tapestry needle, size {{needle}}",
       "estimateNote": "Skeins are an estimate (8 m, 6 strands) with a safety margin: buy the amount shown, perhaps one extra for the most used colours."
@@ -428,7 +434,7 @@
     "by": "by {{author}}",
     "page": "Page {{n}} of {{total}}",
     "region": "columns {{x0}}–{{x1}}, rows {{y0}}–{{y1}}",
-    "credit": "Made with PuntoCroce, free cross-stitch software",
+    "credit": "Made with $t(app.name), free cross-stitch software",
     "overTwo": "over 2",
     "info": {
       "size": "Size",
@@ -456,5 +462,59 @@
       "partialNote": "Pattern Keeper does not read partial stitches, backstitch and knots: use the full PDF for those."
     },
     "pageMap": "Page map"
+  },
+  "export": {
+    "title": "Export the pattern",
+    "format": "Format",
+    "formats": {
+      "pdf": "Printable PDF",
+      "png": "PNG image",
+      "oxs": "OXS file",
+      "project": "Project file"
+    },
+    "preset": "PDF type",
+    "presets": {
+      "print": "Full",
+      "patternKeeper": "For Pattern Keeper"
+    },
+    "printHint": "Cover with sizes, key with estimated skeins, and chart pages with a grid every 10 stitches.",
+    "pkHint": "Grid, black symbols and an English key only: the layout the Pattern Keeper app can read. Half stitches, backstitch and knots stay in the full PDF.",
+    "paper": "Paper",
+    "density": "Squares",
+    "densities": {
+      "40": "Large",
+      "60": "Medium",
+      "80": "Small"
+    },
+    "pages_one": "{{count}} chart page",
+    "pages_other": "{{count}} chart pages",
+    "style": "Page style",
+    "styles": {
+      "color": "Colours and symbols",
+      "bw": "Black and white symbols",
+      "blocks": "Colours only"
+    },
+    "cover": "Cover with preview and sizes",
+    "pageMap": "Page map",
+    "overlap": "Repeat two rows of the neighbouring pages in grey",
+    "pngHint": "The whole chart in a single image, to share or keep as a preview.",
+    "oxsHint": "Interchange format read by WinStitch, MacStitch, FlossCross, Pixel-Stitch, Embroiderly and other cross-stitch programs.",
+    "projectHint": "The full project, with the original photo and your stitching progress: use it as a backup or to carry on on another device, where you open it with “Open a file”.",
+    "download": "Download",
+    "again": "Download again",
+    "share": "Share",
+    "working": "Preparing…",
+    "done": "Ready: {{name}} ({{size}} MB)",
+    "error": "I couldn't create the file. Please try again.",
+    "imported": "This pattern comes from another designer's PDF: out of respect for their work it can't be exported or shared."
+  },
+  "support": {
+    "nudge": "Finding it useful? $t(app.name) is free and ad-free thanks to the people who support it.",
+    "never": "Don't show again",
+    "links": {
+      "kofi": "Buy me a coffee",
+      "githubSponsors": "Sponsor on GitHub",
+      "liberapay": "Donate on Liberapay"
+    }
   }
 }

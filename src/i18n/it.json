@@ -1,7 +1,7 @@
 {
   "app": {
-    "name": "PuntoCroce",
-    "tagline": "Schemi a punto croce dalle tue foto"
+    "name": "Stitchino",
+    "tagline": "Le tue foto, punto dopo punto"
   },
   "nav": {
     "projects": "Progetti",
@@ -30,7 +30,12 @@
     "copyOf": "{{title}} (copia)",
     "deleteTitle": "Eliminare il progetto?",
     "deleteText": "«{{title}}» e il suo avanzamento verranno cancellati da questo dispositivo. Non si può annullare.",
-    "openError": "Questo file non è un progetto PuntoCroce valido."
+    "openError": "Questo file non è un progetto $t(app.name) né un file OXS valido.",
+    "oxsOpened": "File OXS aperto.",
+    "oxsSubstituted_one": "{{count}} colore di una marca che non conosco è stato sostituito con il DMC più simile: {{list}}.",
+    "oxsSubstituted_other": "{{count}} colori di marche che non conosco sono stati sostituiti con i DMC più simili: {{list}}.",
+    "oxsSkipped_one": "{{count}} elemento non supportato (perline o punti speciali) è stato ignorato.",
+    "oxsSkipped_other": "{{count}} elementi non supportati (perline o punti speciali) sono stati ignorati."
   },
   "common": {
     "comingSoon": "Questa sezione è in costruzione.",
@@ -62,7 +67,7 @@
   "pwa": {
     "updateAvailable": "È disponibile una nuova versione.",
     "update": "Aggiorna",
-    "offlineReady": "PuntoCroce ora funziona anche offline.",
+    "offlineReady": "$t(app.name) ora funziona anche offline.",
     "dismiss": "Chiudi"
   },
   "notFound": {
@@ -367,7 +372,8 @@
       "apply": "Pulisci"
     },
     "minimap": "Panoramica",
-    "regenerate": "Rigenera dalla foto"
+    "regenerate": "Rigenera dalla foto",
+    "export": "Esporta"
   },
   "picker": {
     "search": "Cerca per codice o nome",
@@ -417,7 +423,7 @@
       "copy": "Copia",
       "copied": "Copiata",
       "share": "Condividi",
-      "heading": "PuntoCroce – lista della spesa: {{title}}",
+      "heading": "$t(app.name) – lista della spesa: {{title}}",
       "fabricLine": "Tela: {{fabric}}, almeno {{size}}",
       "needleLine": "Ago da ricamo a punta arrotondata n. {{needle}}",
       "estimateNote": "Le matasse sono una stima (8 m, 6 capi) con un margine di sicurezza: compra quelle indicate, eventualmente una in più per i colori più usati."
@@ -428,7 +434,7 @@
     "by": "di {{author}}",
     "page": "Pagina {{n}} di {{total}}",
     "region": "colonne {{x0}}–{{x1}}, righe {{y0}}–{{y1}}",
-    "credit": "Creato con PuntoCroce, software libero per il punto croce",
+    "credit": "Creato con $t(app.name), software libero per il punto croce",
     "overTwo": "su 2 fili",
     "info": {
       "size": "Dimensioni",
@@ -456,5 +462,59 @@
       "partialNote": "Pattern Keeper non legge punti frazionati, punto scritto e nodini: per questi usa il PDF completo."
     },
     "pageMap": "Mappa delle pagine"
+  },
+  "export": {
+    "title": "Esporta lo schema",
+    "format": "Formato",
+    "formats": {
+      "pdf": "PDF da stampare",
+      "png": "Immagine PNG",
+      "oxs": "File OXS",
+      "project": "File del progetto"
+    },
+    "preset": "Tipo di PDF",
+    "presets": {
+      "print": "Completo",
+      "patternKeeper": "Per Pattern Keeper"
+    },
+    "printHint": "Copertina con misure, legenda con matasse stimate e pagine con griglia ogni 10 punti.",
+    "pkHint": "Solo griglia, simboli neri e legenda in inglese: il formato che l'app Pattern Keeper sa leggere. Mezzi punti, punto scritto e nodini restano nel PDF completo.",
+    "paper": "Carta",
+    "density": "Quadretti",
+    "densities": {
+      "40": "Grandi",
+      "60": "Medi",
+      "80": "Piccoli"
+    },
+    "pages_one": "{{count}} pagina di schema",
+    "pages_other": "{{count}} pagine di schema",
+    "style": "Stile delle pagine",
+    "styles": {
+      "color": "Colori e simboli",
+      "bw": "Simboli in bianco e nero",
+      "blocks": "Solo colori"
+    },
+    "cover": "Copertina con anteprima e misure",
+    "pageMap": "Mappa delle pagine",
+    "overlap": "Ripeti in grigio due righe delle pagine vicine",
+    "pngHint": "Tutto lo schema in un'unica immagine, da condividere o da tenere come anteprima.",
+    "oxsHint": "Formato di scambio letto da WinStitch, MacStitch, FlossCross, Pixel-Stitch, Embroiderly e altri programmi di punto croce.",
+    "projectHint": "Il progetto completo, con la foto di partenza e l'avanzamento del ricamo: serve come copia di sicurezza o per continuare su un altro dispositivo, dove si apre con «Apri un file».",
+    "download": "Scarica",
+    "again": "Scarica di nuovo",
+    "share": "Condividi",
+    "working": "Preparazione…",
+    "done": "Pronto: {{name}} ({{size}} MB)",
+    "error": "Non sono riuscito a creare il file. Riprova.",
+    "imported": "Questo schema viene dal PDF di un altro designer: per rispetto del suo lavoro non si può esportare né condividere."
+  },
+  "support": {
+    "nudge": "Ti è utile? $t(app.name) è gratis e senza pubblicità grazie a chi lo sostiene.",
+    "never": "Non mostrare più",
+    "links": {
+      "kofi": "Offrimi un caffè",
+      "githubSponsors": "Sostienimi su GitHub",
+      "liberapay": "Dona con Liberapay"
+    }
   }
 }

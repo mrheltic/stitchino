@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { describe, expect, it } from 'vitest';
 import { createPattern } from '../src/core/model/index.ts';
-import { PuntoCroceDb } from '../src/storage/db.ts';
+import { StitchinoDb } from '../src/storage/db.ts';
 import {
   ImportedPatternError,
   createProject,
@@ -25,7 +25,7 @@ function pattern(title: string) {
 
 describe('project storage', () => {
   it('creates, lists, loads, saves and deletes projects', async () => {
-    const store = new PuntoCroceDb(`test-${Math.random()}`);
+    const store = new StitchinoDb(`test-${Math.random()}`);
     const a = await createProject(pattern('A'), {}, store);
     await new Promise((r) => setTimeout(r, 2));
     const b = await createProject(pattern('B'), {}, store);
@@ -47,7 +47,7 @@ describe('project storage', () => {
   });
 
   it('exports and re-imports a project with its photo and progress', async () => {
-    const store = new PuntoCroceDb(`test-${Math.random()}`);
+    const store = new StitchinoDb(`test-${Math.random()}`);
     const id = await createProject(
       pattern('Foto'),
       { source: { bytes: Uint8Array.from([9, 9]), mime: 'image/png' } },
@@ -69,7 +69,7 @@ describe('project storage', () => {
   });
 
   it('refuses to export patterns imported from PDF', async () => {
-    const store = new PuntoCroceDb(`test-${Math.random()}`);
+    const store = new StitchinoDb(`test-${Math.random()}`);
     const id = await createProject(pattern('Comprato'), { imported: true }, store);
     await expect(exportProjectFile(id, store)).rejects.toThrow(ImportedPatternError);
     await expect(duplicateProject(id, 'x', store)).rejects.toThrow(ImportedPatternError);

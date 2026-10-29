@@ -10,7 +10,7 @@
 
 ## Fonts
 
-`public/fonts/pc-symbols.ttf` ("PuntoCroce Symbols") is a modified subset of the fonts below, built by
+`public/fonts/pc-symbols.ttf` ("Stitchino Symbols") is a modified subset of the fonts below, built by
 `scripts/build_symbol_font.py`; licence texts are in `public/fonts/OFL.txt`.
 
 | Font                       | Copyright                                 | Licence     |
@@ -38,4 +38,4 @@
 ## Trademarks
 
 DMC and Anchor are trademarks of their respective owners. They are mentioned only to identify thread
-colours; PuntoCroce is not affiliated with or endorsed by them.
+colours; Stitchino is not affiliated with or endorsed by them.
