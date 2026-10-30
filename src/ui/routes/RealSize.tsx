@@ -194,7 +194,7 @@ function RealSizeView({ id, pattern }: { id: string; pattern: Pattern }) {
         </LinkButton>
       </PageHeader>
       <p className="-mt-4 mb-6 text-muted">{pattern.meta.title}</p>
-      <div className="grid gap-6 lg:grid-cols-[minmax(300px,380px)_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(300px,380px)_1fr]">
         <div className="space-y-4">
           <Card className="space-y-4">
             <h2 className="font-medium">{t('realSize.fabric')}</h2>
@@ -457,11 +457,11 @@ function RealSizeView({ id, pattern }: { id: string; pattern: Pattern }) {
                       <td className="py-1.5 pl-3 text-right tabular-nums text-muted">{x.owned}</td>
                       <td className="px-4 py-1.5 text-right">
                         {x.buy > 0 ? (
-                          <span className="inline-flex items-center gap-2">
+                          <span className="inline-flex flex-wrap items-center justify-end gap-x-2 gap-y-1">
                             <span className="font-medium tabular-nums">{x.buy}</span>
                             <button
                               type="button"
-                              className="rounded-md border border-line px-1.5 py-0.5 text-xs hover:bg-surface-2"
+                              className="rounded-md border border-line px-1.5 py-1 text-xs hover:bg-surface-2"
                               onClick={() => void addSkeins([{ ref: x.ref, skeins: x.buy }])}
                               title={t('realSize.shopping.boughtHint')}
                             >

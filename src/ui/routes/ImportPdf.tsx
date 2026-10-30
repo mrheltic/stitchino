@@ -197,7 +197,7 @@ function PagePreview({
   }, [pdf, page, lattice]);
   const guessed = page.offset.x === null || page.offset.y === null;
   return (
-    <li className="flex gap-3">
+    <li className="flex gap-3 max-sm:flex-col">
       <div className="relative shrink-0 self-start overflow-hidden rounded border border-line bg-white">
         <canvas ref={canvas} aria-label={t('importPdf.pageImage', { n: page.page + 1 })} />
         {box && (
@@ -315,7 +315,7 @@ function Review({
           {chart.conflicts > 0 && <li>• {t('importPdf.conflicts', { count: chart.conflicts })}</li>}
         </ul>
       )}
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
         <div className="space-y-6">
           <Card className="space-y-3">
             <label className="block space-y-1.5 text-sm">
