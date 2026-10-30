@@ -932,7 +932,7 @@ function PhotoWizard() {
             </p>
           )}
           {!has ? (
-            <Card className="flex min-h-64 items-center justify-center text-center text-muted">
+            <Card className="flex min-h-64 items-center justify-center text-center text-muted max-lg:hidden">
               {t('wizard.preview.empty')}
             </Card>
           ) : (
@@ -1010,14 +1010,20 @@ function PhotoWizard() {
                     value={`${result!.width} × ${result!.height}`}
                   />
                   <Metric label={t('wizard.metrics.colors')} value={formatInt(m.colors, lng)} />
-                  <Metric label={t('wizard.metrics.stitches')} value={formatInt(m.stitches, lng)} />
+                  <Metric
+                    label={t('wizard.metrics.stitches')}
+                    value={formatInt(m.stitches, lng)}
+                    phone={false}
+                  />
                   <Metric
                     label={t('wizard.metrics.confetti')}
                     value={`${formatDecimal(m.confettiPercent, 1, lng)}%`}
+                    phone={false}
                   />
                   <Metric
                     label={t('wizard.metrics.difficulty')}
                     value={t(`difficulty.${m.difficulty}`)}
+                    phone={false}
                   />
                   <Metric
                     label={t('wizard.metrics.time')}
@@ -1035,7 +1041,7 @@ function PhotoWizard() {
               )}
               {result && view === 'pattern' && (
                 <ul
-                  className="flex max-h-40 flex-wrap gap-1.5 overflow-auto"
+                  className="flex max-h-40 flex-wrap gap-1.5 overflow-auto max-sm:hidden"
                   aria-label={t('wizard.preview.palette')}
                 >
                   {result.palette.map((p) => {
@@ -1069,9 +1075,10 @@ function pct(v: number): string {
   return `${v > 0 ? '+' : ''}${Math.round(v * 100)}%`;
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+/** `phone={false}` leaves the figure out on phones, where the pinned preview must stay short. */
+function Metric({ label, value, phone = true }: { label: string; value: string; phone?: boolean }) {
   return (
-    <div className="flex gap-1">
+    <div className={`flex gap-1 ${phone ? '' : 'max-sm:hidden'}`}>
       <dt className="text-muted">{label}</dt>
       <dd className="font-medium tabular-nums">{value}</dd>
     </div>

@@ -74,8 +74,9 @@ body {
 }
 
 :root {
-  /* Height available to image and pattern previews. */
-  --preview-h: 38vh;
+  /* Height available to image and pattern previews. On phones the preview stays pinned above
+     the settings, so it must leave them room. */
+  --preview-h: 32vh;
 }
 
 @media (min-width: 1024px) {
