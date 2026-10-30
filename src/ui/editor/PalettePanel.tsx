@@ -1,5 +1,5 @@
 import { DropdownMenu } from 'radix-ui';
-import { Eye, EyeOff, MoreVertical, Plus } from 'lucide-react';
+import { ChevronRight, Eye, EyeOff, MoreVertical, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { EditorDocument } from '../../core/model/document.ts';
@@ -167,13 +167,18 @@ export function PalettePanel({ doc, version }: { doc: EditorDocument; version: n
               >
                 <SymbolSwatch entry={e} />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium">
-                    {e.threads.map((x) => `${x.brand} ${x.code}`).join(' + ')}
+                  {/* Codes are never cut short: the equivalent goes to the next line if needed. */}
+                  <span className="flex flex-wrap items-baseline gap-x-1.5">
+                    <span className="text-sm font-medium">
+                      {e.threads.map((x) => `${x.brand} ${x.code}`).join(' + ')}
+                    </span>
+                    {eq && e.threads.length === 1 && (
+                      <span className="shrink-0 text-xs text-muted">
+                        ≈ {other} {eq.thread.code}
+                      </span>
+                    )}
                   </span>
-                  <span className="block truncate text-xs text-muted">
-                    {thread?.name}
-                    {eq && ` · ≈ ${other} ${eq.thread.code}`}
-                  </span>
+                  <span className="block truncate text-xs text-muted">{thread?.name}</span>
                 </span>
                 <span className="shrink-0 text-right text-xs tabular-nums text-muted">
                   <span className="block" data-testid="stitch-count">
@@ -223,6 +228,7 @@ export function PalettePanel({ doc, version }: { doc: EditorDocument; version: n
                     <DropdownMenu.Sub>
                       <DropdownMenu.SubTrigger className={menuItem}>
                         {t('editor.palette.strands', { count: e.strands })}
+                        <ChevronRight size={14} className="ml-auto" aria-hidden />
                       </DropdownMenu.SubTrigger>
                       <DropdownMenu.Portal>
                         <DropdownMenu.SubContent className="z-50 rounded-lg border border-line bg-surface p-1 shadow-lg">
@@ -241,6 +247,7 @@ export function PalettePanel({ doc, version }: { doc: EditorDocument; version: n
                     <DropdownMenu.Sub>
                       <DropdownMenu.SubTrigger className={menuItem} disabled={p.palette.length < 2}>
                         {t('editor.palette.merge')}
+                        <ChevronRight size={14} className="ml-auto" aria-hidden />
                       </DropdownMenu.SubTrigger>
                       <DropdownMenu.Portal>
                         <DropdownMenu.SubContent className="z-50 max-h-80 overflow-auto rounded-lg border border-line bg-surface p-1 shadow-lg">

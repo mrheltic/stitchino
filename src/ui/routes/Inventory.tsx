@@ -153,7 +153,7 @@ export default function Inventory() {
                       <span className="block font-medium">
                         {th.brand} {th.code}
                       </span>
-                      <span className="block truncate text-xs text-muted">{th.name}</span>
+                      <span className="line-clamp-2 text-xs text-muted">{th.name}</span>
                     </span>
                     <span className="text-xs text-muted">
                       {owned.get(th.key) ? t('inventory.have', { count: owned.get(th.key) }) : ''}

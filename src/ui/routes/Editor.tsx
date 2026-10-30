@@ -317,13 +317,14 @@ function Workspace({
 
   const active = p.palette.find((e) => e.id === editor.activeId);
   const iconButton =
-    'flex size-9 items-center justify-center rounded-lg text-ink hover:bg-surface-2 disabled:opacity-40';
+    'flex size-9 shrink-0 items-center justify-center rounded-lg text-ink hover:bg-surface-2 disabled:opacity-40';
   const menuItem =
     'flex cursor-pointer select-none items-center gap-2 rounded-md px-2.5 py-1.5 text-sm outline-none data-[highlighted]:bg-surface-2';
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-wrap items-center gap-1 border-b border-line bg-surface px-2 py-1.5">
+      {/* On large screens everything stays on one row and a long title gets shortened. */}
+      <div className="flex flex-wrap items-center gap-1 border-b border-line bg-surface px-2 py-1.5 lg:flex-nowrap">
         <Link
           to="/"
           className={iconButton}
@@ -335,12 +336,12 @@ function Workspace({
         <button
           type="button"
           onClick={() => setDialog('properties')}
-          className="min-w-0 max-w-[40vw] truncate rounded-lg px-2 py-1 text-left font-medium hover:bg-surface-2"
+          className="min-w-0 max-w-[40vw] truncate rounded-lg px-2 py-1 text-left font-medium hover:bg-surface-2 lg:max-w-none"
           title={t('editor.properties.title')}
         >
           {p.meta.title || t('wizard.create.untitled')}
         </button>
-        <span className="px-1 text-xs text-muted" role="status">
+        <span className="shrink-0 px-1 text-xs text-muted" role="status">
           {saveState === 'saving'
             ? t('editor.saving')
             : saveState === 'error'
@@ -370,7 +371,7 @@ function Workspace({
         </button>
         <select
           aria-label={t('editor.view.label')}
-          className="rounded-lg border border-line bg-surface px-2 py-1.5 text-sm"
+          className="shrink-0 rounded-lg border border-line bg-surface px-2 py-1.5 text-sm"
           value={editor.mode}
           onChange={(e) => editor.set({ mode: e.target.value as ViewMode })}
         >
@@ -398,7 +399,7 @@ function Workspace({
           title={t('editor.isolated')}
         >
           <Sparkles size={18} aria-hidden />
-          <span className="text-xs max-sm:sr-only">
+          <span className="text-xs max-sm:sr-only lg:max-xl:sr-only">
             {editor.showIsolated
               ? t('editor.isolatedCount', { count: isolatedCount })
               : t('editor.isolated')}
@@ -508,16 +509,19 @@ function Workspace({
         </Link>
         <Link
           to={`/project/${id}/stitch`}
-          className={buttonClass('primary', 'px-3 py-1.5')}
+          className={buttonClass('primary', 'shrink-0 px-3 py-1.5')}
           data-tour="stitch"
         >
           <Hand size={16} aria-hidden />
-          <span className="max-sm:sr-only">{t('home.stitch')}</span>
+          {t('home.stitch')}
         </Link>
       </div>
 
       <div className="flex min-h-0 flex-1">
-        <aside className="hidden border-r border-line bg-surface p-1.5 lg:block" data-tour="tools">
+        <aside
+          className="hidden overflow-y-auto border-r border-line bg-surface p-1.5 lg:block"
+          data-tour="tools"
+        >
           <Toolbar vertical />
         </aside>
         <div className="flex min-w-0 flex-1 flex-col">
@@ -566,7 +570,7 @@ function Workspace({
         </div>
         <aside
           data-tour="palette"
-          className={`flex min-h-0 flex-col border-l border-line bg-surface max-lg:absolute max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-20 max-lg:max-h-[55vh] max-lg:rounded-t-2xl max-lg:border-t max-lg:shadow-2xl lg:w-80 ${
+          className={`flex min-h-0 flex-col border-l border-line bg-surface max-lg:absolute max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-20 max-lg:max-h-[55vh] max-lg:rounded-t-2xl max-lg:border-t max-lg:shadow-2xl lg:w-80 xl:w-96 ${
             paletteOpen ? '' : 'max-lg:hidden'
           }`}
         >

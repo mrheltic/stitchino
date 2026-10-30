@@ -35,7 +35,7 @@ function ThreadChip({
       />
       <span className="min-w-0">
         <span className="block font-medium leading-tight">{t.code}</span>
-        <span className="block truncate text-xs leading-tight text-muted">{t.name}</span>
+        <span className="line-clamp-2 text-xs leading-tight text-muted">{t.name}</span>
       </span>
     </button>
   );
