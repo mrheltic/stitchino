@@ -121,7 +121,7 @@ export function StitchPanel({ tracker, version }: { tracker: ProgressTracker; ve
                 >
                   <SymbolSwatch entry={e} size={28} />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-medium">
+                    <span className="block font-medium">
                       {e.threads.map((x) => `${x.brand} ${x.code}`).join(' + ')}
                       <span className="ml-1.5 font-normal text-muted">{name}</span>
                     </span>

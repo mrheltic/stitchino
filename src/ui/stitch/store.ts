@@ -22,7 +22,7 @@ export interface StitchState extends StitchPrefs {
   tool: StitchTool;
   /** Colour being stitched: the others fade and marking only touches it. */
   activeId: number | null;
-  /** Shown while a tool needs something first (e.g. a colour for parking). */
+  /** A short message over the chart: how a tool works, or what it needs first. */
   hint: string | null;
   set: (patch: Partial<Omit<StitchState, 'set'>>) => void;
 }

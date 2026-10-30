@@ -70,11 +70,17 @@ export default function Stitch() {
       }
       const { data, reset } = await loadProgress(id, d.pattern);
       if (cancelled) return;
-      useStitch.setState({ activeId: null, tool: 'mark', hint: null });
+      const tracker = new ProgressTracker(d.pattern, data);
+      // Nothing marked yet: say how marking works.
+      useStitch.setState({
+        activeId: null,
+        tool: 'mark',
+        hint: tracker.total.done ? null : 'stitch.toolHints.mark',
+      });
       setState({
         id,
         doc: new EditorDocument(d.pattern),
-        tracker: new ProgressTracker(d.pattern, data),
+        tracker,
         imported: d.summary.imported,
         reset,
       });
@@ -200,12 +206,13 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
     return () => document.removeEventListener('fullscreenchange', onChange);
   }, []);
 
-  // Hints fade after a few seconds.
+  // Hints fade after a few seconds, longer ones a little later.
   useEffect(() => {
     if (!st.hint) return;
-    const timer = setTimeout(() => useStitch.getState().set({ hint: null }), 3500);
+    const ms = Math.max(3500, t(st.hint).length * 60);
+    const timer = setTimeout(() => useStitch.getState().set({ hint: null }), ms);
     return () => clearTimeout(timer);
-  }, [st.hint]);
+  }, [st.hint, t]);
 
   useEffect(() => {
     lastFound.current = -1;
@@ -310,7 +317,7 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
         >
           <ArrowLeft size={18} aria-hidden />
         </Link>
-        <h1 className="min-w-0 truncate px-1 font-medium">
+        <h1 className="min-w-0 truncate px-1 font-medium max-sm:sr-only">
           {p.meta.title || t('wizard.create.untitled')}
         </h1>
         <span
@@ -476,7 +483,7 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
                     aria-pressed={st.tool === tool}
                     aria-label={t(`stitch.tools.${tool}`)}
                     title={t(`stitch.tools.${tool}`)}
-                    onClick={() => st.set({ tool })}
+                    onClick={() => st.set({ tool, hint: `stitch.toolHints.${tool}` })}
                     className={`flex size-11 items-center justify-center rounded-lg ${
                       st.tool === tool ? 'bg-accent text-accent-ink' : 'text-ink hover:bg-surface-2'
                     }`}
@@ -512,10 +519,7 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
                 {t('stitch.allColorsHint')}
               </button>
             )}
-            <p className="min-w-0 flex-1 truncate px-2 text-xs text-muted max-xl:sr-only">
-              {t(`stitch.toolHints.${st.tool}`)}
-            </p>
-            <span className="flex-1 max-lg:hidden xl:hidden" />
+            <span className="flex-1 max-lg:hidden" />
             <span className="flex max-lg:hidden">
               <button
                 type="button"
@@ -585,7 +589,7 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
             {st.hint && (
               <p
                 role="status"
-                className="pointer-events-none absolute inset-x-0 bottom-3 mx-auto w-fit max-w-[90%] rounded-full bg-ink px-4 py-2 text-center text-sm text-bg shadow-lg"
+                className="pointer-events-none absolute inset-x-0 bottom-3 mx-auto w-fit max-w-[90%] rounded-2xl bg-ink px-4 py-2 text-center text-sm text-bg shadow-lg"
               >
                 {t(st.hint)}
               </p>
