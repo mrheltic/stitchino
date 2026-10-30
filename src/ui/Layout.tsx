@@ -28,13 +28,14 @@ function NavItem({
       to={to}
       end={end}
       className={({ isActive }) =>
-        `flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium ${
+        `flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium max-sm:flex-col max-sm:gap-0.5 max-sm:px-1.5 max-sm:py-1 max-sm:text-[11px] max-sm:leading-tight ${
           isActive ? 'bg-surface-2 text-ink' : 'text-muted hover:bg-surface-2 hover:text-ink'
         }`
       }
     >
       {icon}
-      <span className="max-sm:sr-only">{children}</span>
+      {/* On phones the label goes under the icon, small: icons alone don't say enough. */}
+      <span>{children}</span>
     </NavLink>
   );
 }
@@ -60,7 +61,7 @@ export function Layout() {
         <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2.5">
           <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight">
             <img src="./favicon.svg" alt="" width={28} height={28} className="rounded-md" />
-            <span>{t('app.name')}</span>
+            <span className="max-sm:sr-only">{t('app.name')}</span>
           </Link>
           <nav aria-label={t('nav.menu')} className="ml-auto flex items-center gap-1">
             <NavItem to="/" end icon={<FolderOpen size={18} aria-hidden />}>
@@ -86,20 +87,20 @@ export function Layout() {
         <Outlet />
       </main>
       {!fullscreen && (
-        <footer className="flex flex-wrap justify-center gap-x-3 gap-y-1 border-t border-line px-4 py-4 text-center text-xs text-muted">
-          <span>{t('footer.privacy')}</span>
-          <span>{t('footer.license')}</span>
+        <footer className="flex flex-wrap items-center justify-center gap-x-3 border-t border-line px-4 py-3 text-center text-xs text-muted">
+          <span className="py-1">{t('footer.privacy')}</span>
+          <span className="py-1">{t('footer.license')}</span>
           {/* Static pages next to the app, outside the hash router. */}
           <a
             href={i18n.resolvedLanguage === 'it' ? 'it/schemi/' : 'patterns/'}
-            className="underline-offset-2 hover:text-ink hover:underline"
+            className="py-1 underline-offset-2 hover:text-ink hover:underline"
           >
             {t('footer.patterns')}
           </a>
-          <Link to="/privacy" className="underline-offset-2 hover:text-ink hover:underline">
+          <Link to="/privacy" className="py-1 underline-offset-2 hover:text-ink hover:underline">
             {t('footer.privacyLink')}
           </Link>
-          <Link to="/support" className="text-accent underline-offset-2 hover:underline">
+          <Link to="/support" className="py-1 text-accent underline-offset-2 hover:underline">
             ♥ {t('footer.support')}
           </Link>
         </footer>

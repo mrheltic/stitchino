@@ -135,7 +135,7 @@ function Backup() {
 
 function About() {
   const { t } = useTranslation();
-  const link = 'text-accent underline underline-offset-2';
+  const link = 'py-0.5 text-accent underline underline-offset-2';
   return (
     <Card className="space-y-2 text-sm">
       <h2 className="font-medium">{t('settings.about.title')}</h2>

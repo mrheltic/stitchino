@@ -12,7 +12,7 @@ import { Card, LinkButton, Page } from '../components/ui.tsx';
 import { patternThumbnail } from '../patternPaint.ts';
 
 const moreLink =
-  'inline-flex items-center gap-1.5 font-medium text-ink underline-offset-2 hover:underline';
+  'inline-flex min-h-6 items-center gap-1.5 font-medium text-ink underline-offset-2 hover:underline';
 
 export function Home() {
   const { t } = useTranslation();
