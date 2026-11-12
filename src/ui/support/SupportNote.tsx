@@ -11,7 +11,7 @@ export function SupportNote({ onClose }: { onClose: () => void }) {
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border border-line bg-surface-2 px-3 py-2.5 text-sm">
       <Heart size={16} className="shrink-0 text-accent" aria-hidden />
-      <span className="min-w-0 flex-1">{t('support.nudge')}</span>
+      <span className="min-w-0 flex-1 basis-56">{t('support.nudge')}</span>
       <a
         href={LINKS[link]}
         target="_blank"
