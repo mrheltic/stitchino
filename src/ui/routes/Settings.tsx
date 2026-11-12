@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { APP_NAME, LINKS } from '../../core/brand.ts';
 import { LANGUAGES } from '../../i18n/index.ts';
-import { BACKUP_EXTENSION, exportBackup, restoreBackup } from '../../storage/backup.ts';
+import { BACKUP_EXTENSION } from '../../storage/backup.ts';
 import { requestPersistentStorage } from '../../storage/db.ts';
+import { useBackupState } from '../backup/reminder.ts';
+import { downloadBackup, restoreBackupFile } from '../backup/saveBackup.ts';
 import { Button, Card, Page, PageHeader } from '../components/ui.tsx';
-import { downloadBytes } from '../download.ts';
-import { patternThumbnail } from '../patternPaint.ts';
 import { useSettings, type ThemePref, type Units } from '../state/settings.ts';
 
 function Choice<T extends string>({
@@ -47,7 +47,8 @@ function Choice<T extends string>({
 }
 
 function Backup() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lastBackup = useBackupState((s) => s.at);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [persisted, setPersisted] = useState<boolean | null>(null);
@@ -61,8 +62,7 @@ function Backup() {
   const download = async () => {
     setBusy(true);
     try {
-      const date = new Date().toISOString().slice(0, 10);
-      downloadBytes(await exportBackup(), `${APP_NAME.toLowerCase()}-${date}${BACKUP_EXTENSION}`);
+      await downloadBackup();
       setMessage(null);
     } finally {
       setBusy(false);
@@ -75,9 +75,7 @@ function Backup() {
     if (!file) return;
     setBusy(true);
     try {
-      const r = await restoreBackup(new Uint8Array(await file.arrayBuffer()), undefined, (p) =>
-        patternThumbnail(p.width, p.height, p.cells, p.palette, p.fabric.color),
-      );
+      const r = await restoreBackupFile(new Uint8Array(await file.arrayBuffer()));
       setMessage(
         [
           t('settings.backup.restored', { count: r.added }),
@@ -125,6 +123,15 @@ function Backup() {
           {message}
         </p>
       )}
+      <p className="text-sm">
+        {lastBackup
+          ? t('settings.backup.last', {
+              date: new Date(lastBackup).toLocaleDateString(i18n.resolvedLanguage, {
+                dateStyle: 'long',
+              }),
+            })
+          : t('settings.backup.none')}
+      </p>
       <p className="text-xs text-muted">
         {persisted ? t('settings.backup.persisted') : t('settings.backup.notPersisted')}{' '}
         {t('settings.backup.ios')}

@@ -7,6 +7,7 @@ import { importOxs } from '../../core/io/oxs.ts';
 import { PROJECT_EXTENSIONS } from '../../core/io/projectFile.ts';
 import { db } from '../../storage/db.ts';
 import { createProject, importProjectFile, listProjects } from '../../storage/projects.ts';
+import { BackupReminder } from '../backup/BackupReminder.tsx';
 import { ProjectCard } from '../components/ProjectCard.tsx';
 import { Card, LinkButton, Page } from '../components/ui.tsx';
 import { patternThumbnail } from '../patternPaint.ts';
@@ -18,10 +19,11 @@ export function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const projects = useLiveQuery(() => listProjects(), []);
-  const progress = useLiveQuery(async () => {
+  const stitched = useLiveQuery(async () => {
     const rows = await db.progress.toArray();
-    return new Map(rows.map((r) => [r.projectId, r.total ? r.done / r.total : 0]));
+    return rows.map((r) => ({ projectId: r.projectId, done: r.done, total: r.total }));
   }, []);
+  const progress = new Map(stitched?.map((r) => [r.projectId, r.total ? r.done / r.total : 0]));
   const [error, setError] = useState<string | null>(null);
 
   const openFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +56,7 @@ export function Home() {
 
   return (
     <Page wide>
+      <BackupReminder rows={stitched} />
       <section className="mb-10 rounded-2xl border border-line bg-surface px-6 py-10 text-center sm:px-10">
         <p className="mb-3 text-sm font-medium text-accent">
           {t('app.name')} · {t('app.tagline')}
@@ -125,7 +128,7 @@ export function Home() {
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {projects.map((p) => (
-            <ProjectCard key={p.id} project={p} progress={progress?.get(p.id)} />
+            <ProjectCard key={p.id} project={p} progress={progress.get(p.id)} />
           ))}
         </ul>
       )}

@@ -88,7 +88,9 @@
       "invalid": "Questo file non è una copia di sicurezza di $t(app.name).",
       "persisted": "Il browser tiene i tuoi dati al sicuro anche quando lo spazio scarseggia.",
       "notPersisted": "Il browser potrebbe cancellare i dati se lo spazio scarseggia.",
-      "ios": "Su iPhone e iPad installa $t(app.name) nella schermata Home (Condividi → Aggiungi alla schermata Home): Safari cancella i dati dei siti non usati per qualche settimana."
+      "ios": "Su iPhone e iPad installa $t(app.name) nella schermata Home (Condividi → Aggiungi alla schermata Home): Safari cancella i dati dei siti non usati per qualche settimana.",
+      "last": "Ultima copia scaricata da questo browser: {{date}}.",
+      "none": "Da questo browser non hai ancora scaricato una copia."
     },
     "about": {
       "title": "Informazioni",
@@ -611,6 +613,14 @@
     "feedbackLink": "Scrivi qui",
     "test": "Prova e misura",
     "testText": "Chi ricama può aiutare a tarare la stima dei fili e a provare i PDF con Pattern Keeper: basta un piccolo campione."
+  },
+  "backupReminder": {
+    "since": "Hai segnato {{n}} punti dall'ultima copia di sicurezza.",
+    "never": "Hai segnato {{n}} punti e non hai ancora una copia di sicurezza.",
+    "why": "L'avanzamento è salvato solo in questo browser. Scarica una copia: ci vuole un attimo.",
+    "later": "Non ora",
+    "saved": "Copia scaricata. Conservala anche fuori da questo dispositivo, per esempio nel cloud o su una chiavetta.",
+    "failed": "Non sono riuscito a creare la copia. Riprova."
   },
   "stitch": {
     "canvas": "Schema da ricamare «{{title}}»",

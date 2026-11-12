@@ -88,7 +88,9 @@
       "invalid": "This file is not a $t(app.name) backup.",
       "persisted": "The browser keeps your data safe even when space runs low.",
       "notPersisted": "The browser may clear your data when space runs low.",
-      "ios": "On iPhone and iPad, add $t(app.name) to the Home Screen (Share → Add to Home Screen): Safari clears data of sites not used for a few weeks."
+      "ios": "On iPhone and iPad, add $t(app.name) to the Home Screen (Share → Add to Home Screen): Safari clears data of sites not used for a few weeks.",
+      "last": "Last backup downloaded from this browser: {{date}}.",
+      "none": "You haven't downloaded a backup from this browser yet."
     },
     "about": {
       "title": "About",
@@ -611,6 +613,14 @@
     "feedbackLink": "Write here",
     "test": "Try and measure",
     "testText": "Stitchers can help tune the thread estimate and test PDFs with Pattern Keeper: a small sample is enough."
+  },
+  "backupReminder": {
+    "since": "You've marked {{n}} stitches since your last backup.",
+    "never": "You've marked {{n}} stitches and have no backup yet.",
+    "why": "Your progress is saved only in this browser. Download a backup: it takes a moment.",
+    "later": "Not now",
+    "saved": "Backup downloaded. Keep it off this device too, for example in the cloud or on a USB stick.",
+    "failed": "I couldn't create the backup. Please try again."
   },
   "stitch": {
     "canvas": "Pattern to stitch “{{title}}”",
