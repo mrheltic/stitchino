@@ -42,10 +42,12 @@ import { LinkButton, Page, PageHeader } from '../components/ui.tsx';
 import { ChartView, type ChartViewHandle } from '../editor/ChartView.tsx';
 import { BackstitchIcon } from '../editor/icons.tsx';
 import { SymbolSwatch } from '../editor/PalettePanel.tsx';
+import { FinishDialog } from '../stitch/FinishDialog.tsx';
 import { StitchController } from '../stitch/stitchController.ts';
 import { StitchPanel } from '../stitch/StitchPanel.tsx';
 import { DONE_COLORS, useStitch, type StitchTool } from '../stitch/store.ts';
 import { useWakeLock } from '../stitch/useWakeLock.ts';
+import { takeFinishNudge } from '../support/nudge.ts';
 
 interface Loaded {
   id: string;
@@ -119,7 +121,7 @@ const TOOL_ICONS: Record<StitchTool, ComponentType<{ size?: number; 'aria-hidden
   pan: Hand,
 };
 
-function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
+function StitchWorkspace({ id, doc, tracker, imported, reset }: Loaded) {
   const { t } = useTranslation();
   const version = useSyncExternalStore(
     (cb) => tracker.subscribe(cb),
@@ -132,6 +134,7 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
   const [confirmReset, setConfirmReset] = useState(false);
   const [fullscreen, setFullscreen] = useState(() => !!document.fullscreenElement);
   const [saveError, setSaveError] = useState(false);
+  const [finish, setFinish] = useState<{ support: boolean } | null>(null);
   const lastFound = useRef(-1);
   const viewDirty = useRef(false);
   const p = doc.pattern;
@@ -199,6 +202,17 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
       void flush();
     };
   }, [id, tracker, layer]);
+
+  // The last stitch: celebrate once the stroke that made it is over.
+  useEffect(() => {
+    let was = tracker.complete;
+    return tracker.subscribe(() => {
+      if (tracker.inStroke) return;
+      const now = tracker.complete;
+      if (now && !was) setFinish({ support: takeFinishNudge() });
+      was = now;
+    });
+  }, [tracker]);
 
   useEffect(() => {
     const onChange = () => setFullscreen(!!document.fullscreenElement);
@@ -612,10 +626,24 @@ function StitchWorkspace({ id, doc, tracker, reset }: Loaded) {
               <X size={18} aria-hidden />
             </button>
           </div>
-          <StitchPanel tracker={tracker} version={version} />
+          <StitchPanel
+            tracker={tracker}
+            version={version}
+            onFinish={() => {
+              setPanelOpen(false);
+              setFinish({ support: false });
+            }}
+          />
         </aside>
       </div>
 
+      <FinishDialog
+        open={finish !== null}
+        onOpenChange={(open) => !open && setFinish(null)}
+        tracker={tracker}
+        imported={imported}
+        support={finish?.support ?? false}
+      />
       <ConfirmDialog
         open={confirmReset}
         onOpenChange={setConfirmReset}

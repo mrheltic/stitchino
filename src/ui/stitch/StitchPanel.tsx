@@ -26,7 +26,16 @@ function Meter({ value, label }: { value: number; label: string }) {
 }
 
 /** Progress summary, daily chart and the colours with what's left of each. */
-export function StitchPanel({ tracker, version }: { tracker: ProgressTracker; version: number }) {
+export function StitchPanel({
+  tracker,
+  version,
+  onFinish,
+}: {
+  tracker: ProgressTracker;
+  version: number;
+  /** Opens the finish screen of a completed piece. */
+  onFinish: () => void;
+}) {
   const { t, i18n } = useTranslation();
   const lng = i18n.resolvedLanguage;
   const activeId = useStitch((s) => s.activeId);
@@ -64,7 +73,19 @@ export function StitchPanel({ tracker, version }: { tracker: ProgressTracker; ve
           {done >= total && total > 0 ? (
             <>
               <dt className="text-muted">{t('stitch.finish')}</dt>
-              <dd className="font-medium">{t('stitch.finished')}</dd>
+              <dd className="font-medium">
+                {tracker.complete ? (
+                  <button
+                    type="button"
+                    className="text-accent underline underline-offset-2"
+                    onClick={onFinish}
+                  >
+                    {t('stitch.finished')}
+                  </button>
+                ) : (
+                  t('stitch.linesLeft')
+                )}
+              </dd>
             </>
           ) : (
             p.finish && (

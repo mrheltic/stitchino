@@ -56,3 +56,40 @@ test('marks stitches, undoes, and keeps progress after a reload', async ({ page,
   await page.getByRole('link', { name: 'Progetti' }).first().click();
   await expect(page.getByText(`Ricamato al ${marked}`)).toBeVisible();
 });
+
+test('the last stitch opens the finish screen, then home asks for a backup', async ({
+  page,
+  isMobile,
+}) => {
+  await fromPhoto(page, 'Da finire');
+  await page.getByRole('link', { name: 'Ricama' }).click();
+  // On a phone the "works offline" notice of the first visit sits over the tools.
+  const notice = page.getByRole('status').filter({ hasText: 'funziona anche offline' });
+  if (isMobile) {
+    await expect(notice).toBeVisible();
+    await notice.getByRole('button').click();
+  }
+  await page.getByRole('button', { name: 'Segna un rettangolo' }).click();
+  await stroke(page, [0.01, 0.01], [0.99, 0.99], isMobile);
+  await expect(page.getByTestId('stitch-percent')).toHaveText('100%');
+
+  const finish = page.getByRole('dialog', { name: 'Ricamo completato!' });
+  await expect(finish.getByText("«Da finire» è finito, fino all'ultimo punto.")).toBeVisible();
+  await expect(finish.getByTestId('finish-picture')).toBeVisible();
+  await expect(finish.getByRole('link', { name: 'Offrimi un caffè' })).toBeVisible();
+  const picture = page.waitForEvent('download');
+  await finish.getByRole('button', { name: "Scarica l'immagine" }).click();
+  expect((await picture).suggestedFilename()).toBe('Da-finire-stitchino.png');
+
+  await finish.getByRole('link', { name: 'Torna ai progetti' }).click();
+  await expect(page.getByText('Ricamato al 100%')).toBeVisible();
+  const reminder = page.getByRole('region', { name: 'Copia di sicurezza' });
+  await expect(reminder.getByText(/Hai segnato .+ punti e non hai ancora una copia/)).toBeVisible();
+  const backup = page.waitForEvent('download');
+  await reminder.getByRole('button', { name: 'Scarica la copia' }).click();
+  expect((await backup).suggestedFilename()).toMatch(/\.stitchino-backup$/);
+  await expect(page.getByText(/^Copia scaricata\./)).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Ricamato al 100%')).toBeVisible();
+  await expect(reminder).toBeHidden();
+});

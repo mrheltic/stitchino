@@ -4,8 +4,9 @@ import { DONATION_LINKS } from '../../core/brand.ts';
 import { safeStorage } from '../state/settings.ts';
 
 /**
- * The only request for support inside the app: a short thank-you line after an export, from the
- * third export on, at most once every four months, and never again once dismissed.
+ * The only requests for support inside the app: a short thank-you line after an export (from the
+ * third export on, at most once every four months) and on the screen that celebrates a finished
+ * piece. Never again once dismissed.
  */
 export interface SupportState {
   exports: number;
@@ -42,6 +43,13 @@ export function takeNudge(): boolean {
   const now = Date.now();
   if (!shouldNudge(useSupportState.getState(), now)) return false;
   useSupportState.setState({ lastShown: now });
+  return true;
+}
+
+/** True if the thank-you line may show on the finish screen; it then counts as shown. */
+export function takeFinishNudge(): boolean {
+  if (DONATION_LINKS.length === 0 || useSupportState.getState().never) return false;
+  useSupportState.setState({ lastShown: Date.now() });
   return true;
 }
 

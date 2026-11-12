@@ -130,6 +130,17 @@ export class ProgressTracker {
     return this.redoStack.length > 0;
   }
 
+  /** True while a stroke is open: the marks may still change, or be rolled back. */
+  get inStroke(): boolean {
+    return this.pending !== null;
+  }
+
+  /** True when everything in the pattern is done: stitches, backstitch and knots. */
+  get complete(): boolean {
+    const all = [this.total, this.backTotal, this.knotTotal];
+    return all.some((t) => t.total > 0) && all.every((t) => t.done >= t.total);
+  }
+
   /** Recomputes all tallies from the pattern and the marks. */
   recount(): void {
     const p = this.pattern;
@@ -480,4 +491,27 @@ export function pace(
   const days = Math.ceil(remaining / perCalendarDay);
   const finish = new Date(today.getFullYear(), today.getMonth(), today.getDate() + days);
   return { perDay, activeDays, finish };
+}
+
+// --- Looking back ------------------------------------------------------------------------------
+
+export interface StitchingStats {
+  /** Days with stitches marked. */
+  days: number;
+  /** The first of those days (YYYY-MM-DD), if any. */
+  first?: string;
+  /** The day with the most stitches, if any. */
+  best?: { day: string; stitches: number };
+}
+
+/** The story of a piece from its daily counts, for the finish screen. */
+export function stitchingStats(daily: Record<string, number>): StitchingStats {
+  const stats: StitchingStats = { days: 0 };
+  for (const [day, n] of Object.entries(daily)) {
+    if (!(n > 0)) continue;
+    stats.days++;
+    if (!stats.first || day < stats.first) stats.first = day;
+    if (!stats.best || n > stats.best.stitches) stats.best = { day, stitches: n };
+  }
+  return stats;
 }

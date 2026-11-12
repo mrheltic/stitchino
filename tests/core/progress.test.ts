@@ -9,6 +9,7 @@ import {
   emptyProgress,
   localDay,
   pace,
+  stitchingStats,
 } from '../../src/core/progress/tracker.ts';
 import { DONE_COLORS } from '../../src/ui/stitch/store.ts';
 
@@ -145,6 +146,40 @@ describe('pace', () => {
     expect(pace({}, 1000, today).finish).toBeUndefined();
     // Two evenings are not enough for a date.
     expect(pace({ [localDay(today)]: 300, '2026-10-27': 200 }, 1000, today).finish).toBeUndefined();
+  });
+});
+
+describe('finishing', () => {
+  it('is complete only when stitches, backstitch and knots are all done', () => {
+    const p = sample();
+    const t = new ProgressTracker(p, emptyProgress(p), fixedDay);
+    expect(t.complete).toBe(false);
+    t.begin();
+    t.markCells(p.cells.keys(), true);
+    expect(t.inStroke).toBe(true);
+    t.commit();
+    expect(t.inStroke).toBe(false);
+    expect(t.total).toEqual({ total: 8, done: 8 });
+    expect(t.complete).toBe(false);
+    t.markLine(itemKey(p.backstitches[0]), 'back', true);
+    t.markLine(itemKey(p.knots[0]), 'knot', true);
+    expect(t.complete).toBe(true);
+    t.undo();
+    expect(t.complete).toBe(false);
+    // Nothing to stitch is not a finished piece.
+    const blank = createPattern(2, 2);
+    expect(new ProgressTracker(blank, emptyProgress(blank)).complete).toBe(false);
+  });
+
+  it('tells the story of the piece from its days', () => {
+    expect(stitchingStats({})).toEqual({ days: 0 });
+    // A day that ended at zero, or below after unmarking, was not a stitching day.
+    const daily = { '2026-10-03': 120, '2026-09-28': 80, '2026-10-01': 0, '2026-10-05': -4 };
+    expect(stitchingStats(daily)).toEqual({
+      days: 2,
+      first: '2026-09-28',
+      best: { day: '2026-10-03', stitches: 120 },
+    });
   });
 });
 
